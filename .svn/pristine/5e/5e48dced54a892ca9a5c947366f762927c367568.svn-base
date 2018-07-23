@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haoze.dao.system.EmrRoleMenuDao">
+
+  <resultMap id="BaseResultMap" type="com.haoze.model.system.role.entity.EmrRoleMenuEntity">
+    <result column="PK_ROLE_MENU" jdbcType="VARCHAR" property="pkRoleMenu" />
+    <result column="PK_ORG" jdbcType="VARCHAR" property="pkOrg" />
+    <result column="PK_ROLE" jdbcType="VARCHAR" property="pkRole" />
+    <result column="PK_MENU" jdbcType="VARCHAR" property="pkMenu" />
+    <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+    <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+    <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
+    <result column="MODIFY_TIME" jdbcType="DATE" property="modifyTime" />
+    <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />
+  </resultMap>
+
+  <insert id="insert" parameterType="com.haoze.model.system.role.entity.EmrRoleMenuEntity">
+    insert into SYS_ROLE_MENU (PK_ROLE_MENU, PK_ORG, PK_ROLE, 
+      PK_MENU, CREATOR, CREATE_TIME, 
+      MODIFIER, MODIFY_TIME, DEL_FLAG
+      )
+    values (#{pkRoleMenu,jdbcType=VARCHAR}, #{pkOrg,jdbcType=VARCHAR}, #{pkRole,jdbcType=VARCHAR}, 
+      #{pkMenu,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=DATE}, #{delFlag,jdbcType=CHAR}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.haoze.model.system.role.entity.EmrRoleMenuEntity">
+    insert into SYS_ROLE_MENU
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="pkRoleMenu != null">
+        PK_ROLE_MENU,
+      </if>
+      <if test="pkOrg != null">
+        PK_ORG,
+      </if>
+      <if test="pkRole != null">
+        PK_ROLE,
+      </if>
+      <if test="pkMenu != null">
+        PK_MENU,
+      </if>
+      <if test="creator != null">
+        CREATOR,
+      </if>
+      <if test="createTime != null">
+        CREATE_TIME,
+      </if>
+      <if test="modifier != null">
+        MODIFIER,
+      </if>
+      <if test="modifyTime != null">
+        MODIFY_TIME,
+      </if>
+      <if test="delFlag != null">
+        DEL_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="pkRoleMenu != null">
+        #{pkRoleMenu,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrg != null">
+        #{pkOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="pkRole != null">
+        #{pkRole,jdbcType=VARCHAR},
+      </if>
+      <if test="pkMenu != null">
+        #{pkMenu,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null">
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="modifier != null">
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime,jdbcType=DATE},
+      </if>
+      <if test="delFlag != null">
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="batchSave" parameterType="java.util.List" useGeneratedKeys="false">
+    insert into SYS_ROLE_MENU (PK_ROLE_MENU, PK_ORG, PK_ROLE,
+    PK_MENU, CREATOR, CREATE_TIME,MODIFIER, MODIFY_TIME, DEL_FLAG)
+    select Temp.* from
+    (
+    <foreach item="item" index="index" collection="list" separator="union all">
+      select #{item.pkRoleMenu}, #{item.pkOrg}, #{item.pkRole},
+      #{item.pkMenu}, #{item.creator}, #{item.createTime},
+      #{item.modifier}, #{item.modifyTime}, #{item.delFlag}
+      from dual
+    </foreach>
+    ) Temp
+  </insert>
+
+  <delete id="removeByRoleId" parameterType="String">
+    DELETE FROM SYS_ROLE_MENU WHERE PK_ROLE = #{_parameter}
+  </delete>
+
+  <select id="listMenuIdsByRoleId" parameterType="String" resultType="String" >
+    select PK_MENU from SYS_ROLE_MENU
+    where PK_ROLE = #{_parameter}
+  </select>
+
+  <select id="count" parameterType="java.util.Map" resultType="int" >
+    select count(PK_ROLE_MENU) from SYS_ROLE_MENU
+    <where>
+        <if test="roleId != null and roleId != ''"> and PK_ROLE = #{roleId} </if>
+        <if test="menuId != null and menuId != ''"> and PK_MENU = #{menuId} </if>
+    </where>
+  </select>
+
+</mapper>

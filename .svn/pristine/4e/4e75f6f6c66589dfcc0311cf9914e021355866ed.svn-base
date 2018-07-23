@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.haoze.dao.system.EmrUserDepartmentDao">
+
+
+
+    <insert id="batchSave" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into SYS_USER_DEPT (PK_USER_DEPT, PK_ORG, PK_DEPT,
+        PK_USER, CREATOR, CREATE_TIME,MODIFIER, MODIFY_TIME, DEL_FLAG)
+        select Temp.* from
+        (
+        <foreach item="item" index="index" collection="list" separator="union all">
+            select #{item.ID}, #{item.organization}, #{item.departmentId},
+            #{item.userId}, #{item.creator}, #{item.createTime},
+            #{item.modifier}, #{item.modifyTime}, #{item.delFlag}
+            from dual
+        </foreach>
+        ) Temp
+    </insert>
+
+    <delete id="removeByUserId" parameterType="String">
+        DELETE FROM SYS_USER_DEPT WHERE PK_USER = #{_parameter}
+    </delete>
+
+    <select id="listUserDepartments" parameterType="String" resultType="String">
+        select PK_DEPT from SYS_USER_DEPT where PK_USER = #{_parameter}
+    </select>
+        
+
+
+</mapper>

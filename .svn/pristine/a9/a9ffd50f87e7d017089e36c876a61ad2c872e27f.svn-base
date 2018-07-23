@@ -1,0 +1,35 @@
+#病人列表接口
+HIS_PATIENT_URL=http://172.30.1.68:8181/getPatietInfoNew
+#病人医嘱接口
+HIS_PATIENT_DOCTOR_ADVICE=http://58.216.175.154:8181/getVipPatientOrders
+#病人检查接口
+HIS_PATIENT_CHECKUP=http://172.30.1.68:8181/getExamResult
+#病人检验汇总接口
+HIS_PATIENT_COLLECTINSPECT=http://172.30.1.68:8181/getLab
+#病人检验明细接口
+HIS_PATIENT_DETAILINSPECT=http://172.30.1.68:8181/getLabResult
+#病人处方接口
+HIS_PATIENT_PRESCRIPTION=http://58.216.175.154:8181/getDecisionMzcf
+
+HIS_PATIENTEMR_LIST=http://172.30.100.160:8080/his/http/listPatientEmrs
+
+#入院后 病人检查接口
+HIS_PATIENT_IN_CHECKUP=http://172.30.1.68:8181/p_emr_get_ExamResult
+#入院后 病人检验汇总接口
+HIS_PATIENT_IN_COLLECTINSPECT=http://172.30.1.68:8181/p_emr_get_Lab
+#入院后 病人检验明细接口
+HIS_PATIENT_IN_DETAILINSPECT=http://172.30.1.68:8181/p_emr_get_LabResult
+#取病人危急值接口
+HIS_PATIENT_CValues=http://172.30.1.68:8181/p_emr_get_CValues
+
+#HIS返回数据KEY值
+HIS_DATA_KEY=ROWS
+#HIS返回病人医嘱数据KEY值
+HIS_DOCTOR_ADVICE_KEY=orderData
+
+
+
+TEMP_FILE_PATH=C:\\dc\\template\\
+EMR_FILE_PATH=C:\\dc\\emr\\
+SUB_FILE_PATH=C:\\dc\\sub\\
+

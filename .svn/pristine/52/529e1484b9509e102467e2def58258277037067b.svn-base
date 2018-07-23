@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/plugins/default/default.css" />
+    <link rel="stylesheet" href="/css/mystyle.css" />
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div id="cont1">
+    <div class="row">
+        <div class="col-sm-5 col-md-4 col-lg-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">病历目录</div>
+                <div class="panel-body">
+                    <!--<div class="columns pull-left col-md-4 nopadding">
+                        <input id="searchName" type="text" class="form-control" placeholder="">
+                    </div>-->
+                    <div class="content_wrap">
+                        <input id="searchName" type="text" class="form-control" placeholder="" style="width:50%;">
+                        <div class="zTreeDemoBackground left">
+                            <ul id="treeRm" class="ztree">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-7 col-md-8 col-lg-9">
+            <div class="well well-sm">
+                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addTemplate" data-backdrop="static" onclick="addCatalog()"><span class="glyphicon glyphicon-plus"></span> 新增目录</button>
+                <button class="btn btn-primary btn-sm" onclick="updateCatalog()"><span class="glyphicon glyphicon-edit" ></span> 修改目录</button>
+                <button class="btn btn-primary btn-sm" onclick="deleteCatalog()"><span class="glyphicon glyphicon-remove"></span> 删除目录</button>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body clearfix">
+                    <form class="form-horizontal" id="catalogForm">
+                        <div class="form-group">
+                            <label for="inputEmail3" class="col-sm-3 control-label">目录代码</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="codeCatalog" name="codeCatalog" placeholder="" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">目录名称</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="nameCatalog" name="nameCatalog" placeholder="" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">图标</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="img" name="img" placeholder="" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">上级目录</label>
+                            <div class="col-sm-9">
+                                <input type="hidden" id="pkFather" name="pkFather"/>
+                                <input type="text" class="form-control" id="pkFatherName" name="pkFatherName" placeholder="上级目录" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">目录类型</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="typeCatalog" name="typeCatalog" readonly>
+                                    <option value="0">普通</option>
+                                    <option value="1">婴儿</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">医生模式</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="doctorMode" name="doctorMode" readonly>
+                                    <option value="0">不可见</option>
+                                    <option value="1">可见</option>
+                                    <option value="2">可见只读</option>
+                                    <option value="3">可见编辑</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">护士模式</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="nurseMode" name="nurseMode" readonly>
+                                    <option value="0">不可见</option>
+                                    <option value="1">可见</option>
+                                    <option value="2">可见只读</option>
+                                    <option value="3">可见编辑</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">排序号</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="sortNo" name="sortNo" placeholder="" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">状态</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="stopFlag" name="stopFlag" readonly>
+                                    <option value="1">启用</option>
+                                    <option value="0">停用</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-3 control-label">备注</label>
+                            <div class="col-sm-9">
+                                <textarea class="form-control" id="remark" name="remark" cols="30" rows="5" readonly></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:include="emrinclude::footer"></div>
+<script type="text/javascript" src="/js/appjs/template/medicalrecord/medicalrecord.js"></script>
+</body>
+</html>

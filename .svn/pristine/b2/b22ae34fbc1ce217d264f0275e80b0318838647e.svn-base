@@ -1,0 +1,158 @@
+package com.haoze.service.repository.impl;
+
+import com.github.pagehelper.Page;
+import com.haoze.common.model.QueryParam;
+import com.haoze.common.model.ResponseResult;
+import com.haoze.dao.repository.DataDictionaryDao;
+import com.haoze.dao.repository.DataGroupDao;
+import com.haoze.model.repository.entity.DataDictionaryEntity;
+import com.haoze.model.repository.entity.DataGroupEntity;
+import com.haoze.model.repository.vo.DataDictionaryVO;
+import com.haoze.service.repository.DataGroupService;
+import com.haoze.utils.CurrentUser;
+import com.haoze.utils.FixedFieldInitializedUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
+import java.util.Date;
+
+/**
+ * 数据组服务接口实现类。
+ *
+ * @author maxl
+ * @time 2018-07-16。
+ */
+@Service
+public class DataGroupServiceImpl implements DataGroupService {
+
+    @Autowired
+    DataGroupDao dataGroupDao;
+    @Autowired
+    DataDictionaryDao dataDictionaryDao;
+
+    @Override
+    @Transactional
+    public ResponseResult insert(DataGroupEntity dataGroupEntity) {
+
+        try {
+            FixedFieldInitializedUtil.initialize(dataGroupEntity);
+            dataGroupDao.insert(dataGroupEntity);
+            //新增节点关系
+            return ResponseResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "新增失败");
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult delete(String dataGroupId) {
+        try {
+            //判断是否有子节点
+            QueryParam queryParam = QueryParam.getDefaultQueryParam();
+            queryParam.put("pkFather", dataGroupId);
+            int count = dataDictionaryDao.count(queryParam);
+            if (count > 0) {
+                return ResponseResult.failure(0, "具备子节点，无法删除。");
+            }
+            //删除数据组
+            dataGroupDao.delete(dataGroupId);
+            //删除节点关系
+            dataDictionaryDao.deleteByDataId(dataGroupId);
+            return ResponseResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "删除失败");
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult update(DataGroupEntity dataGroupEntity) {
+
+        try {
+            dataGroupEntity.setModifyTime(new Date());
+            dataGroupEntity.setModifier(CurrentUser.getUserId());
+            dataGroupDao.update(dataGroupEntity);
+            return ResponseResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "更新失败");
+        }
+    }
+
+    @Override
+    public DataGroupEntity get(String dataGroupId) {
+        return dataGroupDao.get(dataGroupId);
+    }
+
+    @Override
+    public Page<DataGroupEntity> list(QueryParam queryParam) {
+        return null;
+    }
+
+    @Override
+    public int count(QueryParam queryParam) {
+        return 0;
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult insert(DataDictionaryVO dataDictionaryVO) {
+
+        try {
+            //新增数据组信息
+            DataGroupEntity dataGroupEntity = dataDictionaryVO.getDataGroup();
+            FixedFieldInitializedUtil.initialize(dataGroupEntity);
+            dataGroupDao.insert(dataGroupEntity);
+
+            //新增节点关系
+            DataDictionaryEntity dataDictionaryEntity = dataDictionaryVO.getDataDictionary();
+            FixedFieldInitializedUtil.initialize(dataDictionaryEntity);
+            dataDictionaryEntity.setPkNode(dataDictionaryEntity.getID());
+            dataDictionaryEntity.setPkBd(dataGroupEntity.getID());
+            dataDictionaryDao.insert(dataDictionaryEntity);
+            return ResponseResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "新增失败");
+        }
+    }
+
+    @Override
+    public DataGroupEntity getByDataDictionaryId(String dataDictionaryId) {
+        return dataGroupDao.getByDataDictionaryId(dataDictionaryId);
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult deleteByDataDictionaryId(String dataDictionaryId) {
+
+        try {
+            DataDictionaryEntity dataDictionaryEntity = dataDictionaryDao.get(dataDictionaryId);
+            if(dataDictionaryEntity == null){
+                return ResponseResult.failure(0, "不存在的数据集。");
+            }
+            //判断是否有子节点
+            QueryParam queryParam = QueryParam.getDefaultQueryParam();
+            queryParam.put("pkFather", dataDictionaryEntity.getPkNode());
+            int count = dataDictionaryDao.count(queryParam);
+            if (count > 0) {
+                return ResponseResult.failure(0, "具备子节点，无法删除。");
+            }
+            dataGroupDao.delete(dataDictionaryEntity.getPkBd());
+            return ResponseResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "删除失败");
+        }
+    }
+}

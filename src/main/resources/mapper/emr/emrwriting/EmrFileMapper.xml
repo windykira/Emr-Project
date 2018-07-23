@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haoze.dao.emr.EmrFileDao" >
+
+  <resultMap id="BaseResultMap" type="com.haoze.model.emr.emrwriting.entity.EmrFileEntity" >
+    <id column="PK_EMR_FILEID" property="ID" jdbcType="VARCHAR" />
+    <result column="PK_ORG" property="pkOrg" jdbcType="VARCHAR" />
+    <result column="PK_DEPT" property="pkDept" jdbcType="VARCHAR" />
+    <result column="CODE_DEPT" property="codeDept" jdbcType="VARCHAR" />
+    <result column="PK_TMP_CLASS" property="pkTmpClass" jdbcType="VARCHAR" />
+    <result column="PATIENT_ID" property="patientId" jdbcType="VARCHAR" />
+    <result column="FILE_LOC" property="fileLoc" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+    <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="DATE" />
+    <result column="OP_NUM" property="opNum" jdbcType="VARCHAR" />
+    <result column="EMR_FILE_NAME" property="emrFileName" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="LOCK_FLAG" property="lockFlag" jdbcType="VARCHAR" />
+    <result column="LOCKER" property="locker" jdbcType="VARCHAR" />
+    <result column="LOCK_TIME" property="lockTime" jdbcType="DATE" />
+    <result column="PK_TEMPLATE" property="pkTemplate" jdbcType="VARCHAR" />
+
+    <result column="PK_CATALOG" property="catalogId" jdbcType="VARCHAR" />
+    <result column="PK_CATALOG_PNT" property="parentCatalogId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    PK_EMR_FILEID, PK_ORG, PK_DEPT, CODE_DEPT, PK_TMP_CLASS, PATIENT_ID, FILE_LOC, CREATOR, 
+    CREATE_TIME, MODIFIER, MODIFY_TIME, OP_NUM, EMR_FILE_NAME, DEL_FLAG, LOCK_FLAG, LOCKER, 
+    LOCK_TIME, PK_TEMPLATE,PK_CATALOG,PK_CATALOG_PNT
+  </sql>
+
+  <select id="get" parameterType="String" resultMap="BaseResultMap">
+    select
+      <include refid="Base_Column_List" />
+      from EMR_FILE
+    <where>
+      PK_EMR_FILEID = #{_parameter}
+    </where>
+  </select>
+
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from EMR_FILE
+    where PK_EMR_FILEID = #{_parameter}
+  </delete>
+
+  <select id="listEmrFiles" parameterType="java.util.Map" resultType="com.haoze.model.emr.emrwriting.po.EmrFilePO">
+    select ef.PATIENT_ID PatientId,
+      ef.PK_EMR_FILEID EmrFileId,ef.EMR_FILE_NAME EmrFileName,ef.PK_CATALOG CatalogId,
+      ec.NAME_CATALOG CatalogName,ef.PK_CATALOG_PNT ParentCatalogId,
+      (select NAME_CATALOG from EMR_CATALOG where ef.PK_CATALOG_PNT = PK_CATALOG) ParentCatalogName
+      from EMR_FILE ef INNER JOIN EMR_CATALOG ec on ef.PK_CATALOG = ec.PK_CATALOG
+    <where>
+      <if test="patientId != null and patientId != ''"> and ef.PATIENT_ID = #{patientId} </if>
+    </where>
+  </select>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from EMR_FILE
+    where PK_EMR_FILEID = #{pkEmrFileid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from EMR_FILE
+    where PK_EMR_FILEID = #{pkEmrFileid,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.haoze.model.emr.emrwriting.entity.EmrFileEntity" >
+    insert into EMR_FILE (PK_EMR_FILEID, PK_ORG, PK_DEPT, 
+      CODE_DEPT, PK_TMP_CLASS, PATIENT_ID, 
+      FILE_LOC, CREATOR, CREATE_TIME, 
+      MODIFIER, MODIFY_TIME, OP_NUM, 
+      EMR_FILE_NAME, DEL_FLAG, LOCK_FLAG, 
+      LOCKER, LOCK_TIME, PK_TEMPLATE,PK_CATALOG,PK_CATALOG_PNT
+      )
+    values (#{ID,jdbcType=VARCHAR}, #{pkOrg,jdbcType=VARCHAR}, #{pkDept,jdbcType=VARCHAR},
+      #{codeDept,jdbcType=VARCHAR}, #{pkTmpClass,jdbcType=VARCHAR}, #{patientId,jdbcType=VARCHAR}, 
+      #{fileLoc,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=DATE}, #{opNum,jdbcType=VARCHAR}, 
+      #{emrFileName,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, #{lockFlag,jdbcType=VARCHAR}, 
+      #{locker,jdbcType=VARCHAR}, #{lockTime,jdbcType=DATE}, #{pkTemplate,jdbcType=VARCHAR},
+      #{catalogId,jdbcType=VARCHAR},#{parentCatalogId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.haoze.model.emr.emrwriting.entity.EmrFileEntity" >
+    insert into EMR_FILE
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pkEmrFileid != null" >
+        PK_EMR_FILEID,
+      </if>
+      <if test="pkOrg != null" >
+        PK_ORG,
+      </if>
+      <if test="pkDept != null" >
+        PK_DEPT,
+      </if>
+      <if test="codeDept != null" >
+        CODE_DEPT,
+      </if>
+      <if test="pkTmpClass != null" >
+        PK_TMP_CLASS,
+      </if>
+      <if test="patientId != null" >
+        PATIENT_ID,
+      </if>
+      <if test="fileLoc != null" >
+        FILE_LOC,
+      </if>
+      <if test="creator != null" >
+        CREATOR,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="modifier != null" >
+        MODIFIER,
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME,
+      </if>
+      <if test="opNum != null" >
+        OP_NUM,
+      </if>
+      <if test="emrFileName != null" >
+        EMR_FILE_NAME,
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG,
+      </if>
+      <if test="lockFlag != null" >
+        LOCK_FLAG,
+      </if>
+      <if test="locker != null" >
+        LOCKER,
+      </if>
+      <if test="lockTime != null" >
+        LOCK_TIME,
+      </if>
+      <if test="pkTemplate != null" >
+        PK_TEMPLATE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pkEmrFileid != null" >
+        #{pkEmrFileid,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrg != null" >
+        #{pkOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="pkDept != null" >
+        #{pkDept,jdbcType=VARCHAR},
+      </if>
+      <if test="codeDept != null" >
+        #{codeDept,jdbcType=VARCHAR},
+      </if>
+      <if test="pkTmpClass != null" >
+        #{pkTmpClass,jdbcType=VARCHAR},
+      </if>
+      <if test="patientId != null" >
+        #{patientId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileLoc != null" >
+        #{fileLoc,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=DATE},
+      </if>
+      <if test="opNum != null" >
+        #{opNum,jdbcType=VARCHAR},
+      </if>
+      <if test="emrFileName != null" >
+        #{emrFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="lockFlag != null" >
+        #{lockFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="locker != null" >
+        #{locker,jdbcType=VARCHAR},
+      </if>
+      <if test="lockTime != null" >
+        #{lockTime,jdbcType=DATE},
+      </if>
+      <if test="pkTemplate != null" >
+        #{pkTemplate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.haoze.model.emr.emrwriting.entity.EmrFileEntity" >
+    update EMR_FILE
+    <set >
+      <if test="pkOrg != null" >
+        PK_ORG = #{pkOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="pkDept != null" >
+        PK_DEPT = #{pkDept,jdbcType=VARCHAR},
+      </if>
+      <if test="codeDept != null" >
+        CODE_DEPT = #{codeDept,jdbcType=VARCHAR},
+      </if>
+      <if test="pkTmpClass != null" >
+        PK_TMP_CLASS = #{pkTmpClass,jdbcType=VARCHAR},
+      </if>
+      <if test="patientId != null" >
+        PATIENT_ID = #{patientId,jdbcType=VARCHAR},
+      </if>
+      <if test="fileLoc != null" >
+        FILE_LOC = #{fileLoc,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        CREATOR = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="modifier != null" >
+        MODIFIER = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME = #{modifyTime,jdbcType=DATE},
+      </if>
+      <if test="opNum != null" >
+        OP_NUM = #{opNum,jdbcType=VARCHAR},
+      </if>
+      <if test="emrFileName != null" >
+        EMR_FILE_NAME = #{emrFileName,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="lockFlag != null" >
+        LOCK_FLAG = #{lockFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="locker != null" >
+        LOCKER = #{locker,jdbcType=VARCHAR},
+      </if>
+      <if test="lockTime != null" >
+        LOCK_TIME = #{lockTime,jdbcType=DATE},
+      </if>
+      <if test="pkTemplate != null" >
+        PK_TEMPLATE = #{pkTemplate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PK_EMR_FILEID = #{ID,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.haoze.model.emr.emrwriting.entity.EmrFileEntity" >
+    update EMR_FILE
+    set PK_ORG = #{pkOrg,jdbcType=VARCHAR},
+      PK_DEPT = #{pkDept,jdbcType=VARCHAR},
+      CODE_DEPT = #{codeDept,jdbcType=VARCHAR},
+      PK_TMP_CLASS = #{pkTmpClass,jdbcType=VARCHAR},
+      PATIENT_ID = #{patientId,jdbcType=VARCHAR},
+      FILE_LOC = #{fileLoc,jdbcType=VARCHAR},
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=DATE},
+      MODIFIER = #{modifier,jdbcType=VARCHAR},
+      MODIFY_TIME = #{modifyTime,jdbcType=DATE},
+      OP_NUM = #{opNum,jdbcType=VARCHAR},
+      EMR_FILE_NAME = #{emrFileName,jdbcType=VARCHAR},
+      DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      LOCK_FLAG = #{lockFlag,jdbcType=VARCHAR},
+      LOCKER = #{locker,jdbcType=VARCHAR},
+      LOCK_TIME = #{lockTime,jdbcType=DATE},
+      PK_TEMPLATE = #{pkTemplate,jdbcType=VARCHAR}
+    where PK_EMR_FILEID = #{pkEmrFileid,jdbcType=VARCHAR}
+  </update>
+</mapper>

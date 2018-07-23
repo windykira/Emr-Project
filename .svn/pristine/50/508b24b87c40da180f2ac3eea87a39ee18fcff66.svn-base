@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>常州市第二人民医院住院电子病历</title>
+<link rel="stylesheet" href="css/bootstrap.css">
+<link rel="stylesheet" href="css/font-awesome.css">
+<link rel="stylesheet" href="css/zTreeStyle/zTreeStyle.css">
+<link rel="stylesheet" href="css/styles.css">
+<link rel="shortcut icon" href="images/favicon.ico">
+<!--[if lt IE 9]>
+<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<!-- navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header"> <a class="navbar-brand" href="../../index.html"><img src="images/logo.png" height="30" class="d-inline-block align-top" alt=""> 常州市第二人民医院住院电子病历</a></div>
+  </div>
+</nav>
+<!-- /navbar -->
+<div class="well well-sm">
+<strong>姓名：</strong><span>张三</span>&nbsp;&nbsp;&nbsp;&nbsp;<strong>床号：</strong><span>1</span>&nbsp;&nbsp;&nbsp;&nbsp;<strong>住院号：</strong><span>0000123</span>&nbsp;&nbsp;&nbsp;&nbsp;<strong>性别：</strong><span>男</span>&nbsp;&nbsp;&nbsp;&nbsp;<strong>年龄：</strong><span>59</span>&nbsp;&nbsp;&nbsp;&nbsp;<strong>费用类别：</strong><span>自费</span>&nbsp;&nbsp;&nbsp;&nbsp;<strong>所在病区：</strong><span>十病区</span>&nbsp;&nbsp;&nbsp;&nbsp;<strong>入院时间：</strong><span>2018-05-16</span>&nbsp;&nbsp;&nbsp;&nbsp;<strong>主要诊断：</strong><span>关节炎</span>
+</div>
+<!-- sidebar -->
+<div class="sidebar2">
+  <div class="content_wrap">
+    <div class="zTreeDemoBackground left">
+      <ul id="treeDemo" class="ztree">
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="main2">
+<div class="well well-sm">
+<button type="button" class="btn btn-default">新增</button>
+<button type="button" class="btn btn-default">保存</button>
+<button type="button" class="btn btn-default">删除</button>
+<button type="button" class="btn btn-default">存为个人模板</button>
+<button type="button" class="btn btn-default">预览</button>
+<button type="button" class="btn btn-default">打印</button>
+
+</div>
+  <textarea name="editor1">常州市第二人民医院住院病案首页</textarea>
+</div>
+<!-- sidebar -->
+<!-- footer -->
+<footer class="footer">
+  <h5 class="pull-left mr-20"><i class="fa fa-user-md fa-lg text-primary" aria-hidden="true"></i> 郑正   住院医生</h5>
+  <h5 class="pull-left"><i class="fa fa-clock-o fa-lg text-primary" aria-hidden="true"></i> 2018年5月17日  10:30:36</h5>
+  <nav class="pull-right">
+    <ul class="pagination pagination-sm">
+      <li><a href="#">上一页</a></li>
+      <li><a href="#">下一页</a></li>
+    </ul>
+  </nav>
+</footer>
+<!-- /footer -->
+<script src="js/jquery.min.js"></script> 
+<script src="js/bootstrap.min.js"></script> 
+<script src="js/jquery.ztree.core-3.5.js"></script> 
+<script src="js/ztree-02.js"></script> 
+<script src="js/ckeditor/ckeditor.js"></script> 
+<script>
+  CKEDITOR.replace( 'editor1' );
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=8">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>常州市第二人民医院住院电子病历</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/plugins/default/default.css" />
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!-- modal -->
+<!--<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">新增病历</h4>
+</div>-->
+
+<div class="modal-body">
+
+    <div class="">
+        <input type="hidden" id="pkFather" name="pkFather"/>
+        <input type="text" class="form-control" style="width: 31%;margin-bottom: 10px;" id="pkFatherName" name="pkFatherName"  onclick="openCatalog()" placeholder="请选择病历目录">
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4 col-md-3">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs catalog-choose" style="margin-bottom:8px;">
+                <li value="1" class="active" onclick="reloadTemplateTable(this.value)"><a href="#" data-toggle="tab">全院</a></li>
+                <li value="2" onclick="reloadTemplateTable(this.value)"><a href="#" data-toggle="tab">科室</a></li>
+                <li value="3" onclick="reloadTemplateTable(this.value)"><a href="#" data-toggle="tab">个人</a></li>
+            </ul>
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div class="tab-pane active" id="home">
+                    <ul class="list-group">
+                        <!--<li class="list-group-item active">病案首页</li>
+                        <li class="list-group-item">入院记录</li>
+                        <li class="list-group-item">病程记录</li>
+                        <li class="list-group-item">手术记录</li>
+                        <li class="list-group-item">会诊记录</li>
+                        <li class="list-group-item">知情同意书</li>
+                        <li class="list-group-item">出院记录</li>-->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-8 col-md-7">
+            <table id="templateTable" data-mobile-responsive="true">
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" onclick="cancel()">取消</button>
+    <!--<button type="button" class="btn btn-primary" onClick="window.open('template-manager-add.html')">确定</button>-->
+    <button type="button" class="btn btn-primary" onclick="loadDcEditor()">确定</button>
+</div>
+</div>
+
+<div th:include="emrinclude::footer"></div>
+<script src="/js/jquery.ztree.core-3.5.js"></script>
+<script src="/js/appjs/emr/emrwriting/templatetable.js"></script>
+<!--<script src="/js/appjs/emr/emrwriting/emrwrite.js"></script>-->
+<!--<script src="/js/appjs/emr/emrwriting/buttonshow.js"></script>-->
+</body>
+
+</html>

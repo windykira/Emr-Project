@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.haoze.dao.kb.EmrSimuSympDao">
+
+    <resultMap id="BaseResultMap" type="com.haoze.model.kb.symp.entity.SimuSympEntity" >
+        <result column="PK_SIMUSYMP" property="ID" jdbcType="VARCHAR" />
+        <result column="PK_ORG" property="organizationID" jdbcType="VARCHAR" />
+        <result column="CODE_SIMUSYMP" property="simuSympCode" jdbcType="VARCHAR" />
+        <result column="NAME_SIMUSYMP" property="simuSympName" jdbcType="VARCHAR" />
+        <result column="PY_CODE" property="pyCode" jdbcType="VARCHAR" />
+        <result column="WB_CODE" property="wbCode" jdbcType="VARCHAR" />
+
+    </resultMap>
+     <sql id="Base_Column_List">
+        PK_SIMUSYMP,PK_ORG,CODE_SIMUSYMP,NAME_SIMUSYMP,PY_CODE,WB_CODE
+    </sql>
+    
+    <select id="list" resultMap="BaseResultMap">
+        select 
+          <include refid="Base_Column_List"/>
+        from
+        bd_simu_symptom
+    </select>
+    
+     <select id="get" resultMap="BaseResultMap">
+        SELECT 
+          <include refid="Base_Column_List"/>
+        FROM bd_simu_symptom where PK_SIMUSYMP = #{roleId}
+    </select>
+    
+    <select id="getByName" resultMap="BaseResultMap">
+        SELECT 
+          <include refid="Base_Column_List"/>
+        FROM bd_simu_symptom where NAME_SIMUSYMP = #{simuSympName}
+    </select>
+
+    <insert id="save" parameterType="com.haoze.model.kb.symp.entity.SimuSympEntity"
+            useGeneratedKeys="true" keyProperty="id">
+        insert into bd_simu_symptom
+        (
+        PK_SIMUSYMP,
+        pk_org,
+        CODE_SIMUSYMP,
+        NAME_SIMUSYMP,
+        py_code,
+        wb_code
+        )
+        values
+        (
+        #{ID,jdbcType=VARCHAR},
+        #{organizationID,jdbcType=VARCHAR},
+        #{simuSympCode,jdbcType=VARCHAR},
+        #{simuSympName,jdbcType=VARCHAR},
+        #{pyCode,jdbcType=VARCHAR},
+        #{wbCode,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.haoze.model.kb.symp.entity.SimuSympEntity">
+        update bd_simu_symptom
+        <set>
+            <if test="organizationID != null">pk_org = #{organizationID,jdbcType=VARCHAR}, </if>
+            <if test="simuSympCode != null">CODE_SIMUSYMP = #{simuSympCode,jdbcType=VARCHAR}, </if>
+            <if test="simuSympName != null">NAME_SIMUSYMP = #{simuSympName,jdbcType=VARCHAR}, </if>
+            <if test="pyCode != null">py_code = #{pyCode,jdbcType=VARCHAR}, </if>
+            <if test="wbCode != null">WB_CODE = #{wbCode,jdbcType=VARCHAR}</if>
+        </set>
+        where PK_SIMUSYMP = #{ID,jdbcType=VARCHAR}
+    </update>
+
+    <delete id="remove">
+        delete from bd_simu_symptom where PK_SIMUSYMP = #{sympId,jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

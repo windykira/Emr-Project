@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.haoze.dao.emr.SymptomDao">
+
+    <!--<select id="getSympTree" resultType="Map">-->
+    <!--SELECT-->
+		<!--simu.PK_SIMUSYMP id,-->
+		<!--simu.NAME_SIMUSYMP name,-->
+		<!--rela.PK_SYMP pid-->
+	<!--FROM-->
+		<!--BD_SIMU_SYMPTOM simu-->
+	<!--INNER JOIN BD_SYMP_SIMUSYMP rela ON SIMU.PK_SIMUSYMP = RELA.PK_SIMUSYMP-->
+	<!--UNION ALL-->
+		<!--SELECT-->
+			<!--pk_symp id,-->
+			<!--NAME_SYMP name,-->
+			<!--'1' pid-->
+		<!--FROM-->
+			<!--BD_SYMPTOM-->
+	<!--UNION ALL-->
+		<!--SELECT-->
+			<!--'1' id,-->
+			<!--'症状' name,-->
+			<!--'0' pid-->
+		<!--FROM-->
+			<!--dual-->
+    <!--</select>-->
+    <select id="getSympTree" resultType="Map">
+        select NAME_BD AS "name",PK_BD AS "id",PK_FATHER AS "pId",LVL_BD AS "lv",ATTR_TYPE AS "attrType" from BD_BASE_DOC where LVL_BD &lt;= 3 and DEL_FLAG = 0
+        UNION ALL
+        select '症状' AS "name",'0' AS "id",null AS "pId",'0' AS "lv", '0' AS "attrType" from dual
+    </select>
+    
+    <select id="getSimuInfo" resultType="Map">
+	SELECT
+		simu.NAME_SIMUSYMP name,
+		to_char(wm_concat (symp.name_symp)) symps
+	FROM
+		BD_SIMU_SYMPTOM simu
+	LEFT JOIN BD_SYMP_SIMUSYMP rela ON RELA.PK_SIMUSYMP = SIMU.PK_SIMUSYMP
+	LEFT JOIN BD_SYMPTOM symp ON RELA.PK_SYMP = symp.PK_SYMP
+	
+	GROUP BY
+		simu.NAME_SIMUSYMP
+    </select>
+    
+    <select id="getSympInfo" resultType="Map">
+    select pk_symp id,name_symp name from bd_symptom
+    </select>
+
+    <select id="getTemplateFilePathById" parameterType="String" resultType="String">
+        select content from EMR_TEMPLATE where PK_TEMPLATE = #{id}
+    </select>
+</mapper>

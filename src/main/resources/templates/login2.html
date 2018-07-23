@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录界面</title>
+    <!--<meta http-equiv="refresh" content="5" surl="http://www.baidu.com">-->
+    <link rel="stylesheet" type="text/css" href="/css/newlogin.css">
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+</head>
+<body>
+
+<div class="container-fluid">
+    <span><img src="/img/back.png"></span>
+</div>
+<div class="wrapper">
+
+    <div class="container">
+        <h1>欢迎登录</h1>
+        <form class="form">
+            <input type="text" placeholder="用户名">
+            <input type="password" placeholder="密码">
+            <!--<button type="submit" id="login-button">登录</button>-->
+            <input type="button" onclick="asd(3,'病人列表.html');" value="登录">
+            <div id="div1" style="display:none;"></div>
+
+        </form>
+    </div>
+
+</div>
+<!--注脚开始-->
+<div class="footer">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <span style="color: #7b7b7b;">©2018 常州市第二人民医院</span>
+            <small>建议使用IE8+浏览器</small>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="../jquery-2.1.1.min.js"></script>
+<!-- <script type="text/javascript">
+    $('#div1').click(function (event) {
+        event.preventDefault();
+        $('form').fadeOut(200);
+        $('.wrapper').addClass('form-success');
+    });
+</script> -->
+<script language="javascript">
+    function asd(count, url) {
+        document.getElementById("div1").style.display = "block";
+        if (--count > 0)
+            setTimeout("asd(" + count + ",'" + url + "')", 1000);
+        else
+            location.href = url;
+    }
+</script>
+
+</body>
+</html>

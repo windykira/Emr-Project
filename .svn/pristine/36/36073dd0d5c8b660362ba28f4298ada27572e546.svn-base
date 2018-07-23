@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html lang="zh_CN" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<meta charset="utf-8">
+<head th:include="emrinclude :: header">
+
+</head>
+
+<link rel="stylesheet" href="/css/body.css" />
+
+<body class="gray-bg">
+<!--右击菜单-->
+<div id="rMenu" >
+	<a class="list-group-item" id="insertSympMenu" onclick="insertSymp();">插入症状选框</a>
+	<a class="list-group-item" id="insertSimuMenu" onclick="insertSimus();">插入伴随症状</a>
+	<a class="list-group-item" id="insertSimusWithSympMenu" onclick="insertSimusWithSymp();">插入鉴别症状</a>
+	<a class="list-group-item" id="insertThisMenu" onclick="insertInput();">插入当前节点内容</a>
+	<a class="list-group-item" onclick="expand();">展开下一级</a>
+	<a class="list-group-item" onclick="expandSon();">展开所有子节点</a>
+	<a class="list-group-item" onclick="collapse();">折叠子节点</a>
+	<a class="list-group-item" onclick="expandAll();">全部展开</a>
+	<a class="list-group-item" onclick="collapseAll();">全部折叠</a>
+</div>
+<!-- <div class="wrapper wrapper-content "> -->
+	<div>
+		<div class="row">
+			<div class="col-sm-2">
+				<div class="ibox ibox-body">
+					<div class="ibox-title">
+						<h5>选择症状</h5>
+<!-- 						<input id="searchTree"/> -->
+					</div>
+					<div class="ibox-content">
+						<div class="zTreeDemoBackground left">
+							<ul id="sympTree" class="ztree">
+							</ul>
+						</div>
+						<!--<table id="exampleTable">-->
+               			<!--</table>-->
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-10">
+				<div class="">
+					<button class="btn btn-default" type="button" onclick="frontpage()" data-toggle="modal" data-backdrop="static" data-target="#addMedical">新增</button>
+					<button class="btn btn-default" type="button" onclick="saveTemplate()">保存</button>
+					<button class="btn btn-default" type="button" onclick="pp()">删除</button>
+					<button class="btn btn-default" type="button">存为个人模板</button>
+					<button class="btn btn-default" type="button" onclick="preview()">预览</button>
+					<button class="btn btn-default" type="button" onclick="print()">打印</button>
+					<button class="btn btn-default" type="button" onclick="insertTime()">时间</button>
+
+					<button class="btn btn-default" type="button" onclick="page_setting()">页面设置</button>
+					<button class="btn btn-default" type="button" onclick="zoom()">缩放</button>
+					<!--<button class="btn btn-default" type="button" onclick="gogo1()">1</button>-->
+					<!--<button class="btn btn-default" type="button" onclick="gogo2()">2</button>-->
+					<!--<button class="btn btn-default" type="button" onclick="gogo3()">3</button>-->
+					<!--<button class="btn btn-default" type="button" onclick="gogo4()">4</button>-->
+					<!--<button class="btn btn-default" type="button" onclick="makeBlankInput()">空输入框</button>-->
+					<!--<button class="btn btn-default" type="button" onclick="makeInputFromString()">字符生成</button>-->
+					<button class="btn btn-default" type="button" onclick="saveLocal()">本地保存</button>
+					<button class="btn btn-default" type="button" onclick="openLocal()">本地打开</button>
+					<button class="btn btn-default" type="button" onclick="readLocal()">本地读取</button>
+					<button class="btn btn-default" type="button" onclick="bbb()">测试绑定</button>
+					<!--<input id="stringSource" type="text" width="50px"/>-->
+
+				</div>
+			<div th:replace="dc_div"></div> 
+			</div>
+		</div>
+	</div>
+	<div th:include="emrinclude :: footer"></div>
+	
+</body>
+<script>
+	$(window).resize(function() {
+		resize();
+	});
+	function resize(){
+		var h = $("body").height();
+		$("#myWriter").css("height",h-68);
+	}
+
+
+	$(document).ready(function () {
+	    load();
+		resize();
+		if(!window.opener.currentEditId){
+			return;
+		}
+		$.ajax({
+			url: "/emr/dc/getTemplate/"+window.opener.currentEditId,
+			dataType: "text",
+			success: function (data) {
+				myWriter.ExecuteCommand("FileOpenString", false, data);
+			},
+			error: function () {
+				alert("读取出错");
+			}
+		})
+//		setTimeout(resize,5000)
+//		resize();
+	});
+	var zTree;
+	var selectedNode;
+	var load = function () {
+		$.ajax({
+			url: "getSympTree",
+			dataType: "json",
+
+			success: function (data) {
+				var setting = {
+					data: {
+						simpleData: {
+							enable: true
+						}
+					},
+					callback: {
+						onRightClick: function (event, treeId, treeNode) {
+							if (!treeNode && event.target.tagName.toLowerCase() != "button" && $(event.target).parents("a").length == 0) {
+								showRMenu("root", event.clientX, event.clientY);
+							} else if (treeNode && !treeNode.noR) {
+								showRMenu("node", event.clientX, event.clientY);
+							}
+							selectedNode = treeNode;
+//							alert('right')
+						}
+					}
+				};
+
+				zTree = $.fn.zTree.init($("#sympTree"), setting, data);
+			}
+		})
+	}
+		var rMenu = $("#rMenu");
+//		function //显示右键菜单
+	function showRMenu(type, x, y) {
+		rMenu.css({"top":y+"px", "left":x+"px", "visibility":"visible","z-index":99,"cursor":"pointer"}); //设置右键菜单的位置、可见
+		$("body").bind("mousedown", onBodyMouseDown);
+	}
+//隐藏右键菜单
+	function hideRMenu() {
+		if (rMenu) rMenu.css({"visibility": "hidden"}); //设置右键菜单不可见
+		$("body").unbind("mousedown", onBodyMouseDown);
+	}
+//鼠标按下事件
+	function onBodyMouseDown(event){
+		if (!(event.target.id == "rMenu" || $(event.target).parents("#rMenu").length>0)) {
+			rMenu.css({"visibility" : "hidden"});
+		}
+	}
+
+//展开下一级子节点
+	function expand(){
+		hideRMenu();
+		var selectNodes = zTree.getSelectedNodes();
+		zTree.expandNode(selectNodes[0], true, null, null);
+	}
+//展开所有子节点
+	function expandSon(){
+		hideRMenu();
+		var selectNodes = zTree.getSelectedNodes();
+		zTree.expandNode(selectNodes[0], true, true, null);
+	}
+//折叠子节点
+	function collapse(){
+		hideRMenu();
+		var selectNodes = zTree.getSelectedNodes();
+		zTree.expandNode(selectNodes[0], false, null, null);
+	}
+//全部展开
+	function expandAll(){
+		hideRMenu();
+		zTree.expandAll(true);
+	}
+//全部折叠
+	function collapseAll(){
+		hideRMenu();
+		zTree.expandAll(false);
+	}
+//插入
+	function insertInput(){
+
+		var attr = selectedNode["attrType"];
+		var lv = selectedNode["lv"];
+		if(attr==='0'&&lv==='0'){//症状总览
+			alert("症状总览")
+			insertAllSymp(selectedNode);
+		}
+		if(attr==='1'&&lv==='1'){//症状
+			alert("症状")
+			insertSympPack(selectedNode)
+		}
+		if(attr==='1'&&lv==='2'){//症状描述
+			insertSympDescript(selectedNode);
+			alert("症状描述")
+		}
+		if(attr==='2'&&lv==='2'){//伴随症状
+			insertSimuSympList(selectedNode);
+		}
+		if(attr==='2'&&lv==='3'){//伴随症状具体
+			alert("伴随症状具体")
+			insertSimuSymp(selectedNode);
+		}
+		if(attr==='1'&&lv==='3'){//症状描述具体
+			alert("症状描述具体,作为父节点的选项,不可单独插入")
+		}
+		hideRMenu();
+	}
+
+	//插入 一个 伴随症状选框
+	function insertSimuSymp(node){
+		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+		var simuInput = myWriter.ComCreateXTextInputFieldElement();
+		simuInput.ID = node["id"];
+		simuInput.name = node["name"];
+		simuInput.BackgroundText = "有/无";
+		simuInput.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		simuInput.FieldSettings.EditStyle = 1;
+		simuInput.FieldSettings.MultiSelect = false;
+		simuInput.FieldSettings.DynamicListItems = false;
+		var sympId = node.getParentNode().getParentNode().id;
+		simuInput.VisibleExpression="FIND('"+sympId+"',[zz])>=0";
+		simuInput.endBorderText = node["name"]+"，";
+		simuInput.FieldSettings.ListSource.Items.AddByTextValue("有", "1");
+		simuInput.FieldSettings.ListSource.Items.AddByTextValue("无", "2");
+		simuInput.innerText="有";
+		myWriter.ExecuteCommand("InsertInputField", false, simuInput);
+	}
+
+	//插入 一系列 伴随症状选框
+	function insertSimuSympList(node){
+		var list = node.children;
+		for(var i in list){
+			insertSimuSymp(list[i]);
+		}
+	}
+	//插入症状描述选框
+	function insertSympDescript(node){
+		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+		var simuInput = myWriter.ComCreateXTextInputFieldElement();
+		simuInput.ID = node["id"];
+		simuInput.name = node["name"];
+		simuInput.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		if(node.children){
+	//		myWriter.ExecuteCommand("InsertString", false, node.name+"-");
+			simuInput.BackgroundText = "请选择";
+			simuInput.FieldSettings.EditStyle = 1;
+			simuInput.FieldSettings.MultiSelect = false;
+			simuInput.FieldSettings.DynamicListItems = false;
+
+			//获取下拉选项数值
+			var list = node.children;
+			for(var i in list){
+				simuInput.FieldSettings.ListSource.Items.AddByTextValue(list[i]["name"],list[i]["id"] );
+			}
+			simuInput.startBorderText = node.name+"【";
+			simuInput.endBorderText = "】";
+		}else {
+			simuInput.BackgroundText = node.name;
+			simuInput.FieldSettings.EditStyle = 0;
+			simuInput.startBorderText = "【";
+			simuInput.endBorderText = "】";
+		}
+
+
+//		simuInput.FieldSettings.ListSource.Items.AddByTextValue("有", "1");
+//		simuInput.FieldSettings.ListSource.Items.AddByTextValue("无", "2");
+//		simuInput.innerText="有";
+		myWriter.ExecuteCommand("InsertInputField", false, simuInput);
+	}
+	//插入一个症状的系列内容：描述
+	function insertSympPack(node){
+		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+		var input = myWriter.ComCreateXTextInputFieldElement();
+		input.ID = node["id"];
+		input.name = node["name"];
+		input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		input.FieldSettings.EditStyle = 1;
+		input.VisibleExpression="FIND('"+node.id+"',[zz])>=0";
+//		input.innerText=node.name+"：";
+		myWriter.ExecuteCommand("InsertInputField", false, input);
+		input.focus();
+		myWriter.ExecuteCommand("InsertString", false, "于");
+
+		var timeinput = myWriter.ComCreateXTextInputFieldElement();
+		timeinput.BackgroundText = "持续时间";
+		timeinput.CopySource = myWriter.ComCreateCopySourceInfo();
+		timeinput.CopySource.SourceID = "time"+node["id"];
+		timeinput.startBorderText = "【";
+		timeinput.endBorderText = "】";
+		myWriter.ExecuteCommand("InsertInputField", false, timeinput);
+		myWriter.ExecuteCommand("InsertString", false, "前");
+
+		var haveinput = myWriter.ComCreateXTextInputFieldElement();
+		haveinput.BackgroundText = "有/无";
+		haveinput.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		haveinput.FieldSettings.EditStyle = 1;
+		haveinput.FieldSettings.MultiSelect = false;
+		haveinput.FieldSettings.DynamicListItems = false;
+		haveinput.startBorderText = "【";
+		haveinput.endBorderText = "】";
+		haveinput.FieldSettings.ListSource.Items.AddByTextValue("有", "有");
+		haveinput.FieldSettings.ListSource.Items.AddByTextValue("无", "无");
+		haveinput.DefaultEventExpression = "value='有'";
+
+		myWriter.ExecuteCommand("InsertInputField", false, haveinput);
+		myWriter.ExecuteCommand("InsertString", false, "明显诱因，");
+
+		var yyinput = myWriter.ComCreateXTextInputFieldElement();
+		myWriter.ExecuteCommand("InsertInputField", false, yyinput);
+		yyinput.focus();
+		myWriter.ExecuteCommand("InsertString", false, "因");
+
+		var descinput = myWriter.ComCreateXTextInputFieldElement();
+		descinput.BackgroundText = "诱因描述";
+		descinput.startBorderText = "【";
+		descinput.endBorderText = "】";
+		myWriter.ExecuteCommand("InsertInputField", false, descinput);
+		myWriter.ExecuteCommand("InsertString", false, "，");
+		haveinput.innerText="无";
+
+		input.focus();
+		myWriter.ExecuteCommand("MoveTo" , false , "FieldEnd");
+		myWriter.ExecuteCommand("InsertString", false, "出现"+node.name+"：");
+
+		var list = node.children;
+		for(var i in list){
+			if(list[i]["attrType"]==="1"){//插入描述
+				insertSympDescript(list[i]);
+				if(i==list.length-2){
+					myWriter.ExecuteCommand("InsertString", false, "。");
+				}else{
+					myWriter.ExecuteCommand("InsertString", false, "，");
+				}
+			}
+//			if(list[i]["attrType"]==="2"){//插入伴随症状
+//				insertSimuSympList(list[i]);
+//			}
+		}
+		myWriter.ExecuteCommand("MoveTo" , false , "AfterField");//症状描述插入完毕，光标移动到输入域的外面
+	}
+	//插入症状多选
+	function insertSymptomMultiSel(node){
+//		myWriter.ExecuteCommand("InsertString", false, "症状【");
+		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+		var sympInput = myWriter.ComCreateXTextInputFieldElement();
+		sympInput.ID = "zz";
+		sympInput.name = "症状";
+		sympInput.BackgroundText = "请选择症状";
+		sympInput.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		sympInput.FieldSettings.EditStyle = 1;
+		sympInput.FieldSettings.MultiSelect = true;
+		sympInput.FieldSettings.DynamicListItems = false;
+		sympInput.startBorderText = "症状【";
+		sympInput.endBorderText = "】，";
+		//加载症状选项
+		var list = node.children;
+		for(var i in list){
+			sympInput.FieldSettings.ListSource.Items.AddByTextValue(list[i]["name"], list[i]["id"]);
+		}
+//		sympInput.startBorderText = "症状【";
+//		sympInput.endBorderText = "】";
+
+		myWriter.ExecuteCommand("InsertInputField", false, sympInput);
+//		myWriter.ExecuteCommand("InsertString", false, "】");
+		insertSymptomInfos(node);
+		hideRMenu();
+	}
+	function insertSymptomInfos(node){
+		for(var i in node.children){
+			var nd = node.children[i];
+			var input = myWriter.ComCreateXTextInputFieldElement();
+			input.ID = "info"+ nd["id"];
+			input.BackgroundText = "症状详情";
+			input.VisibleExpression = "FIND('"+nd["id"]+"',[zz])>=0";
+			myWriter.ExecuteCommand("InsertInputField", false, input);
+			input.focus();
+			myWriter.ExecuteCommand("InsertString", false, nd["name"]);
+			var input1 = myWriter.ComCreateXTextInputFieldElement();
+			input1.ID = "time"+ nd["id"];
+			input1.BackgroundText = "持续时间";
+			input1.startBorderText = "【";
+			input1.endBorderText = "】";
+			myWriter.ExecuteCommand("InsertInputField", false, input1);
+			var input2 = myWriter.ComCreateXTextInputFieldElement();
+			input2.BackgroundText = "病情发展与演变";
+			input2.startBorderText = "【";
+			input2.endBorderText = "】";
+			myWriter.ExecuteCommand("InsertInputField", false, input2);
+			var input3 = myWriter.ComCreateXTextInputFieldElement();
+			input3.BackgroundText = "发展演变时间";
+			input3.startBorderText = "【";
+			input3.endBorderText = "】";
+			myWriter.ExecuteCommand("InsertInputField", false, input3);
+			var punc = "，";
+			myWriter.ExecuteCommand("InsertString", false, punc);
+			myWriter.ExecuteCommand("MoveTo" , false , "AfterField");
+		}
+	}
+	function insertSymp(){
+		insertSymptomMultiSel(selectedNode);
+	}
+	//插入鉴别症状
+	function insertSimusWithSymp(){
+		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+		var sympInput = myWriter.ComCreateXTextInputFieldElement();
+		sympInput.ID = "jbzz";
+		sympInput.name = "鉴别症状";
+		sympInput.BackgroundText = "请选择症状";
+		sympInput.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		sympInput.FieldSettings.EditStyle = 1;
+		sympInput.FieldSettings.MultiSelect = true;
+		sympInput.FieldSettings.DynamicListItems = false;
+		//加载症状选项
+		var list = zTree.getNodes()[0].children;
+		for(var i in list){
+			sympInput.FieldSettings.ListSource.Items.AddByTextValue(list[i]["name"], list[i]["id"]);
+		}
+		sympInput.startBorderText = "鉴别症状【";
+		sympInput.endBorderText = "】";
+//		myWriter.ExecuteCommand("InsertString", false, "排他症状【");
+		myWriter.ExecuteCommand("InsertInputField", false, sympInput);
+//		myWriter.ExecuteCommand("InsertString", false, "】");
+		var root = zTree.getNodes()[0].children;
+		var simus = {};
+		var simus_size = 0;
+		//按中文去重
+		for(var i= 0,len=root.length;i<len;i++){
+			var sympList = root[i].children;
+			var sympName =  root[i].name;
+			var sympId =  root[i].id;
+			console.log(sympName)
+			for(var j= 0,len1=sympList.length;j<len1;j++){
+				if(sympList[j].attrType==='2'){//只用伴随症状
+					var simuList = sympList[j].children;//获取所有伴随症状的叶子节点
+					for(var k= 0,len2=simuList.length;k<len2;k++){
+						var simu = simuList[k];
+						if(!simus[simu.name]){//当前伴随症状第一次出现
+//							simus[simu.name]["sympId"] = sympId;
+							simus[simu.name] = {"exp":"FIND('"+sympId+"',[jbzz])>=0"};
+							simus_size++;
+						}else{//name已存在
+							simus[simu.name]["exp"] += "||FIND('"+sympId+"',[jbzz])>=0"
+						}
+					}
+				}
+			}
+		}
+		var count=1;
+		for(var simu in simus){
+			var punc = "，";
+			if(count===simus_size) punc = "。";
+			myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+			//先插入一个输入域用来显示标签 和控制显隐
+			var input = myWriter.ComCreateXTextInputFieldElement();
+			input.name = "鉴别-"+simu;
+			input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+			input.FieldSettings.EditStyle = 1;
+			input.VisibleExpression = simus[simu].exp;
+//		input.innerText=node.name+"：";
+			myWriter.ExecuteCommand("InsertInputField", false, input);
+			input.focus();
+			var simuInput = myWriter.ComCreateXTextInputFieldElement();
+//			simuInput.ID = node["id"];
+			simuInput.Name = simu;
+			simuInput.BackgroundText = "有/无";
+			simuInput.FieldSettings = myWriter.ComCreateInputFieldSettings();
+			simuInput.FieldSettings.EditStyle = 1;
+			simuInput.FieldSettings.MultiSelect = false;
+			simuInput.FieldSettings.DynamicListItems = false;
+//			simuInput.VisibleExpression = simus[simu].exp;
+//			simuInput.endBorderText = simu+punc
+			simuInput.FieldSettings.ListSource.Items.AddByTextValue("有", "1");
+			simuInput.FieldSettings.ListSource.Items.AddByTextValue("无", "2");
+			simuInput.innerText="无";
+			simuInput.startBorderText = "【";
+			simuInput.endBorderText = "】";
+			myWriter.ExecuteCommand("InsertInputField", false, simuInput);
+//			simuInput.style.Underline = true;
+//			simuInput.style.BorderBottom=true;
+//			simuInput.style.BorderWidth=2;
+			myWriter.ExecuteCommand("InsertString", false, simu+punc);
+			myWriter.ExecuteCommand("MoveTo" , false , "AfterField");
+			count++;
+		}
+		hideRMenu();
+	}
+	//插入伴随症状内容
+	function insertSimus(){
+	    alert("伴随")
+		var root = zTree.getNodes()[0].children;
+		var simus = {};
+		var simus_size = 0;
+		var symps = {};
+		for(var i= 0,len=root.length;i<len;i++){
+			symps[root[i].name] = root[i];
+			var sympList = root[i].children;
+			var sympName =  root[i].name;
+			var sympId =  root[i].id;
+			console.log(sympName)
+			for(var j= 0,len1=sympList.length;j<len1;j++){
+				if(sympList[j].attrType==='2'){//只用伴随症状
+					var simuList = sympList[j].children;//获取所有伴随症状的叶子节点
+					for(var k= 0,len2=simuList.length;k<len2;k++){
+						var simu = simuList[k];
+						if(!simus[simu.name]){//当前伴随症状第一次出现
+//							simus[simu.name]["sympId"] = sympId;
+							simus[simu.name] = {"exp":"FIND('"+sympId+"',[zz])>=0"};
+							simus_size++;
+						}else{//name已存在
+							simus[simu.name]["exp"] += "||FIND('"+sympId+"',[zz])>=0"
+						}
+					}
+				}
+			}
+		}
+		var count=1;
+		for(var simu in simus){
+			var punc = "，";
+			if(count===simus_size) punc = "。";
+			myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+			var input1 = myWriter.ComCreateXTextInputFieldElement();
+			input1.name = "伴随-"+simu;
+			input1.FieldSettings = myWriter.ComCreateInputFieldSettings();
+			input1.FieldSettings.EditStyle = 1;
+			input1.VisibleExpression = simus[simu].exp;
+//		input.innerText=node.name+"：";
+			myWriter.ExecuteCommand("InsertInputField", false, input1);
+			input1.focus();
+			var simuInput = myWriter.ComCreateXTextInputFieldElement();
+			simuInput.ID = simu;
+			simuInput.Name = simu;
+			simuInput.BackgroundText = "有/无";
+			simuInput.FieldSettings = myWriter.ComCreateInputFieldSettings();
+			simuInput.FieldSettings.EditStyle = 1;
+			simuInput.FieldSettings.MultiSelect = false;
+			simuInput.FieldSettings.DynamicListItems = false;
+//			simuInput.VisibleExpression = simus[simu].exp;
+//			simuInput.endBorderText = simu+punc
+			simuInput.FieldSettings.ListSource.Items.AddByTextValue("有", "1");
+			simuInput.FieldSettings.ListSource.Items.AddByTextValue("无", "2");
+			simuInput.startBorderText = "【";
+			simuInput.endBorderText = "】";
+			simuInput.innerText="无";
+			myWriter.ExecuteCommand("InsertInputField", false, simuInput);
+//			simuInput.style.BorderBottom=true;
+//			simuInput.style.BorderWidth=2;
+			myWriter.ExecuteCommand("InsertString", false, simu+punc);
+
+			if(symps[simu]){//有中文名相同的主症状
+				var node = symps[simu];
+				var list = node.children;
+				for(var i in list) {
+					var punc1 = "，";
+					if(i==list.length-1) punc1 = "";
+					if (list[i]["attrType"] === "1") {//插入描述
+						var node1 = list[i];
+						myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+
+						var input3 = myWriter.ComCreateXTextInputFieldElement();
+						input3.name = "伴随-"+node1["name"];
+						input3.FieldSettings = myWriter.ComCreateInputFieldSettings();
+						input3.FieldSettings.EditStyle = 1;
+						input3.VisibleExpression =  "FIND('1',[" + simu + "])>=0";
+//						input3.startBorderText = "【";
+//						input3.endBorderText = "】";
+
+						myWriter.ExecuteCommand("InsertInputField", false, input3);
+						input3.focus();
+						var input = myWriter.ComCreateXTextInputFieldElement();
+						input.ID = node1["id"];
+						input.name = node1["name"];
+						input.BackgroundText = "请选择";
+						input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+						input.FieldSettings.EditStyle = 1;
+						input.FieldSettings.MultiSelect = false;
+						input.FieldSettings.DynamicListItems = false;
+//						var sympId = node.getParentNode().id;
+//						input.VisibleExpression = "FIND('1',[" + simu + "])>=0";
+//						input.startBorderText = node1["name"];
+//						input.endBorderText = "，";
+
+						//获取下拉选项数值
+						var list2 = node1.children;
+						for (var i in list2) {
+							input.FieldSettings.ListSource.Items.AddByTextValue(list2[i]["name"], list2[i]["id"]);
+						}
+//		simuInput.FieldSettings.ListSource.Items.AddByTextValue("有", "1");
+//		simuInput.FieldSettings.ListSource.Items.AddByTextValue("无", "2");
+//		simuInput.innerText="有";
+						input.startBorderText = "【";
+						input.endBorderText = "】";
+						myWriter.ExecuteCommand("InsertString", false, node1["name"]);
+						myWriter.ExecuteCommand("InsertInputField", false, input);
+//						input.style.BorderBottom=true;
+//						input.style.BorderWidth=2;
+						myWriter.ExecuteCommand("InsertString", false, punc);
+						myWriter.ExecuteCommand("MoveTo" , false , "AfterField");
+					}
+				}
+			}
+			myWriter.ExecuteCommand("MoveTo" , false , "AfterField");
+			count++;
+		}
+		hideRMenu();
+	}
+
+	//插入所有症状内容
+	function insertAllSymp(node){
+		var list = node.children;
+		for(var i in list){
+			var nd = list[i];
+			var input = myWriter.ComCreateXTextInputFieldElement();
+			input.ID = "detail"+ nd["id"];
+			input.BackgroundText = "症状明细";
+			input.VisibleExpression = "FIND('"+nd["id"]+"',[zz])>=0";
+			myWriter.ExecuteCommand("InsertInputField", false, input);
+			input.focus();
+//			myWriter.ExecuteCommand("InsertString", false, list[i].name+"：");
+			insertSympPack(list[i]);
+//			myWriter.ExecuteCommand("InsertString", false, "\n");
+			myWriter.ExecuteCommand("MoveTo" , false , "AfterField");
+		}
+	}
+
+
+
+
+
+
+
+	function page_setting(){
+		myWriter.ExecuteCommand("FilePageSettings",true,null);
+	}
+	myWriter.ExecuteCommand("Zoom",false,"95%");
+	myWriter.ExecuteCommand("RuleVisible",true,null);
+	myWriter.BackColorString='#B1CAEB';
+	//function zoom(){
+	//	myWriter.ExecuteCommand("Zoom",false,"104%");
+	//}
+	function frontpage(){
+//     var contextPath = $('#contextPath').attr('href');//获取应用的根目录，我的绝对路径是http://localhost:80/
+//     myWriter.ExecuteCommand("FileOpen", false, contextPath+"/cab/index.xml");
+		$.ajax({
+			url:"/emr/dc/getTemplate/338701cdf3bd4790a8aa07a1b1a319e1",
+			dataType:"text",
+			success:function(data){
+				myWriter.ExecuteCommand("FileOpenString", false, data);
+			},
+			error:function(){
+				alert("读取出错");
+			}
+		})
+	}
+	function saveLocal(){
+		myWriter.ExecuteCommand("FileSaveAs", true, null);
+	}
+	function openLocal(){
+		myWriter.ExecuteCommand("FileOpen", true, null);
+	}
+	var ct = 1;
+	function readLocal(){
+		$.ajax({
+			url:"/emr/dc/getXML/"+ct,
+			dataType:"text",
+			success:function(data){
+				myWriter.ExecuteCommand("InsertXML", false, data);
+			},
+			error:function(){
+				alert("读取出错");
+			}
+		})
+		ct++;
+	}
+
+	function saveTemplate(){
+		var url = "";
+		if(window.opener.currentEditId){
+			url = "/template/temp/update";
+		}else{
+			url = "/template/temp/save";
+		}
+		var templateData = {
+			templateName : window.opener.templateName,
+			templateCode : window.opener.templateCode,
+			rangeSel : window.opener.rangeSel,
+			typeSel : window.opener.typeSel,
+			catalogId : window.opener.catalogId,
+			patientTypeSel : window.opener.patientTypeSel,
+			statusSel : window.opener.statusSel,
+			id :window.opener.currentEditId,
+			xml : myWriter.XMLTextUnFormatted
+		}
+		$.ajax({
+			url:url,
+			type : "POST",
+			data : templateData,
+			dataType :"json",
+			success:function(data){
+				if (data.code == 1) {
+					window.opener.layer.msg("操作成功");
+					window.opener.reLoad();
+//					var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+//					parent.layer.close(index);
+					window.close();
+
+				} else {
+					window.opener.layer.alert(data.msg)
+				}
+			},
+			error:function(){
+				alert("读取出错");
+			}
+		})
+	}
+	function insertTime(){
+		myWriter.ExecuteCommand("InsertDateTimeField",true,null);
+	}
+
+
+
+	var inputFlags = [ "{", "【"]
+	var stopFlags = ["\n", "，", "。"];
+
+
+
+//	var str1 = "六. 生殖器、肛门、直肠检查\n" +
+//			"男性\n" +
+//			"包皮【无过长/过长/易翻起/难翻起/无法翻起】，阴茎头【无充血/水肿/结节/糜烂/溃疡/菜花样肿块/瘢痕】，尿道口【充血/水肿/溃疡/狭窄】，阴囊大小【正常/明显增大/不发育】，阴囊皮肤【暗红色/其它色】，睾丸未触及【双侧睾丸/左侧睾丸/右侧睾丸】，睾丸硬结【无/有】，睾丸硬结压痛【无/有】，附睾结节【无/有】，附睾结节压痛【无/有】，前列腺表面【光滑/不光滑】，前列腺质地【软/中/硬】，前列腺中央沟【正常/变浅/消失/隆起】，精索形态【条索状/串珠状/蚯蚓团样】，精索质地【柔软/居中/质硬】\n" +
+//			"女性\n" +
+//			"阴毛分布【正常/稀疏/增多】，小阴唇【光滑/红肿/局部色素脱失/结节、溃疡/乳突样、蕈样突起】，阴蒂【过小/过大/红肿】， 尿道口【充血/水肿/溃疡/狭窄】，阴道前庭【局部红肿/明显肿大】\n" +
+//			"肛旁肿块皮肤红肿【无/有】，肛旁肿块距离肛缘【@】cm，肛旁肿块触痛【无/有】，肛旁肿块波动感【无/有】，肛旁肿块表面破口【无/有】，肛旁肿块质地【软/韧/硬】，肛旁肿块活动【可活动/不可活动】，\n" +
+//			"肛周皮肤充血性皮疹【无/有】，肛周皮肤出血性皮疹【无/有】，肛周皮肤紫癜【无/有】，肛周皮肤荨麻疹【无/有】，肛周皮肤疱疹【无/有】，肛周皮肤手术瘢痕【无/有】，肛周皮肤色素沉着【无/有】，肛周皮肤皮肤潮红【无/有】，肛周皮肤皮肤苍白【无/有】，肛周皮肤皮肤增厚【无/有】，肛周皮肤疣状新生物【无/有】，骶尾部肿块皮肤红肿【无/有】，骶尾部肿块触痛【无/有】，骶尾部肿块波动感【无/有】，骶尾部肿块肿块表面破口【无/有】，骶尾部肿块质地【软/韧/硬】，骶尾部肿块活动度【无/有】，骶尾部肿块肿块位置【正中/偏左/偏右】，外痔皮赘【无/有】，外痔肿胀【无/有】，{外痔触痛【无/有】，截石位【@】点}，血栓性外痔【无/有】，{截石位【@】点}，痔核脱出【无/有】，{截石位【@】点，回纳【可/不可】，痔核粘膜【光滑/糜烂/充血/出血】}，肛旁肉芽增生外口【无/有】，{皮下条索【无/有】，溢液【无/有】}，直肠息肉【无/有】，肛乳头状瘤【无/有】，疣状新生物【无/有】，齿线上下粘膜隆起【无/有】，肛窦粘膜【无异常/充血/糜烂/散在出血点/水肿】，肛内粘液【无/有】，肛内血便【无/有】，{性质【活动性出血/血块】，颜色【鲜红/暗红/黑色】}，肛内异物【无/有】，肛管直肠新生物【无/有】，{距离肛缘【@】cm，质地【软/韧/硬】，触之出血【否/是】}，肛窦、直肠粘膜增生【无/有】，粘膜下隆起肿块【无/有】，{截石位【@】点}，肛门狭窄【无/有】，{形状【管状/线状】，容【@】指通过}，指套染血【无/有】，肛内异物【无/有】"
+//
+//	var str2 = "七. 脊柱与四肢检查\n" +
+//			"脊柱弯曲度【生理性弯曲/病理性变形】，{病理性变形种类【颈椎变形/脊柱后凸/脊柱前凸/脊柱侧凸】，{脊柱侧凸性质【姿势性侧凸/器质性侧凸】}}，脊柱活动度【正常/受限】，{前屈【可/不可】，后伸【可/不可】，侧弯【可/不可】，旋转【可/不可】}，脊柱压痛【无/有】，{部位【脊柱棘突/椎旁肌肉/组织】}。脊柱叩击痛【无/有】，{直接叩击痛【无/有】，间接叩击痛【无/有】}，颈椎特殊试验【Jackson压头试验/前屈旋转试验（Fenz征）/颈静脉加压试验（压颈试验，Naffziger试验）/旋颈试验】，腰骶椎特殊试验【摇摆试验/拾物试验/直腿抬高试验（lasegue征）/屈颈试验（Linder征）】，股神经牵拉试验【@试验描述】\n" +
+//			"四肢跛行【无/有】， 四肢肿胀【无/有】，四肢畸形【无/有】，{畸形分类【骨折所致畸形/关节畸形】，{骨折所致畸形形状【短缩/成角/旋转】/关节畸形方式【内翻/外翻】}}，四肢水泡【无/有】，四肢创面【无/有】，{连通方式【与骨折端相通/与骨折端不相通】}，四肢皮下瘀斑【无/有】，四肢静脉曲张【无/有】，四肢皮肤发红【否/是】，四肢与健侧相应部位对称【等长/短缩】，四肢压痛【无/有】，{部位【@部位描述】，程度【轻/中/重】}，伤处皮温【正常/降低/增高】，末梢皮温【正常/降低】，骨擦音或骨擦感【无/有】，皮肤张力【正常/增高】，血管搏动肱动脉【可触及/不可及】，血管搏动桡动脉【可触及/不可及】，血管搏动股动脉【可触及/不可及】，血管搏动足背动脉【可触及/不可及】，四肢主动活动【正常/受限】，四肢被动活动【受限/不受限】，四肢弹性固定【无/有】，四肢反常活动【无/有】"
+//
+//	var str3 = "八. 神经系统检查\n" +
+//			"肌力【0级/1级/2级/3级/4级/5级】，肌张力【正常/增高/减低】，不自主运动【无/震颤/舞蹈样运动/手足徐动】，指鼻试验【正常/异常】，跟膝胫试验【正常/异常】， 角膜反射【正常/减弱/消失】，腹壁反射【正常/减弱/消失】，提睾反射【正常/减弱/消失】，跖反射【正常/减弱/消失】，肛门反射【正常/减弱/消失】，肱二头肌反射【正常/增强/减弱/消失】，肱三头肌反射【正常/增强/减弱/消失】，桡骨膜反射【正常/增强/减弱/消失】，膝反射【正常/增强/减弱/消失】，跟腱反射【正常/增强/减弱/消失】，踝阵挛【阴性/阳性】，髌阵挛【阴性/阳性】，Babinski征【阴性/阳性】，Oppenheim征【阴性/阳性】，Gordon征【阴性/阳性】，Hoffman征【阴性/阳性】，颈强直【阴性/阳性】，Kerning征【阴性/阳性】，Brudzinski征【阴性/阳性】，眼心反射【正常（脉率减少10～12次/分）/异常】，{异常描述【副交感神经功能增强（脉率减少超过12次/分）/迷走神经麻痹（脉率无变化）/交感神经功能亢进（脉率不减反增）】}，卧立位试验【正常/异常】，{异常描述【交感神经兴奋性增强/迷走神经兴奋性增强】}，皮肤化痕试验【阴性/阳性】，{阳性描述【交感神经兴奋性增高/副交感神经兴奋性增高/交感神经麻痹】}，竖毛反射【正常/异常】，发汗试验【正常/异常】，Valsalva动作【正常/异常】"
+
+
+//	var str1 = "一．一般检查\n" +
+//			"生命体征\n" +
+//			"体温【】℃，脉搏【】次/分，呼吸【】次/分，血压【收缩压】/【舒张压】mmHg\n" +
+//			"1. 一般情况：\n" +
+//			"发育【正常/不良/超常】，营养【良好/中等/不良/肥胖/恶病质】，意识状态【清晰/淡漠/模糊/嗜睡/谵妄/昏迷】，情感、认知、行为【无/有】异常，语言【流畅/不流畅】，语调【无/有】改变，体位【自主体位/被动体位/强迫仰卧位/强迫俯卧位/强迫侧卧位/强迫坐位/强迫蹲位/强迫停立位/辗转体位/角弓反射】，表情与面容【安静/忧虑/痛苦/烦躁/急性病容/慢性病容/贫血面容/肝病面容/肾病面容/甲状腺功能亢进面容/黏液性水肿面容/二尖瓣面容/肢端肥大症面容/伤寒面容/苦笑面容/满月面容/面具面容/病危面容】，检查【能/不能】合作\n" +
+//			"2. 皮肤、粘膜：\n" +
+//			"颜色【正常/潮红/苍白/发绀/黄染/色素沉着/色素脱失】，温度【正常/偏高/偏低】，温度【正常/湿润/干燥】，弹性【正常/减弱】，水肿【无/有】，{程度【轻度/中度/重度】}，皮疹【无/有】，{【斑疹/玫瑰疹/丘疹/斑丘疹/荨麻疹/疱疹】}，瘀点【无/有】，紫癜【无/有】，瘀斑【无/有】，血肿【无/有】，皮下结节【无/有】，{【部位】【数目】【大小(格式为：【】cm╳【】cm/大小不一)】，表面【光滑/不光滑】，形状【规则/不规则】，硬度【质软/质韧/质硬】，边界【清楚/较清楚/不清】，活动度【良好/尚可/差】，黏连情况【无黏连/与周围组织黏连】，压痛【无/有】}，肿块【无/有】，{【肿块性状描述】}，蜘蛛痣【无/有】，肝掌【无/有】，溃疡【无/有】，{【部位】【数量】【大小(格式为：【】cm╳【】cm/大小不一)】，【深度】cm，形状【规则/不规则】，边界【清楚/较清楚/不清】，肌肉暴露【无/有】，血管暴露【无/有】，骨骼暴露【无/有】，神经暴露【无/有】，肉芽组织覆盖【无/有】，渗血【无/有】，渗液【无/有】}，瘢痕【无/有】，{【部位】【面积：【】cm╳【】cm】，形状【规则/不规则】，瘢痕溃疡【无/有】，瘢痕挛缩【无/有】，关节活动受限【无/有】}，毛发生长及分布【无/有】异常，{【毛发脱落/毛发增多】}，全身及局部淋巴结肿大【无/有】，{部位【耳前淋巴结/耳后淋巴结/枕部淋巴结/颌下淋巴结/颏下淋巴结/锁骨上淋巴结/腋窝淋巴结/腋间淋巴结群/中央淋巴结群/胸肌淋巴结群/外侧淋巴结群/滑车上淋巴结/腹股沟淋巴结上群/腹股沟淋巴结下群/腘窝淋巴结】，【数目】，【大小(格式为：【】cm╳【】cm/大小不一)】，外形【规则/不规则】，质地【柔软/质韧/中等硬度/坚硬】，活动度【良好/尚可/差】，黏连【无/与周围组织黏连/相互黏连】}，局部皮肤红肿【无/有】，局部皮肤波动【无/有】，局部皮肤压痛【无/有】，局部皮肤瘘管【无/有】，局部皮肤瘢痕【无/有】"
+//
+//	var str2 = "二．头部检查\n" +
+//			"头发颜色【黑色/黄色/白色】，头发疏密度【正常/多毛/稀疏】，【无/有】脱发，{部位【不规则/额角/前额/头顶部/头部四周】，形状【圆形/椭圆形】}\n" +
+//			"头皮颜色【正常/黄色/红色】，头皮屑【无/有】，头癣【无/有】，疖痈【无/有】，外伤【无/有】，血肿【无/有】，疤痕【无/有】\n" +
+//			"头颅大小、外形【正常/异常】，{【小颅/尖颅或塔颅/方颅/巨颅/长颅/变形颅】，异常隆起【无/有】，运动异常【无/头部活动受限/头部不随意颤动/Musset征】}，压痛【无/有】\n" +
+//			"视力【远视力/近视力】，视野【正常/缺损】，色觉【正常/色弱/色盲】，立体视【无/有】，眼睑【正常/睑内翻/上睑下垂/眼睑闭合障碍/眼睑水肿】，泪道【正常/狭窄/阻塞】，睑结膜【正常/充血/水肿/出血/滤泡】，球结膜【正常/充血/水肿/出血/滤泡】，眼球外形【正常/眼球突出/眼球缺如/义眼】，眼球运动【正常/运动受限/眼球震颤】，眼压【正常/减低/增高】，角膜【透明/云翳/白斑/软化/溃疡/新生血管】，巩膜【正常/黄染】，虹膜【正常/前粘连/后粘连/萎缩/缺损/根部离断】，瞳孔形状【圆形/椭圆形/不规则】，【瞳孔大小】，双侧瞳孔大小形状【等大等圆/不等】，直接对光反射【正常/迟钝/消失】，间接对光反射【正常/迟钝/消失】，集合反射【正常/迟钝/消失】，晶状体【无/透明/浑浊/人工晶状体】，玻璃体【透明/浑浊/积血】，视神经乳头形状【圆形/椭圆形】，视神经乳头边界【清晰/不清晰】，视神经乳头颜色【淡红/苍白/充血水肿/出血】，视网膜血管【正常/新生血管】，黄斑区【正常/出血/水肿/渗出/裂孔/萎缩】，视网膜各象限【正常/出血/水肿/渗出/裂孔/瘢痕】\n" +
+//			"耳廓皮肤【正常/异常】，{【左侧/右侧】}，耳廓皮肤充血【无/有】，{【左侧/右侧】}，耳廓皮肤肿胀【无/有】，{【左侧/右侧】}，耳廓皮肤压痛【无/有】，{【左侧/右侧】}，耳廓畸形【无/有】，{【左侧/右侧】}，耳前瘘管【无/有】，{【左侧/右侧】}，耳廓新生物【无/有】，{【左侧/右侧】，{【左侧描述】/【右侧描述】}}，耳廓牵拉痛【无/有】，{【左侧/右侧】}，耳屏压痛【无/有】，{【左侧/右侧】}，外耳道【通畅/不通畅】，{【左侧/右侧】}，外耳道狭窄【无/有】，{【左侧/右侧】}，外耳道闭锁【无/有】，{【左侧/右侧】}，外耳道皮肤【正常/不正常】，{【左侧/右侧】}，外耳道皮肤充血【无/有】，{【左侧/右侧】}，外耳道皮肤肿胀【无/有】，{【左侧/右侧】}，外耳道耵聍【无/有】，{【左侧/右侧】}，外耳道异物【无/有】，{【左侧/右侧】}，外耳道肉芽【无/有】，{【左侧/右侧】}，外耳道分泌物【无/有】，{【左侧/右侧】}，外耳道胆脂瘤【无/有】，{【左侧/右侧】}，鼓膜色泽【正常/异常】，{【左侧/右侧】}，鼓膜充血【无/有】，{【左侧/右侧】}，鼓膜浑浊【无/有】，{【左侧/右侧】}，鼓膜棕黄色【无/有】，{【左侧/右侧】}，蓝鼓膜【无/有】，{【左侧/右侧】}，鼓膜光锥【存在/消失】，{【左侧/右侧】}，鼓膜内陷【无/有】，{【左侧/右侧】}，鼓膜穿孔【无/有】，{左侧【紧张部穿孔/松弛部穿孔/边缘性穿孔】/右侧【紧张部穿孔/松弛部穿孔/边缘性穿孔】}，鼓膜钙化【无/有】，{【左侧/右侧】}，鼓膜灯塔征【无/有】，{【左侧/右侧】}，股室粘膜【正常/异常】，{【左侧/右侧】}，股室粘膜充血【无/有】，{【左侧/右侧】}，股室粘膜肿胀【无/有】，{【左侧/右侧】}，股室肉芽【无/有】，{【左侧/右侧】}，股室胆脂瘤【无/有】，{【左侧/右侧】}，股室新生物【无/有】，{【左侧/右侧】，{【左侧描述】/【右侧描述】}}，股室分泌物【无/有】，{【左侧/右侧】}，乳突皮肤【正常/不正常】，{【左侧/右侧】}，乳突皮肤充血【无/有】，{【左侧/右侧】}，乳突皮肤肿胀【无/有】，{【左侧/右侧】}，乳突皮肤压痛【无/有】，{【左侧/右侧】}，乳突瘘口【无/有】，{【左侧/右侧】，分泌物【无/有】，{【左侧/右侧】}}，乳突新生物【无/有】，{【左侧/右侧】}，耳后沟【存在/消失】，{【左侧/右侧】}，听力【粗测正常/粗测异常】，{【左侧/右侧】}，音叉试验RT【未检/已检】，{【RT已检结果描述】}，音叉试验WT【未检/已检】，{【WT已检结果描述】}，音叉试验ST【未检/已检】，{【ST已检结果描述】}，音叉试验GT【未检/已检】，{【GT已检结果描述】}\n" +
+//			"外鼻畸形【无/有】，{【畸形描述】}，外鼻皮肤红肿【无/有】，{【红肿描述】}，外鼻伤口【无/有】，{【伤口部位描述】}，外鼻新生物【无/有】，{【新生物部位描述】}，鼻前庭狭窄【无/有】，{【双侧/左侧/右侧】，【狭窄描述】}，外鼻皮肤【正常/双侧红肿/左侧红肿/右侧红肿/双侧疖肿/左侧疖肿/右侧疖肿/双侧糜烂/左侧糜烂/右侧糜烂/双侧皲裂/左侧皲裂/右侧皲裂/双侧结痂/左侧结痂/右侧结痂】，{【皮肤异常情况描述】}，鼻腔粘膜【双侧红润/左侧红润/右侧红润/双侧充血/左侧充血/右侧充血/双侧苍白/左侧苍白/右侧苍白/双侧水肿/左侧水肿/右侧水肿】，鼻甲【正常/双侧充血/左侧充血/右侧充血/双侧肿大/左侧肿大/右侧肿大/双侧萎缩/左侧萎缩/右侧萎缩/双侧息肉样变/左侧息肉样变/右侧息肉样变】，嗅裂分泌物【无/有】，{部位【双侧/左侧/右侧】，性质【水样/粘液性/粘液脓性/血性】}，嗅裂息肉【无/有】，{部位【双侧/左侧/右侧】}，嗅裂新生物【无/有】，{部位【双侧/左侧/右侧】，【新生物描述】}，中鼻道分泌物【无/有】，{部位【双侧/左侧/右侧】，性质【水样/粘液性/粘液脓性/血性】}，中鼻道息肉【无/有】，{部位【双侧/左侧/右侧】}，中鼻道新生物【无/有】，{部位【双侧/左侧/右侧】，【新生物描述】}，鼻中隔偏曲【无/有】，{形状【左偏/右偏/S形偏曲】}，鼻中隔穿孔【无/有】，{【部位描述】}，鼻中隔新生物【无/有】，{【新生物描述】}，鼻中隔出血【无/有】，{【出血描述】}，鼻窦局部隆起【无/有】，{【隆起情况描述】}，鼻窦压痛【无/有】，{【压痛情况描述】}，【鼻窦其他情况描述】\n" +
+//			"口唇【红润光泽/苍白/发绀/干燥皲裂/疱疹/唇裂/肿胀/口角糜烂/肥厚】， 口腔黏膜【光洁/色素沉着/瘀斑/充血肿胀/溃疡/白色伪膜】，牙【龋齿/残冠/残根/缺失/氟斑牙/哈钦森牙】， 牙龈【正常/水肿/出血/溢脓/铅线】，舌外观【干燥舌/舌体增大/地图舌/裂纹舌/草莓舌/牛肉舌/镜面舌/毛舌】， 伸舌运动【正常/向左偏斜/向右偏斜】， 口腔气味【无特殊/口臭】，腮腺大体外观【正常/肿大】，腮腺导管口【分泌液清/溢脓】\n" +
+//			"痛觉【正常/过敏/减退/消失】， 触觉【正常/过敏/减退/消失】， 温度觉【正常/过敏/减退/消失】， 运动觉【正常/过敏/减退/消失】， 位置觉【正常/过敏/减退/消失】， 震动觉【正常/过敏/减退/消失】， 皮肤定位觉【正常/过敏/减退/消失】， 两点辨别觉【正常/过敏/减退/消失】， 实体觉【正常/过敏/减退/消失】， 体表图形觉【正常/过敏/减退/消失】，";
+
+//	var str3 = "三. 颈部检查\n" +
+//			"颈部肿块部位【颌下颏下区/颈前正中区/颈側区/锁骨上窝/颈后区/腮腺区】， 颈部肿块数目【单发性/多发性】， 颈部肿块质地【硬/不硬】，颈部肿块粘连融合【无/有】，颈部肿块压痛【无/有】，颈部肿块活动度【好/差】，颈部肿块随吞咽【上下移动/不移动】，颈静脉【充盈/怒张/搏动】。颈部血管杂音【无/有】\n" +
+//			"甲状腺大小【正常/肿大】，{部位【左/右】，级别【Ⅰ/Ⅱ/Ⅲ】}，甲状腺对称性【对称/不对称】，{气管偏移【向左/向右】}，甲状腺结节【无/有】，{结节大小【<1cm/1-2cm/2-4cm/>4cm】，结节质地【硬/不硬】，结节活动【好/差】，结节压痛【无/有】，结节随吞咽【上下移动/不移动】，连续性静脉嗡鸣【无/有】}"
+
+//	var str4 ="四. 胸部检查\n" +
+//			"胸廓大小【正常/异常】，{【异常描述】}，胸廓外形【正常/异常】，{病变外形【扁平胸/桶状胸/佝偻胸病(佝偻病串珠)/ 佝偻胸病(肋膈沟)/佝偻胸病(漏斗胸)/佝偻胸病(鸡胸)/胸廓一侧变形/胸廓局部隆起/脊柱畸形引起的胸廓两侧不对称/脊柱畸形引起的肋间隙增宽/脊柱畸形引起的肋间隙变窄】}，胸壁静脉怒张【无/有】，{血流【自上而下/自下而上】}，胸壁皮下气肿捻发感【无/有】，胸壁皮下气肿捻发音【无/有】，胸壁压痛【无/有】，{【压痛部位描述】}，胸壁肋间隙正常【回缩/膨隆】\n" +
+//			"乳房对称性【对称/欠对称】，{欠对称描述【左乳明显增大/左乳明显缩小/右乳明显增大/右乳明显缩小/左乳缺如（术后改变）/右乳缺如（术后改变）/双乳缺如（术后改变）/局部凹陷/局部隆起】}，乳头凹陷【无/有】，{部位描述【左侧/右侧/双侧】}，乳头分泌物【血性/浆液性/乳汁样/脓性/清水样】，乳头皮肤改变【红肿/橘皮样变/湿疹样变/浅表静脉曲张/皮肤回缩/疤痕/溃疡/色素沉着】， 腋窝及锁骨上淋巴结【包块/红肿/溃疡/瘘管/疤痕】，乳房硬度和弹性【乳房硬度增加/乳房弹性消失】，乳头硬度和弹性【乳头硬结/乳头弹性消失】，乳房触感【颗粒感/柔韧感/结节感/纤维感】， 乳头溢液位置【左侧乳头溢液/右侧乳头溢液/双侧乳头溢液】， 乳头溢液性质【血性溢液/浆液性溢液/乳汁样溢液/脓性溢液/脓性溢液/清水样溢液/浆液性溢液/乳汁样溢液】，乳房压痛【无/有】，乳房包块位置象限【内上/外上/内下/外下】， 乳房包块与乳头的距离【位置描述】，乳房包块大小【大小描述】，乳房包块硬度【柔软/质韧/质硬】，乳房包块边界【清晰/不清晰】，乳房包块活动度【活动度较大/活动度不佳/固定不动】，{固定不动【与皮肤黏连/与周围组织黏连/与胸壁黏连】}，乳房包块伴随压痛【无/有】，腋窝及锁骨上淋巴结【无明显肿大/肿大】，{活动性【不可活动/可活动】}，腋窝及锁骨上淋巴结疼痛【无触痛/有触痛】\n" +
+//			"胸腹式呼吸方式【胸式呼吸为主/腹式呼吸为主】，气道阻塞情况【吸气性呼吸困难（吸气时间延长）/呼气性呼吸困难（呼气时间延长）/三凹征】，呼吸困难的体位【端坐呼吸/转卧或折身呼吸/平卧呼吸】，呼吸频率【正常呼吸（12~20次/分）/呼吸过速（大于20次/分）/呼吸过缓（小于12次/分）、呼吸浅慢】，呼吸深度变化【呼吸浅快/呼吸深快（库斯莫尔呼吸）】，呼吸节律【节律正常（均匀、整齐）/潮式呼吸（陈-施呼吸）/间停呼吸（比奥呼吸）/抑制性呼吸/叹气样呼吸/呼吸停止】，胸廓扩张度【动度一致/胸廓左侧扩张受限/胸廓左侧扩张受限/胸廓两侧扩张受限】，语音震颤【对称/减弱/消失/增强】，{【部位描述】}，胸膜摩擦感【无/有】，{部位【左侧/右侧】}，肺部叩诊音【清音/过清音/鼓音/浊音/实音】，{【部位描述】}"
+
+//	var str4 ="耳廓皮肤【正常/异常】，{【左侧/右侧】}，耳廓皮肤充血【无/有】，{【左侧/右侧】}，耳廓皮肤肿胀【无/有】，{【左侧/右侧】}，耳廓皮肤压痛【无/有】，{【左侧/右侧】}，耳廓畸形【无/有】，{【左侧/右侧】}，耳前瘘管【无/有】，{【左侧/右侧】}，耳廓新生物【无/有】，{【左侧/右侧】，{【左侧描述】/【右侧描述】}}，耳廓牵拉痛【无/有】，{【左侧/右侧】}，耳屏压痛【无/有】，{【左侧/右侧】}，外耳道【通畅/不通畅】，{【左侧/右侧】}，外耳道狭窄【无/有】，{【左侧/右侧】}，外耳道闭锁【无/有】，{【左侧/右侧】}，外耳道皮肤【正常/不正常】，{【左侧/右侧】}，外耳道皮肤充血【无/有】，{【左侧/右侧】}，外耳道皮肤肿胀【无/有】，{【左侧/右侧】}，外耳道耵聍【无/有】，{【左侧/右侧】}，外耳道异物【无/有】，{【左侧/右侧】}，外耳道肉芽【无/有】，{【左侧/右侧】}，外耳道分泌物【无/有】，{【左侧/右侧】}，外耳道胆脂瘤【无/有】，{【左侧/右侧】}，鼓膜色泽【正常/异常】，{【左侧/右侧】}，鼓膜充血【无/有】，{【左侧/右侧】}，鼓膜浑浊【无/有】，{【左侧/右侧】}，鼓膜棕黄色【无/有】，{【左侧/右侧】}，蓝鼓膜【无/有】，{【左侧/右侧】}，鼓膜光锥【存在/消失】，{【左侧/右侧】}，鼓膜内陷【无/有】，{【左侧/右侧】}，鼓膜穿孔【无/有】，{左侧【紧张部穿孔/松弛部穿孔/边缘性穿孔】/右侧【紧张部穿孔/松弛部穿孔/边缘性穿孔】}，鼓膜钙化【无/有】，{【左侧/右侧】}，鼓膜灯塔征【无/有】，{【左侧/右侧】}，股室粘膜【正常/异常】，{【左侧/右侧】}，股室粘膜充血【无/有】，{【左侧/右侧】}，股室粘膜肿胀【无/有】，{【左侧/右侧】}，股室肉芽【无/有】，{【左侧/右侧】}，股室胆脂瘤【无/有】，{【左侧/右侧】}，股室新生物【无/有】，{【左侧/右侧】，{【左侧描述】/【右侧描述】}}，股室分泌物【无/有】，{【左侧/右侧】}，乳突皮肤【正常/不正常】，{【左侧/右侧】}，乳突皮肤充血【无/有】，{【左侧/右侧】}，乳突皮肤肿胀【无/有】，{【左侧/右侧】}，乳突皮肤压痛【无/有】，{【左侧/右侧】}，乳突瘘口【无/有】，{【左侧/右侧】，分泌物【无/有】，{【左侧/右侧】}}，乳突新生物【无/有】，{【左侧/右侧】}，耳后沟【存在/消失】，{【左侧/右侧】}，听力【粗测正常/粗测异常】，{【左侧/右侧】}，音叉试验RT【未检/已检】，{【RT已检结果描述】}，音叉试验WT【未检/已检】，{【WT已检结果描述】}，音叉试验ST【未检/已检】，{【ST已检结果描述】}，音叉试验GT【未检/已检】，{【GT已检结果描述】}"
+
+	function gogo1(){
+		startProcessing(str1);
+	}
+	function gogo2(){
+		startProcessing(str2);
+	}
+	function gogo3(){
+		startProcessing(str3);
+	}
+	function gogo4(){
+		startProcessing(str4);
+	}
+	function bbb(){
+        var url = "";
+        if(window.opener.currentEditId){
+            url = "/template/temp/update";
+        }else{
+            url = "/template/temp/save";
+        }
+        var input = myWriter.Document.GetElementById("既往史");//获取诊疗经过输入域
+		if (input != null) {
+			input = myWriter.ComConvertToXTextInputFieldElement(input);
+			if (input != null) {
+				input.focus();
+			}
+		}
+        var templateData = {
+            templateName : window.opener.templateName,
+            templateCode : window.opener.templateCode,
+            rangeSel : window.opener.rangeSel,
+            typeSel : window.opener.typeSel,
+            catalogId : window.opener.catalogId,
+            patientTypeSel : window.opener.patientTypeSel,
+            statusSel : window.opener.statusSel,
+            id :window.opener.currentEditId,
+            xml : input.innerXML
+        }
+        $.ajax({
+            url:url,
+            type : "POST",
+            data : templateData,
+            dataType :"json",
+            success:function(data){
+                if (data.code == 1) {
+                    window.opener.layer.msg("操作成功");
+                    window.opener.reLoad();
+//					var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+//					parent.layer.close(index);
+                    window.close();
+
+                } else {
+                    window.opener.layer.alert(data.msg)
+                }
+            },
+            error:function(){
+                alert("读取出错");
+            }
+        })
+//         var head= document.getElementsByTagName('head')[0];
+//         var script= document.createElement('script');
+//         script.type= 'text/javascript';
+//         script.onload = script.onreadystatechange = function() {
+//             if (!this.readyState || this.readyState === "loaded" || this.readyState === "complete" ) {
+//                 ceshi();
+// // Handle memory leak in IE
+//                 script.onload = script.onreadystatechange = null;
+//             } };
+//         script.src= '/js/templateScript/入院记录.js';
+//         head.appendChild(script);
+
+
+		// var ttt = myWriter.XMLTextUnFormatted.length;
+		// alert(ttt)
+//		var inputw = myWriter.Document.GetElementById("zz");
+//		if (inputw != null) {
+//			inputw = myWriter.ComConvertToXTextInputFieldElement(inputw);
+//		}
+//		inputw.Visible = false;XTextTableRowElement
+//		var row = myWriter.Document.GetElementById("yjsy");
+//		if (row != null) {
+//			row = myWriter.ComConvertToXTextTableRowElement(row);
+//		}
+//		row.Visible = false;
+//		myWriter.RefreshDocument();
+
+//		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+//		var input1 = myWriter.ComCreateXTextInputFieldElement();
+//		input1.BackgroundText = "检查项目";
+//		input1.startBorderText = "【";
+//		input1.endBorderText = "】";
+//		input1.FieldSettings = myWriter.ComCreateInputFieldSettings();
+//		input1.FieldSettings.EditStyle = 2;
+//		myWriter.ExecuteCommand("InsertInputField", false, input1);
+// 		var input = myWriter.Document.GetElementById("ceshi");//获取诊疗经过输入域
+// 		if (input != null) {
+// 			input = myWriter.ComConvertToXTextInputFieldElement(input);
+// 			if (input != null) {
+// 				input.focus();
+// 			}
+// 		}
+// 		debugger;
+//		mvar input = myWriter.ComCreateXTextInputFieldEleent();
+//		input.BackgroundText = "ceshi";
+////		descinput.startBorderText = "【";
+////		descinput.endBorderText = "】";
+//		myWriter.ExecuteCommand("InsertInputField", false, input);
+//		input.focus();
+//
+//		myWriter.ExecuteCommand("InsertString", false, "abcde");
+//
+//		input.focus();
+//
+//		myWriter.ExecuteCommand("MoveTo" , false , "FieldEnd");
+//		myWriter.ExecuteCommand("InsertString", false, "hhh");
+//		var input2 = myWriter.ComCreateXTextInputFieldElement();
+//		input2.BackgroundText = "laji";
+//		myWriter.ExecuteCommand("InsertInputField", false, input2);
+//		var haveinput = myWriter.ComCreateXTextInputFieldElement();
+//		haveinput.BackgroundText = "有/无";
+//		haveinput.FieldSettings = myWriter.ComCreateInputFieldSettings();
+//		haveinput.FieldSettings.EditStyle = 1;
+//		haveinput.FieldSettings.MultiSelect = false;
+//		haveinput.FieldSettings.DynamicListItems = false;
+//		haveinput.startBorderText = "【";
+//		haveinput.endBorderText = "】";
+//		haveinput.FieldSettings.ListSource.Items.AddByTextValue("有", "有");
+//		haveinput.FieldSettings.ListSource.Items.AddByTextValue("无", "无");
+//		haveinput.DefaultEventExpression = "value='有'";
+	}
+
+	function startProcessing(str) {
+		while(str.length>0){
+//			if(str.indexOf("甲状腺对称性")<0){
+//				debugger;
+//			}
+			str = doPart(str);
+		}
+	}
+
+	function doPart(str) {
+		var curIndex = 0
+		var finIndex = str.length;
+		var curHeadString = "";
+		var curContentString = "";
+		var curContentMode = "";
+
+//        for (var i in stopFlags.concat(inputFlags)) {
+//            var flag = stopFlags[i];
+//            var index = str.indexOf(flag);
+//            if (index == -1) continue;
+//            if (index < firstFlagIndex) {
+//                firstFlagIndex = index;
+//                curStopFlag = stopFlags[i];
+//            }
+//            // firstFlagIndex = index<firstFlagIndex? index : firstFlagIndex;
+//            // curStopFlag = index<firstFlagIndex? stopFlags[i] : curStopFlag;
+//        }
+		var endObj = findLastIndex(str, stopFlags.concat(inputFlags), 0);
+		if(stopFlags.indexOf(endObj.flag)>=0){//curStopFlag == "\n" || curStopFlag == "，" || curStopFlag == "。"
+			insertString(str.substring(0,endObj.index+1))
+			str = str.substr(endObj.index+1);
+		}
+		if(endObj.flag == "【"){
+			var endFlagIndex = str.indexOf("】");
+			var itemsString = str.substring(endObj.index+1, endFlagIndex);
+			var itemsArray = itemsString.split("/");
+			var startBorder = str.substring(0, endObj.index);
+			var sentenceFinalObj=findLastIndex(str, stopFlags, endFlagIndex);
+
+			var endBorder = str.substring(endFlagIndex+1, sentenceFinalObj.index);
+			var params = {
+				start : startBorder,
+				end : endBorder,
+				punc : sentenceFinalObj.flag
+			}
+			if(itemsArray.length>1){
+				insertSelectInput(params, itemsArray)
+			}else{
+				insertTextInput(params, itemsString);
+			}
+			str = str.substr(sentenceFinalObj.index+1);
+		}
+		if(endObj.flag == "{"){
+			var endFlagIndex = findBlockEndIndex(str);
+			var itemsString = str.substring(endObj.index+1, endFlagIndex);
+			var startBorder = str.substring(0, endObj.index);
+			var sentenceFinalObj=findLastIndex(str, stopFlags, endFlagIndex);
+			var endBorder = str.substring(endFlagIndex+1, sentenceFinalObj.index);
+			var params = {
+				start : startBorder,
+				end : endBorder,
+				punc : sentenceFinalObj.flag
+			}
+			insertBlockInput(params,itemsString);
+			str = str.substr(sentenceFinalObj.index+1);
+		}
+		return str;
+	}
+
+	function findLastIndex(str, flagsArray, endFlagIndex){
+		var firstFlagIndex = 9999;
+		var curStopFlag = "";
+		for (var i in flagsArray) {
+			var flag = flagsArray[i];
+			var index = str.indexOf(flag, endFlagIndex);
+			if (index == -1) continue;
+			if (index < firstFlagIndex) {
+				firstFlagIndex = index;
+				curStopFlag = flagsArray[i];
+			}
+			// firstFlagIndex = index<firstFlagIndex? index : firstFlagIndex;
+			// curStopFlag = index<firstFlagIndex? stopFlags[i] : curStopFlag;
+		}
+		return {index:firstFlagIndex,flag:curStopFlag};
+	}
+
+	function findBlockEndIndex(str){
+		var count = 0;
+		var reg = /[{}]/g;
+		var match;
+		while(true){
+			match = reg.exec(str);
+			if(!match) break;
+			if(match[0]=="{") count++;
+			if(match[0]=="}") count--;
+			if(count==0) break;
+		}
+		return match.index;
+	}
+
+	function insertString(str){
+		console.log("插入字符串："+str);
+		myWriter.ExecuteCommand("InsertString", false, str);
+	}
+
+	function insertSelectInput(params,itemList){
+		var id = "";
+		if(myTrim(params.start).length>0){
+			id = myTrim(params.start);
+		}else{
+			id = myTrim(params.end);
+		}
+		var itemsStr = "";
+		for(var i in itemList){
+			itemsStr += itemList[i]+"/";
+		}
+		console.log("id：" + id + "内容："+itemsStr);
+//debugger;
+		var multiFlag = false;
+//		if(itemsStr.indexOf("左侧")>=0){
+//			multiFlag = true;
+//		}else{
+//			multiFlag = false;
+//		}
+
+		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+		var input = myWriter.ComCreateXTextInputFieldElement();
+		input.ID = id;
+		input.name = id;
+		input.BackgroundText = "请选择";
+		input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		input.FieldSettings.EditStyle = 1;
+		input.FieldSettings.MultiSelect = multiFlag;
+		input.FieldSettings.DynamicListItems = false;
+		input.startBorderText = "【";
+		input.endBorderText = "】";
+		//获取下拉选项数值
+		var list2 = itemList;
+
+		for (var i in list2) {
+			input.FieldSettings.ListSource.Items.AddByTextValue(list2[i], list2[i]);
+		}
+		myWriter.ExecuteCommand("InsertString", false, params.start);
+		myWriter.ExecuteCommand("InsertInputField", false, input);
+		myWriter.ExecuteCommand("InsertString", false, params.end+"，");//原本为 params.end+params.punc punc为原文标点 现在无视 自动生成，加入
+	}
+
+	function insertTextInput(params,content){
+		var id = "";
+		if(myTrim(params.start).length>0){
+			id = myTrim(params.start);
+		}else{
+			id = myTrim(params.end);
+		}
+		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+		var input = myWriter.ComCreateXTextInputFieldElement();
+		input.ID = id;
+		input.name = id;
+		input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		input.FieldSettings.EditStyle = 0;
+		input.BackgroundText = content;
+
+		myWriter.ExecuteCommand("InsertString", false, params.start);
+		myWriter.ExecuteCommand("InsertInputField", false, input);
+		myWriter.ExecuteCommand("InsertString", false, params.end+"，");//原本为 params.end+params.punc punc为原文标点 现在无视 自动生成，加入
+	}
+
+	function insertBlockInput(params,content){
+		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+		var input = myWriter.ComCreateXTextInputFieldElement();
+		input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		input.FieldSettings.EditStyle = 0;
+		if(content.indexOf("【")<0){
+			input.innerText= content;
+		}
+		myWriter.ExecuteCommand("InsertString", false, params.start);
+		myWriter.ExecuteCommand("InsertInputField", false, input);
+		myWriter.ExecuteCommand("InsertString", false, params.end);
+
+		if(content.indexOf("【")>=0){
+			input.focus();
+			startProcessing(content);
+			myWriter.ExecuteCommand("MoveTo" , false , "End");
+
+		}
+	}
+
+
+
+	function myTrim(x) {
+		return x.replace(/^\s+|\s+$/gm,'');
+	}
+
+
+
+	function makeBlankInput(){
+		myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+		var input = myWriter.ComCreateXTextInputFieldElement();
+		input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+		input.FieldSettings.EditStyle = 0;
+		myWriter.ExecuteCommand("InsertInputField", false, input);
+	}
+
+	function makeInputFromString(){
+		var con = $("#stringSource").val();
+		var index1 = con.indexOf("【");
+		var index2 = con.indexOf("】");
+		var start = con.substring(0, index1);
+		var end = con.substring(index2+1);
+		var id = "";
+		if(myTrim(start).length>0){
+			id=myTrim(start);
+		}else{
+			id=myTrim(end);
+		}
+		var itemsArray = con.substring(index1+1,index2).split("/")
+		if(itemsArray.length>1){
+			myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+			var input = myWriter.ComCreateXTextInputFieldElement();
+			input.ID = id;
+			input.name = id;
+			input.BackgroundText = "请选择";
+			input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+			input.FieldSettings.EditStyle = 1;
+			input.FieldSettings.MultiSelect = false;
+			input.FieldSettings.DynamicListItems = false;
+			input.startBorderText = "【";
+			input.endBorderText = "】";
+			//获取下拉选项数值
+			var list2 = itemsArray;
+
+			for (var i in list2) {
+				input.FieldSettings.ListSource.Items.AddByTextValue(list2[i], list2[i]);
+			}
+			myWriter.ExecuteCommand("InsertString", false, start);
+			myWriter.ExecuteCommand("InsertInputField", false, input);
+			myWriter.ExecuteCommand("InsertString", false, end);
+		}else{
+			myWriter.DocumentOptions.BehaviorOptions.AutoCreateInstanceInProperty = true;
+			var input = myWriter.ComCreateXTextInputFieldElement();
+			input.ID = id;
+			input.name = id;
+			input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+			input.FieldSettings.EditStyle = 0;
+			input.BackgroundText = con.substring(index1+1,index2);
+
+			myWriter.ExecuteCommand("InsertString", false, start);
+			myWriter.ExecuteCommand("InsertInputField", false, input);
+			myWriter.ExecuteCommand("InsertString", false, end);
+		}
+
+	}
+</script>
+</html>

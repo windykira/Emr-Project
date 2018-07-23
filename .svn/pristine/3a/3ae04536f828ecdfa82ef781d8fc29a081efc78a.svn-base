@@ -1,0 +1,58 @@
+<div class="sidebar">
+  <div class="panel panel-default">
+    <!--<div class="panel-heading">
+      <h4 class="panel-title">菜单管理</h4>
+    </div>-->
+    <input type="hidden" id="userId" th:value="${userId}"/>
+    <ul class="list-group">
+      <a th:each="menu : ${menus}" class="list-group-item" style="cursor:pointer;" th:url="${menu.menuUrl}" th:text="${menu.menuName}"></a>
+      <!--<li class="list-group-item"><a href="#">菜单管理</a></li>-->
+    </ul>
+  </div>
+</div>
+<div class="main"></div>
+<script>
+
+  $(function() {
+    //默认加载用户管理页面
+    loadUser();
+
+    $(".list-group a").click(function () {
+      $(this).addClass("active").siblings(".active").removeClass("active");
+    });
+  });
+
+  $(".list-group-item").click(function(){
+    $.ajax({
+      type: "GET",
+      url: $(this).attr("url"),
+      async: false,
+      error: function (request) {
+        parent.layer.alert("Connection error");
+      },
+      success: function (data) {
+        $(".main").initPage(data);
+      }
+    });
+  });
+
+  function loadUser(){
+    $(".list-group a").each(function(i,e){
+      if($(this).attr("url") == "emrsys/user/"){
+        $(this).addClass("active");
+      }
+    });
+    $.ajax({
+      type: "GET",
+      url: "/emrsys/user",
+      async: false,
+      error: function (request) {
+        parent.layer.alert("Connection error");
+      },
+      success: function (data) {
+        //debugger;
+        $(".main").initPage(data);
+      }
+    });
+  }
+</script>

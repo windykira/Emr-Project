@@ -1,0 +1,323 @@
+<link rel="stylesheet" href="/kindeditor/themes/default/default.css" />
+
+<div width="100%" style="position:absolute;z-index:100">
+<!-- 工具栏 -->
+<div style="display:block;" class="ke-toolbar" unselectable="on">
+	<span class="ke-outline" data-name="undo" title="后退(Ctrl+Z)" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-undo" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="redo" title="前进(Ctrl+Y)" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-redo" unselectable="on"></span></span>
+	<span class="ke-inline-block ke-separator"></span>
+	<span class="ke-outline" data-name="preview" title="预览" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-preview" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="print" title="打印(Ctrl+P)" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-print" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="cut" title="剪切(Ctrl+X)" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-cut" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="copy" title="复制(Ctrl+C)" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-copy" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="paste" title="粘贴(Ctrl+V)" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-paste" unselectable="on"></span></span>
+	<span class="ke-inline-block ke-separator"></span>
+	<span class="ke-outline" data-name="justifyleft" title="左对齐" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-justifyleft" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="justifycenter" title="居中" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-justifycenter" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="justifyright" title="右对齐" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-justifyright" unselectable="on"></span></span>
+	<span class="ke-outline ke-on ke-selected" data-name="justifyfull" title="两端对齐" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-justifyfull" unselectable="on"></span></span>
+	<span class="ke-inline-block ke-separator"></span>
+<!-- 		<div class="ke-hr"></div> -->
+	<span id="font_btn" class="ke-outline" data-name="fontname" title="字体" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-fontname" unselectable="on"></span></span>
+	<span id="size_btn" class="ke-outline" data-name="fontsize" title="文字大小" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-fontsize" unselectable="on"></span></span>
+	<span class="ke-inline-block ke-separator"></span>
+	<span id="color_btn" class="ke-outline" data-name="forecolor" title="文字颜色" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-forecolor" unselectable="on"></span></span>
+	<span id="bgcolor_btn" class="ke-outline" data-name="hilitecolor" title="文字背景" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-hilitecolor" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="bold" title="粗体(Ctrl+B)" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-bold" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="italic" title="斜体(Ctrl+I)" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-italic" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="underline" title="下划线(Ctrl+U)" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-underline" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="removeformat" title="删除格式" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-removeformat" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="table" title="表格" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-table" unselectable="on"></span></span>
+	<span class="ke-outline" data-name="hr" title="插入横线" unselectable="on">
+	<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-hr" unselectable="on"></span></span>
+</div>
+<!-- 字体下拉菜单 -->
+<div id="font_menu" style="display: none;width: 150px;position: absolute ;z-index: 811213;" class="ke-menu-default ke-shadow ke-menu" unselectable="on">
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left">	</div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: SimSun;" unselectable="on">宋体</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: NSimSun;" unselectable="on">新宋体</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: FangSong_GB2312;" unselectable="on">仿宋_GB2312</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: KaiTi_GB2312;" unselectable="on">楷体_GB2312</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: SimHei;" unselectable="on">黑体</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: Microsoft YaHei;" unselectable="on">微软雅黑</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: Arial;" unselectable="on">Arial</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: Arial Black;" unselectable="on">Arial Black</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: Times New Roman;" unselectable="on">Times New Roman</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: Courier New;" unselectable="on">Courier New</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: Tahoma;" unselectable="on">Tahoma</span></div></div>
+	<div class="ke-menu-item" unselectable="on">
+	<div class="ke-inline-block ke-menu-item-left"></div>
+	<div class="ke-inline-block ke-menu-item-right">
+		<span style="font-family: Verdana;" unselectable="on">Verdana</span>
+	</div>
+	</div>
+</div>
+<!-- 字号下拉菜单 -->
+<div id="size_menu" style="display: none; width: 150px; position: absolute ;z-index: 811213;" class="ke-menu-default ke-shadow ke-menu" unselectable="on">
+	<div class="ke-menu-item" unselectable="on" style="height: 21px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 21px;"><span style="font-size:9px;" unselectable="on">9px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 22px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 22px;"><span style="font-size:10px;" unselectable="on">10px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 24px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 24px;"><span style="font-size:12px;" unselectable="on">12px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 26px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 26px;"><span style="font-size:14px;" unselectable="on">14px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 28px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 28px;"><span style="font-size:16px;" unselectable="on">16px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 30px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 30px;"><span style="font-size:18px;" unselectable="on">18px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 36px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 36px;"><span style="font-size:24px;" unselectable="on">24px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 44px;">
+		<div class="ke-inline-block ke-menu-item-left">
+			<span class="ke-inline-block ke-toolbar-icon ke-toolbar-icon-url ke-icon-checked"></span>
+		</div>
+	<div class="ke-inline-block ke-menu-item-right" style="line-height: 44px;"><span style="font-size:32px;" unselectable="on">32px</span></div></div></div>
+<!-- 文字色下拉菜单 -->
+<div id="color_menu" style="display: none; position: absolute; z-index: 811213;" class="ke-menu-default ke-colorpicker-default ke-shadow ke-colorpicker" unselectable="on">
+	<table class="ke-colorpicker-table" cellpadding="0" cellspacing="0" border="0">
+	<tbody>
+		<tr>
+		<td colspan="6" class="ke-colorpicker-cell-top" title="transparent" unselectable="on">无颜色</td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#E53333" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(229, 51, 51);"></div></td>
+		<td class="ke-colorpicker-cell" title="#E56600" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(229, 102, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#FF9900" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(255, 153, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#64451D" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(100, 69, 29);"></div></td>
+		<td class="ke-colorpicker-cell" title="#DFC5A4" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(223, 197, 164);"></div></td>
+		<td class="ke-colorpicker-cell" title="#FFE500" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(255, 229, 0);"></div></td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#009900" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 153, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#006600" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 102, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#99BB00" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(153, 187, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#B8D100" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(184, 209, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#60D978" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(96, 217, 120);"></div></td>
+		<td class="ke-colorpicker-cell" title="#00D5FF" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 213, 255);"></div></td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#337FE5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(51, 127, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#003399" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 51, 153);"></div></td>
+		<td class="ke-colorpicker-cell" title="#4C33E5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(76, 51, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#9933E5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(153, 51, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#CC33E5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(204, 51, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#EE33EE" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(238, 51, 238);"></div></td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#FFFFFF" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(255, 255, 255);"></div></td>
+		<td class="ke-colorpicker-cell" title="#CCCCCC" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(204, 204, 204);"></div></td>
+		<td class="ke-colorpicker-cell" title="#999999" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(153, 153, 153);"></div></td>
+		<td class="ke-colorpicker-cell" title="#666666" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(102, 102, 102);"></div></td>
+		<td class="ke-colorpicker-cell" title="#333333" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(51, 51, 51);"></div></td>
+		<td class="ke-colorpicker-cell ke-colorpicker-cell-selected" title="#000000" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 0, 0);"></div></td></tr></tbody>
+	</table>
+</div>
+<!-- 背景色下拉菜单 -->
+<div id="bgcolor_menu" style="display: none; position: absolute; z-index: 811213;" class="ke-menu-default ke-colorpicker-default ke-shadow ke-colorpicker" unselectable="on">
+	<table class="ke-colorpicker-table" cellpadding="0" cellspacing="0" border="0">
+	<tbody>
+		<tr>
+		<td colspan="6" class="ke-colorpicker-cell-top" title="无颜色" unselectable="on">无颜色</td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#E53333" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(229, 51, 51);"></div></td>
+		<td class="ke-colorpicker-cell" title="#E56600" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(229, 102, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#FF9900" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(255, 153, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#64451D" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(100, 69, 29);"></div></td>
+		<td class="ke-colorpicker-cell" title="#DFC5A4" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(223, 197, 164);"></div></td>
+		<td class="ke-colorpicker-cell" title="#FFE500" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(255, 229, 0);"></div></td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#009900" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 153, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#006600" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 102, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#99BB00" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(153, 187, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#B8D100" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(184, 209, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#60D978" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(96, 217, 120);"></div></td>
+		<td class="ke-colorpicker-cell" title="#00D5FF" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 213, 255);"></div></td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#337FE5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(51, 127, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#003399" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 51, 153);"></div></td>
+		<td class="ke-colorpicker-cell" title="#4C33E5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(76, 51, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#9933E5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(153, 51, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#CC33E5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(204, 51, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#EE33EE" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(238, 51, 238);"></div></td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#FFFFFF" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(255, 255, 255);"></div></td>
+		<td class="ke-colorpicker-cell" title="#CCCCCC" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(204, 204, 204);"></div></td>
+		<td class="ke-colorpicker-cell" title="#999999" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(153, 153, 153);"></div></td>
+		<td class="ke-colorpicker-cell" title="#666666" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(102, 102, 102);"></div></td>
+		<td class="ke-colorpicker-cell" title="#333333" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(51, 51, 51);"></div></td>
+		<td class="ke-colorpicker-cell ke-colorpicker-cell-selected" title="#000000" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 0, 0);"></div></td></tr></tbody>
+	</table>
+</div>
+<!-- 	<iframe id="testMenu" frameborder="no" border="0" style="display:none;position:absolute;width:156px;height:318px;left:10px;top:10px;z-index:100" src="fontMenu"></iframe> -->
+	
+<!-- 	<iframe id="testMenu" frameborder="no" border="0" style="background-color:transparent;position:absolute;width:100%;height:418px;left:10px;top:10px;z-index:100" src="fontMenu"></iframe> -->
+				
+	<script type="text/javascript" src="/js/jquery.min.js" ></script>
+	<script>
+	$(document).click(function(e){
+		var flag = $(e.target).parent().attr('id');
+		if(flag){
+			flag = flag.split("_")[0]
+		}
+		$(".ke-menu-default").each(function(){
+			var target_flag = $(this).attr("id");
+			if(target_flag){
+				target_flag = target_flag.split("_")[0]
+				if(target_flag!=flag){
+					$(this).hide();
+				}
+			}
+		})
+	    
+	});
+	
+	//绑定下拉菜单点击事件
+	$("#font_menu").delegate('span','click',function () {//
+	    alert($(this).html());   
+	})
+	$("#size_menu").delegate('.ke-menu-item','click',function () {
+	    alert($(this).html());   
+	})
+	$("#color_menu").delegate('td','click',function () {
+	    alert($(this).attr("title"));   
+	})
+	$("#bgcolor_menu").delegate('td','click',function () {
+	    alert($(this).attr("title"));   
+	})
+	
+	
+	
+	//下拉菜单代理各个选项
+	$("#font_menu").delegate('.ke-menu-item','mouseenter',function () {
+	    $(this).addClass("ke-menu-item-on")   
+	})
+	$("#font_menu").delegate('.ke-menu-item','mouseleave',function () {
+	    $(this).removeClass("ke-menu-item-on")  
+	})
+	$("#size_menu").delegate('.ke-menu-item','mouseenter',function () {
+	    $(this).addClass("ke-menu-item-on")   
+	})
+	$("#size_menu").delegate('.ke-menu-item','mouseleave',function () {
+	    $(this).removeClass("ke-menu-item-on")  
+	})
+	$("#color_menu").delegate('td','mouseenter',function () {
+	    $(this).addClass("ke-colorpicker-cell-selected")   
+	})
+	$("#color_menu").delegate('td','mouseleave',function () {
+	    $(this).removeClass("ke-colorpicker-cell-selected")  
+	})
+	$("#bgcolor_menu").delegate('td','mouseenter',function () {
+	    $(this).addClass("ke-colorpicker-cell-selected")   
+	})
+	$("#bgcolor_menu").delegate('td','mouseleave',function () {
+	    $(this).removeClass("ke-colorpicker-cell-selected")  
+	})
+	
+	//悬浮时显示边框
+	$(".ke-toolbar").delegate('.ke-outline','mouseenter',function () {
+		
+	    $(this).addClass("ke-on")  
+	})
+	$(".ke-toolbar").delegate('.ke-outline','mouseleave',function () {
+		
+	    $(this).removeClass("ke-on")  
+	})
+	//toolbar按钮点击事件
+	$("#font_btn").click(function(e){
+		var top = $(this).position().top+$(this).height()+8;
+		var left = $(this).position().left;
+// 		$("#font_menu").css("top",top);
+// 		$("#font_menu").css("left",left);
+// 		$("#font_menu").show();
+		$("#testMenu").css("top",top);
+		$("#testMenu").css("left",left);
+		$("#testMenu").show();
+		//TODO: 获取文档中选中内容的对应属性并显示勾选
+	});
+	$("#size_btn").click(function(e){
+		var top = $(this).position().top+$(this).height()+8;
+		var left = $(this).position().left;
+		$("#size_menu").css("top",top);
+		$("#size_menu").css("left",left);
+		$("#size_menu").show();
+// 		e.stopPropagation();
+		//TODO: 获取文档中选中内容的对应属性并显示勾选
+	});
+	$("#color_btn").click(function(e){
+		var top = $(this).position().top+$(this).height()+8;
+		var left = $(this).position().left;
+		$("#color_menu").css("top",top);
+		$("#color_menu").css("left",left);
+		$("#color_menu").show();
+// 		e.stopPropagation();
+		//TODO: 获取文档中选中内容的对应属性并显示勾选
+	});
+	$("#bgcolor_btn").click(function(e){
+		var top = $(this).position().top+$(this).height()+8;
+		var left = $(this).position().left;
+		$("#bgcolor_menu").css("top",top);
+		$("#bgcolor_menu").css("left",left);
+		$("#bgcolor_menu").show();
+// 		e.stopPropagation();
+		//TODO: 获取文档中选中内容的对应属性并显示勾选
+	});
+		
+	</script>
+</div>	
+

@@ -1,0 +1,107 @@
+$().ready(function() {
+	validateRule();
+
+	$.ajax({  
+        type : 'get',  
+        url : "/template/temp/getTypes",  
+        dataType : 'json',  
+        success : function(datas) {//返回list数据并循环获取  
+            var select = $("#typeSel");  
+            for (var i = 0; i < datas.length; i++) {  
+                select.append("<option value='"+datas[i].PK_TMP_CLASS+"'>"  
+                        + datas[i].NAME_CLASS + "</option>");  
+            }
+        }
+    });
+	
+});
+
+$.validator.setDefaults({
+	submitHandler : function() {
+		save();
+	}
+});
+
+function save() {
+	parent.templateName = $("#templateName").val();
+	parent.templateCode = $("#templateCode").val();
+	parent.rangeSel = $("#rangeSel").val();
+	parent.typeSel = $("#typeSel").val();
+	parent.catalogId = $("#catalogId").val();
+	parent.patientTypeSel = $("#patientTypeSel").val();
+	parent.statusSel = $("#statusSel").val();
+	parent.openFlag = 1;
+	var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+	parent.loadEditPage();
+	parent.layer.close(index);
+
+}
+function validateRule() {
+	var icon = "<i class='fa fa-times-circle'></i> ";
+	$("#templateForm").validate({
+		rules : {
+			templateName : {
+				required : true
+			},
+			rangeSel : {
+				required : true
+			},
+			templateCode : {
+				required : true,
+				minlength : 2,
+				remote : {
+					url : "/template/temp/codeCheck", // 后台处理程序
+					type : "post", // 数据发送方式
+					dataType : "json", // 接受数据格式
+					data : { // 要传递的数据
+						templateCode : function() {
+							return $("#templateCode").val();
+						}
+					}
+				}
+			},
+			typeSel : {
+				required : true
+			}
+		},
+		messages : {
+			templateName : {
+				required : icon + "请输入模板名称"
+			},
+			templateCode : {
+				required : icon + "请输入模板编码",
+				minlength : icon + "编码必须两个字符以上",
+				remote : icon + "该编码已经存在"
+			},
+		}
+	})
+}
+
+function cancel(){
+	var index = parent.layer.getFrameIndex(window.name);
+	parent.layer.close(index);
+}
+
+function callBack(id, name){
+	$("#catalogName").val(name);
+	$("#catalogId").val(id);
+}
+
+function openCatalog(){
+	layer.open({
+		type:2,
+		title:"选择上级目录",
+		shadeClose: true,
+		area : [ '400px', '450px' ],
+		skin: 'layui-layer-molv',
+		content:"/template/medicalrecord/catalogTree/2",
+		btn: ['确认', '取消'],
+		yes:function(index,layero){
+			var iframeWin = window[layero.find('iframe')[0]['name']];
+			var result = iframeWin.callBack();
+			$("#catalogName").val(result.catalogName);
+			$("#catalogId").val(result.catalogId);
+			layer.close(index)
+		}
+	})
+}

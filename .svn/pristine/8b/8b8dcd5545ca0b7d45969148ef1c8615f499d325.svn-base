@@ -1,0 +1,444 @@
+<div th:fragment="dc">
+<div width="100%" style="z-index:100">
+	<!--<div class="">-->
+		<!--<button class="btn btn-default" type="button" onclick="frontpage()" data-toggle="modal" data-backdrop="static" data-target="#addMedical">新增</button>-->
+		<!--<button class="btn btn-default" type="button" onclick="saveTemplate()">保存</button>-->
+		<!--<button class="btn btn-default" type="button" onclick="pp()">删除</button>-->
+		<!--<button class="btn btn-default" type="button">存为个人模板</button>-->
+		<!--<button class="btn btn-default" type="button">预览</button>-->
+		<!--<button class="btn btn-default" type="button">打印</button>-->
+		<!--<button class="btn btn-default" type="button" onclick="change_page()">改页面</button>-->
+
+		<!--<button class="btn btn-default" type="button" onclick="page_setting()">页面设置</button>-->
+		<!--<button class="btn btn-default" type="button" onclick="zoom()">缩放</button>-->
+	<!--</div>-->
+	<!-- 工具栏 -->
+	<div style="display:block;" class="ke-toolbar" unselectable="on">
+		<span id="ctrlz_btn" class="ke-outline" data-name="undo" title="后退(Ctrl+Z)" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-undo" unselectable="on"></span></span>
+		<span id="ctrly_btn" class="ke-outline" data-name="redo" title="前进(Ctrl+Y)" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-redo" unselectable="on"></span></span>
+		<span class="ke-inline-block ke-separator"></span>
+		<span id="preview_btn"class="ke-outline" data-name="preview" title="预览" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-preview" unselectable="on"></span></span>
+		<span id="print_btn" class="ke-outline" data-name="print" title="打印(Ctrl+P)" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-print" unselectable="on"></span></span>
+		<span class="ke-outline" data-name="cut" title="剪切(Ctrl+X)" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-cut" unselectable="on"></span></span>
+		<span class="ke-outline" data-name="copy" title="复制(Ctrl+C)" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-copy" unselectable="on"></span></span>
+		<span class="ke-outline" data-name="paste" title="粘贴(Ctrl+V)" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-paste" unselectable="on"></span></span>
+		<span class="ke-inline-block ke-separator"></span>
+		<span id="align_left_btn" class="ke-outline" data-name="justifyleft" title="左对齐" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-justifyleft" unselectable="on"></span></span>
+		<span id="align_center_btn" class="ke-outline" data-name="justifycenter" title="居中" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-justifycenter" unselectable="on"></span></span>
+		<span id="align_right_btn"class="ke-outline" data-name="justifyright" title="右对齐" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-justifyright" unselectable="on"></span></span>
+		<span id="align_justify_btn" class="ke-outline" data-name="justifyfull" title="两端对齐" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-justifyfull" unselectable="on"></span></span>
+		<span class="ke-inline-block ke-separator"></span>
+	<!-- 		<div class="ke-hr"></div> -->
+		<span id="font_btn" class="ke-outline" data-name="fontname" title="字体" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-fontname" unselectable="on"></span></span>
+		<span id="size_btn" class="ke-outline" data-name="fontsize" title="文字大小" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-fontsize" unselectable="on"></span></span>
+		<span class="ke-inline-block ke-separator"></span>
+		<span id="color_btn" class="ke-outline" data-name="forecolor" title="文字颜色" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-forecolor" unselectable="on"></span></span>
+		<span id="bgcolor_btn" class="ke-outline" data-name="hilitecolor" title="文字背景" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-hilitecolor" unselectable="on"></span></span>
+		<span id="bold_btn" class="ke-outline" data-name="bold" title="粗体(Ctrl+B)" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-bold" unselectable="on"></span></span>
+		<span id="italic_btn" class="ke-outline" data-name="italic" title="斜体(Ctrl+I)" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-italic" unselectable="on"></span></span>
+		<span id="underline_btn" class="ke-outline" data-name="underline" title="下划线(Ctrl+U)" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-underline" unselectable="on"></span></span>
+		<span class="ke-outline" data-name="removeformat" title="删除格式" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-removeformat" unselectable="on"></span></span>
+		<span id="grid_btn" class="ke-outline" data-name="table" title="表格" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-table" unselectable="on"></span></span>
+		<span class="ke-outline" data-name="hr" title="插入横线" unselectable="on">
+		<span class="ke-toolbar-icon ke-toolbar-icon-url ke-icon-hr" unselectable="on"></span></span>
+		<!--<span><button onclick="frontpage()">加载首页</button></span>-->
+		<!--<span><button onclick="save()">保存</button></span>-->
+		<!--<span><button onclick="past()">诊疗经过</button></span>-->
+		<!--<span><button onclick="sub_symp()">鉴别症状</button></span>-->
+		<!--<span><button onclick="bindDataSource()">绑定数据</button></span>-->
+		<!--<span><button onclick="pp()">测试</button></span>-->
+		<!--<span><button onclick="saveTemplate()">保存模板</button></span>-->
+	</div>
+	<iframe id="font_menu_frame" class="menu_frame" frameborder="no" border="0" style="display:none;background-color:transparent;position:absolute;width:156px;height:321px;z-index:100" src="/emr/dc/fontMenu"></iframe>
+	<iframe id="size_menu_frame" class="menu_frame" frameborder="no" border="0" style="display:none;background-color:transparent;position:absolute;width:156px;height:255px;z-index:100" src="/emr/dc/sizeMenu"></iframe>
+	<iframe id="color_menu_frame" class="menu_frame" frameborder="no" border="0" style="display:none;background-color:transparent;position:absolute;width:140px;height:122px;z-index:100" src="/emr/dc/colorMenu"></iframe>
+	<iframe id="bgcolor_menu_frame" class="menu_frame" frameborder="no" border="0" style="display:none;background-color:transparent;position:absolute;width:140px;height:122px;z-index:100" src="/emr/dc/bgcolorMenu"></iframe>
+	<script type="text/javascript" src="/js/jquery.min.js" ></script>
+	<script>
+	//文档点击事件--控制下拉菜单的显示隐藏
+	$(document).click(function(e){
+		var flag = $(e.target).parent().attr('id');
+		if(flag){
+			flag = flag.split("_")[0]
+		}
+		$(".menu_frame").each(function(){
+			var target_flag = $(this).attr("id");
+			if(target_flag){
+				target_flag = target_flag.split("_")[0]
+				if(target_flag!=flag){
+					$(this).hide();
+				}
+			}
+		})
+	    
+	});
+	<!--工具栏按钮-->
+	//打印按钮
+	$("#print_btn").click(function(e){
+		print();
+	});
+	//预览按钮
+	$("#preview_btn").click(function(e){
+		preview();
+	});
+
+	//ctrlz
+	$("#ctrlz_btn").click(function(e){
+		myWriter.ExecuteCommand("Undo",false,null);
+	});
+
+	//ctrly
+	$("#ctrly_btn").click(function(e){
+		myWriter.ExecuteCommand("Redo",false,null);
+	});
+
+
+	function preview(){
+		myWriter.ExecuteCommand("FilePrintPreview", true , null );
+	}
+	function print(){
+		myWriter.ExecuteCommand("FilePrint",true,null);
+	}
+	function getXMLString(){
+		return myWriter.XMLTextUnFormatted;
+		//return myWriter.XMLText;
+	}
+	function getJSONString(){
+		var tmp = myWriter.getelementsbytypename("xtextinputfieldelement");
+		var ct = tmp.Count;
+		var inputInfoArray = [] ;
+		for(var i=0;i<ct;i++){
+			var input = myWriter.ComConvertToXTextInputFieldElement(tmp.GetItem(i));
+			var id = input.ID;
+			var name = input.name;
+			var value = input.innerText;
+			var info = {
+				"id": id,
+				"name": name,
+				"value": value
+			}
+			inputInfoArray.push(info);
+		}
+		var str = JSON.stringify(inputInfoArray);
+		return str;
+	}
+	//字体按钮
+	$("#font_btn").click(function(e){
+		var top = $(this).position().top+$(this).height()+8;
+		var left = $(this).position().left;
+// 		$("#font_menu").css("top",top);
+// 		$("#font_menu").css("left",left);
+// 		$("#font_menu").show();
+		$("#font_menu_frame").css("top",top);
+		$("#font_menu_frame").css("left",left);
+		$("#font_menu_frame").show();
+		//TODO: 获取文档中选中内容的对应属性并显示勾选
+	});
+	//文字大小按钮
+	$("#size_btn").click(function(e){
+		var top = $(this).position().top+$(this).height()+8;
+		var left = $(this).position().left;
+// 		$("#size_menu").css("top",top);
+// 		$("#size_menu").css("left",left);
+// 		$("#size_menu").show();
+		$("#size_menu_frame").css("top",top);
+		$("#size_menu_frame").css("left",left);
+		$("#size_menu_frame").show();
+// 		e.stopPropagation();
+		//TODO: 获取文档中选中内容的对应属性并显示勾选
+	});
+	//前景色按钮
+	$("#color_btn").click(function(e){
+		var top = $(this).position().top+$(this).height()+8;
+		var left = $(this).position().left;
+// 		$("#color_menu").css("top",top);
+// 		$("#color_menu").css("left",left);
+// 		$("#color_menu").show();
+		$("#color_menu_frame").css("top",top);
+		$("#color_menu_frame").css("left",left);
+		$("#color_menu_frame").show();
+// 		e.stopPropagation();
+		//TODO: 获取文档中选中内容的对应属性并显示勾选
+	});
+	//背景色按钮
+	$("#bgcolor_btn").click(function(e){
+		var top = $(this).position().top+$(this).height()+8;
+		var left = $(this).position().left;
+// 		$("#bgcolor_menu").css("top",top);
+// 		$("#bgcolor_menu").css("left",left);
+// 		$("#bgcolor_menu").show();
+		$("#bgcolor_menu_frame").css("top",top);
+		$("#bgcolor_menu_frame").css("left",left);
+		$("#bgcolor_menu_frame").show();
+// 		e.stopPropagation();
+		//TODO: 获取文档中选中内容的对应属性并显示勾选
+	});
+	//左对齐按钮
+	$("#align_left_btn").click(function(){
+		myWriter.ExecuteCommand("AlignLeft", false , null );
+	})
+	//居中按钮
+	$("#align_center_btn").click(function(){
+		myWriter.ExecuteCommand("AlignCenter", false , null );
+	})
+	$("#align_right_btn").click(function(){
+		myWriter.ExecuteCommand("AlignRight", false , null );
+	})
+	$("#align_justify_btn").click(function(){
+		myWriter.ExecuteCommand("AlignJustify", false , null );
+	})	
+	$("#bold_btn").click(function(){
+		myWriter.ExecuteCommand("Bold", false , null );
+		if($("#bold_btn").hasClass("ke-on")){
+			$("#bold_btn").removeClass("ke-on");
+		}else{
+			$("#bold_btn").addClass("ke-on");
+		}
+	})	
+	$("#italic_btn").click(function(){
+		myWriter.ExecuteCommand("Italic", false , null );
+		if($("#italic_btn").hasClass("ke-on")){
+			$("#italic_btn").removeClass("ke-on");
+		}else{
+			$("#italic_btn").addClass("ke-on");
+		}
+	})
+	$("#underline_btn").click(function(){
+		myWriter.ExecuteCommand("Underline", false , null );
+		if($("#italic_btn").hasClass("ke-on")){
+			$("#italic_btn").removeClass("ke-on");
+		}else{
+			$("#italic_btn").addClass("ke-on");
+		}
+	})
+	$("#grid_btn").click(function(){
+		myWriter.ExecuteCommand("Table_InsertTable", true , null );
+	})
+
+	</script>
+</div>
+	<div style="z-index:1;width:100%">
+	<object id="myWriter" name="myWriter" onclick="closeMenu()"
+					classid="clsid:00012345-6789-ABCD-EF01-2345678900ff" 
+				    codebase="http://192.168.0.115:8081/cab/DCWriterWeb.cab"
+					style="position:relative ;width: 100%;overflow-x:hidden;border:solid 1 black">
+				    <param name="CodeBaseForUpdateAssembly"   
+				        value="http://172.30.100.155:8081/cab/DCWriterWeb.cab#Version=1,2015,12,23" />
+				    <param name="BackColor" value="Gray" />
+				    <param name="BorderStyle" value="3DFixed" />
+				    <param name="InitalizeParameterValues" value="PatientName:张三" />
+				    <param name="Font" value="宋体,20" />
+				    <param name="wmode" value="transparent" />
+					<param name="wmode" value="opaque" />
+				    <span style="border-width:1;border-style:solid;border-color:black;background-color:yellow" >
+				        没能下载安装控件，请联系管理员来设置安全站点。</span>
+				</object>
+	</div>
+</div>	
+<!-- //getScheme()获取协议，getServerName()获取服务器名，getServerPort()服务器端口，getContextPath() APP根路径 -->
+<!--<a th:href="${#httpServletRequest.getScheme() + '://' + #httpServletRequest.getServerName() + ':' + #request.getServerPort()  + #request.getContextPath() + '/'} "-->
+ <!--id="contextPath"></a>-->
+<script type="text/javascript">
+//设置右键菜单
+myWriter.AddContextMenuItemByTypeName("XTextTableCellElement", "insertrowup", "Table_InsertRowUp", "在上面插入表格行");
+myWriter.AddContextMenuItemByTypeName("XTextTableCellElement", "insertrowdown", "Table_InsertRowDown", "在下面插入表格行");
+myWriter.AddContextMenuItemByTypeName("XTextTableCellElement", "deleterow", "Table_DeleteRow", "删除表格行");
+myWriter.AddContextMenuSeparatorByTypeName("XTextTableCellElement");
+myWriter.AddContextMenuItemByTypeName("XTextTableCellElement", "mergecell", "Table_MergeCell", "合并单元格");
+myWriter.AddContextMenuItemByTypeName("XTextInputFieldElement", "openProperty", "ElementProperties", "属性");
+myWriter.AddContextMenuItemByTypeName("XTextTableCellElement", "openProperty1", "ElementProperties", "属性");
+myWriter.AddContextMenuItemByTypeName("XTextDocument", "insertInput", "InsertInputField", "插入输入域");
+myWriter.AddContextMenuItemByTypeName("XTextTableCellElement", "insertInput1", "InsertInputField", "插入输入域");
+
+myWriter.ExecuteCommand("Zoom",false,"95%");
+myWriter.ExecuteCommand("RuleVisible",true,null);
+myWriter.BackColorString='#B1CAEB';
+
+// myWriter.ExecuteCommand("FormViewMode",false,"Strict");
+
+
+function JSON2XML(json){
+	var xml = "<x>";
+	for(var i in json){
+		var text = json[i]||"";
+		xml = xml + "<" + i + ">" + text + "</" + i + ">";
+	}
+	xml = xml + "</x>";
+	return xml;
+}
+
+</script>
+<script language=javascript  for="myWriter" event="EventMouseClickExt(eventSender,eventArgs)">
+	//关闭菜单
+	$(".menu_frame").hide();
+	var style = myWriter.CurrentStyle; 
+	var color = style.ColorString;
+	var backColor = style.BackgroundColorString;
+	var fontName = style.FontName;
+	var fontSize = style.FontSize;
+	if(myWriter.CurrentBold){
+		$("#bold_btn").addClass("ke-on");
+	}else{
+		$("#bold_btn").removeClass("ke-on");
+	}
+	if(myWriter.CurrentItalic){
+		$("#italic_btn").addClass("ke-on");
+	}else{
+		$("#italic_btn").removeClass("ke-on");
+	}
+	if(myWriter.CurrentUnderline){
+		$("#underline_btn").addClass("ke-on");
+	}else{
+		$("#underline_btn").removeClass("ke-on");
+	}
+	//调用页面实现该方法 用来在单击编辑器时关闭各种弹出层
+	if(window.closeLayer){
+		closeLayer();
+	}
+
+	temp_click(eventSender,eventArgs)
+</script>
+
+<script language=javascript  for="myWriter" event="EventAfterFieldContentEdit(eventSender,eventArgs)">
+	temp_field_change(eventSender,eventArgs)
+	// debugger;
+	// if(eventSender.CurrentInputField.ID=="zz"){
+	// 	var itemzz = eventSender.CurrentInputField.Text.split("，");
+	// 	var input = myWriter.Document.GetElementById("ptzz");
+	// 	if (input != null) {
+	// 		input = myWriter.ComConvertToXTextInputFieldElement(input);
+	// 		input.FieldSettings = myWriter.ComCreateInputFieldSettings();
+	// 		var items = input.FieldSettings.ListSource.Items;
+	// 		debugger;
+	// 	}
+	// }
+//	if(eventSender.CurrentInputField.name=="本院外院"){
+//		if(eventSender.CurrentInputField.Text=="本院"){
+////			myWriter.ExecuteCommand("MoveTo" , false , "AfterField");
+//			var input = myWriter.Document.GetElementById("zljg");//获取诊疗经过输入域
+//			if (input != null) {
+//				input = myWriter.ComConvertToXTextInputFieldElement(input);
+//				if (input != null) {
+//					input.focus();
+//				}
+//			}
+//			myWriter.ExecuteCommand("InsertString" , false , "\n\r");
+//			$.ajax({
+//				url: "/emr/emrwriting/listHisResponseDatas",
+//				data:{
+//					hisCallType:"2",
+//					patientId:"852307"
+//				},
+//				async: false,
+//				dataType: "json",
+//				success: function(data){
+//					if(data.length==0){//没有记录则直接返回
+//						return;
+//					}
+//					myWriter.ExecuteCommand("InsertString" , false , "检查：");
+//					var jc_count = 0;
+//					for(var i in data){
+//						jc_count++;
+//						myWriter.ExecuteCommand("InsertString" , false , "检查名称："+jc_count+"."+data[i].checkClass+" 检查结果：");
+//						var temp = data[i]
+//						var checkNo = temp.checkNo;
+//						$.ajax({
+//							url: "/emr/patient/getJCDetailByCheckNo/" + checkNo,
+//							type: "GET",
+//							dataType: "json",
+//							async: false,
+//							success: function(data1){
+//								if(data1.decisionJcxxDetail[0]){
+//									var seen = data1.decisionJcxxDetail[0].checkSeen;
+//									var c = seen.replace("\n","").replace("\r","")
+//									myWriter.ExecuteCommand("InsertString" , false ,seen.replace(/\s/g,""));
+//								}
+//							}
+//						})
+//					myWriter.ExecuteCommand("InsertString" , false ,"\n\r");
+//					}
+//
+//				}
+//			})
+//
+//			$.ajax({
+//				url: "/emr/emrwriting/listHisResponseDatas",
+//				data:{
+//					hisCallType:"3",
+//					patientId:"872745"
+//				},
+//				async: false,
+//				dataType: "json",
+//				success: function(data){
+//					if(data.length==0){//没有记录则直接返回
+//						return;
+//					}
+//					debugger;
+////					myWriter.ExecuteCommand("MoveTo" , false , "AfterField");
+//					myWriter.ExecuteCommand("InsertString" , false , "检验：");
+//					var jy_count = 0;
+//					for(var i in data){
+//						jy_count++;
+//						myWriter.ExecuteCommand("InsertString" , false ,"\n\r");
+//						myWriter.ExecuteCommand("InsertString" , false , jy_count+"."+"检验名称："+data[i].checkClass);
+//						var temp = data[i]
+//						var checkNo = temp.checkNo;
+//						var content = "";
+//						$.ajax({
+//							url: "/emr/patient/getJYDetailByCheckNo/" + checkNo,
+//							type: "GET",
+//							dataType: "json",
+//							async: false,
+//							success: function(data1){
+//								debugger;
+//								var detail = data1.decisionJyxxDetail;
+//								for(var i in detail){
+//									if(detail[i].abnormalIndicator==="N"){//结果正常则不现实结果
+//										continue;
+//									}
+//									content += detail[i].reportItemName+"："+detail[i].result+detail[i].units+"；";
+////									myWriter.ExecuteCommand("InsertString" , false ,str);
+//								}
+//							}
+//						})
+//						if(content !== ""){
+//							myWriter.ExecuteCommand("InsertString" , false , "【"+content+"】");
+//						}
+//					}
+//
+//				}
+//			})
+//		}else if(eventSender.CurrentInputField.Text=="外院"){
+//			var input = myWriter.Document.GetElementById("zljg");//获取诊疗经过输入域
+//			if (input != null) {
+//				input = myWriter.ComConvertToXTextInputFieldElement(input);
+//				if (input != null) {
+//					input.innerText="";
+//				}
+//			}
+//		}
+//	}
+
+
+
+</script>

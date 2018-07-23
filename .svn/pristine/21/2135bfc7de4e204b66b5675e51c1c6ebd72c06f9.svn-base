@@ -1,0 +1,26 @@
+<!doctype html>
+<head>
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" href="/css/font-awesome.css">
+	<link rel="stylesheet" href="/css/styles.css">
+	<script src="/js/jquery.min.js"></script>
+</head>
+<body style="padding-top:0">
+<div class="list-group"> 
+<!-- <a th:each="menu : ${subMenus}" class="nav-item"> -->
+<!-- 	<a class="nav-link nav-btn" th:dataUrl="${menu.URL_MENU}" th:text="${menu.text}"></a> -->
+<!-- </li> -->
+<a th:each="menu : ${subMenus}" class="list-group-item" style="cursor:pointer;" th:dataUrl="${menu.URL_MENU}" th:text="${menu.NAME_MENU}"></a>
+<!-- <a class="list-group-item" href="知识库管理-伴随症状.html">伴随症状</a>  -->
+</div>
+</body>
+<script>
+$(function () {
+	$(".list-group-item").click(function(){
+		var menuUrl = $(this).attr("dataUrl");
+		parent.document.getElementById("iframe_content").src=menuUrl;
+		$(".list-group-item").removeClass("active");
+		$(this).addClass("active");
+	});
+});
+</script>

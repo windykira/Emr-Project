@@ -1,0 +1,69 @@
+<div class="sidebar">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">任务提醒</h4>
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item"><strong>病程列表</strong></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+      <li class="list-group-item"><a href="#">崔天明【副主任（主任/科主任首次查房记录）】</a></li>
+    </ul>
+  </div>
+</div>
+<div class="main">
+  <!--<div class="well well-sm text-right">-->
+    <!--<button class="btn btn-primary btn-sm" type="button" onClick="window.open('/emr/emrwriting/emrwrite')">书写病历</button>-->
+    <!--<button class="btn btn-primary btn-sm" type="button">查看病历</button>-->
+  <!--</div>-->
+  <div class="panel panel-default">
+    <div class="panel-body clearfix">
+      <form class="form-inline">
+        <div class="form-group form-group-sm">
+          <label for="">床号：</label>
+          <input id="bedNo" type="text" class="form-control" placeholder="" value="" size="6">
+        </div>
+        &nbsp;
+        <div class="form-group form-group-sm">
+          <label for="">住院号：</label>
+          <input id="patientId" type="text" class="form-control" placeholder="" value="" size="6">
+        </div>
+        &nbsp;
+        <div class="form-group form-group-sm">
+          <label for="">姓名：</label>
+          <input id="name" type="text" class="form-control" placeholder="" value="" size="6">
+        </div>
+        &nbsp;
+        <div class="form-group form-group-sm">
+          <select id="typeSel" class="form-control">
+          <option value="1">我的病人</option>
+          <option value="2" selected>科室病人</option>
+          <!--<option value="3">历史病人</option>-->
+        </select>
+        </div>
+        &nbsp;
+        <button onclick="reLoad()" type="button" class="btn btn-primary btn-sm">查询</button>
+      </form>
+    </div>
+  </div>
+  <table id="exampleTable" data-mobile-responsive="true">
+  </table>
+</div>
+<script type="text/javascript" src="/js/appjs/emr/patient/index.js?v=1.0"></script>

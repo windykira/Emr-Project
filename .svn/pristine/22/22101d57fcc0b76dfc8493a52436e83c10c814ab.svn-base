@@ -1,0 +1,11 @@
+body{
+    padding-top:0px;
+    padding-bottom: 0px;
+    width:98%
+}
+#rMenu {position:absolute; visibility:hidden; top:0; text-align: left;padding:4px;}
+#rMenu a{
+    padding: 3px 15px 3px 15px;
+    background-color:#cad4e6;
+    vertical-align:middle;
+}

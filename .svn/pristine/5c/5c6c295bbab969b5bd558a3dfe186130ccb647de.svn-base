@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haoze.dao.template.TemplateDao">
+
+	<resultMap id="BaseResultMap" type="com.haoze.model.template.temp.entity.TemplateEntity">
+	  <id column="PK_TEMPLATE" jdbcType="VARCHAR" property="pkTemplate" />
+	  <result column="PK_ORG" jdbcType="VARCHAR" property="pkOrg" />
+	  <result column="CODE_TMP" jdbcType="VARCHAR" property="codeTmp" />
+	  <result column="NAME_TMP" jdbcType="VARCHAR" property="nameTmp" />
+	  <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+	  <result column="RANGE" jdbcType="VARCHAR" property="range" />
+	  <result column="PK_DEPT" jdbcType="VARCHAR" property="pkDept" />
+	  <result column="PK_USER" jdbcType="VARCHAR" property="pkUser" />
+	  <result column="PK_TMP_CLASS" jdbcType="VARCHAR" property="pkTmpClass" />
+	  <result column="PATIENT_TYPE" jdbcType="VARCHAR" property="patientType" />
+	  <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+	  <result column="STOP_FLAG" jdbcType="VARCHAR" property="stopFlag" />
+	  <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
+	  <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+	  <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
+	  <result column="MODIFY_TIME" jdbcType="DATE" property="modifyTime" />
+	  <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />
+	  <result column="CREATOR_NAME" jdbcType="CHAR" property="creatorName" />
+	  <result column="TMP_CLASS_NAME" jdbcType="CHAR" property="tmpClassName" />
+		<result column="CREATE_TIME_STRING" jdbcType="VARCHAR" property="createTimeString" />
+		<result column="NAME_DEPT" jdbcType="VARCHAR" property="deptName" />
+		<result column="PK_CATALOG" jdbcType="VARCHAR" property="pkCatalog" />
+		<result column="NAME_CATALOG" jdbcType="VARCHAR" property="nameCatalog" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+	  PK_TEMPLATE, PK_ORG, CODE_TMP, NAME_TMP, CONTENT, RANGE, PK_DEPT, PK_USER, PK_TMP_CLASS, 
+	  PATIENT_TYPE, REMARK, STOP_FLAG, CREATOR, CREATE_TIME, MODIFIER, MODIFY_TIME, DEL_FLAG
+	</sql>
+
+	<select id="get" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from EMR_TEMPLATE
+		where PK_TEMPLATE = #{pkTemplate,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+	  select 
+	  <include refid="Base_Column_List" />
+	  from EMR_TEMPLATE
+	  where PK_TEMPLATE = #{pkTemplate,jdbcType=VARCHAR}
+	</select>
+  
+	<select id="getTypes" resultType="Map">
+		select PK_TMP_CLASS, NAME_CLASS from EMR_TMP_CLASS
+	</select>
+  
+	<select id="list" parameterType="java.util.Map" resultMap="BaseResultMap">
+	  select
+	  t.PK_TEMPLATE,t.CODE_TMP, t.STOP_FLAG, c.NAME_CLASS TMP_CLASS_NAME, t.NAME_TMP, u.NAME_USER CREATOR_NAME, to_char(t.CREATE_TIME,'yyyy-mm-dd hh24:mi:ss') CREATE_TIME_STRING, t.RANGE,d.NAME_DEPT,t.PK_CATALOG,l.NAME_CATALOG,t.PATIENT_TYPE,t.PK_TMP_CLASS
+	  from EMR_TEMPLATE t
+	  left join EMR_TMP_CLASS c on c.PK_TMP_CLASS = t.PK_TMP_CLASS
+	  left join SYS_USER u on u.PK_USER = t.CREATOR
+	  left join SYS_DEPT d on d.PK_DEPT = t.PK_DEPT
+	  left join EMR_CATALOG l on l.PK_CATALOG = t.PK_CATALOG
+	  <where>
+		  <if test="name != null and name != ''"> and NAME_TMP like '%'||#{name}||'%' </if>
+	    <if test="range != null and range != ''"> and t.RANGE = #{range} </if>
+	    <if test="type != null and type != ''"> and t.PK_TMP_CLASS = #{type} </if>
+		  <if test="status != null and status != ''"> and t.STOP_FLAG = #{status}</if>
+		  <if test="cata != null and cata != ''"> and t.PK_CATALOG = #{cata}</if>
+		  and t.DEL_FLAG = '0'
+	  </where>
+	  <choose>
+	    <when test="sort != null and sort.trim() != ''">
+	      order by ${sort} ${sortOrder}
+	    </when>
+	  </choose>
+	</select>
+
+	<select id="count" parameterType="java.util.Map" resultType="int">
+		select count(PK_TEMPLATE) from EMR_TEMPLATE
+		<where>
+			<if test="name != null and name != ''"> and NAME_TMP like '%'||#{name}||'%' </if>
+			<if test="range != null and range != ''"> and RANGE = #{range} </if>
+			<if test="type != null and type != ''"> and PK_TMP_CLASS = #{type} </if>
+			<if test="status != null and status != ''"> and STOP_FLAG = #{status}</if>
+			<if test="templateCode != null and templateCode != ''"> and CODE_TMP = #{templateCode}</if>
+			and DEL_FLAG = '0'
+		</where>
+	</select>
+
+	<select id="codeCheck" parameterType="java.util.Map" resultType="int">
+		select count(PK_TEMPLATE) from EMR_TEMPLATE
+		<where>
+			<if test="templateCode != null and templateCode != ''"> and CODE_TMP = #{templateCode}</if>
+		</where>
+	</select>
+
+	<select id="codeCheckWhenEdit" parameterType="java.util.Map" resultType="int">
+		select count(PK_TEMPLATE) from EMR_TEMPLATE
+		<where>
+			<if test="templateCode != null and templateCode != ''"> and CODE_TMP = #{templateCode}</if>
+			<if test="id != null and id != ''"> and PK_TEMPLATE != #{id}</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="com.haoze.model.template.temp.entity.TemplateEntity">
+	   insert into EMR_TEMPLATE (PK_TEMPLATE, PK_ORG, CODE_TMP,
+	     NAME_TMP, CONTENT, RANGE, 
+	     PK_DEPT, PK_USER, PK_TMP_CLASS, 
+	     PATIENT_TYPE, REMARK, STOP_FLAG, 
+	     CREATOR, CREATE_TIME, MODIFIER, 
+	     MODIFY_TIME, DEL_FLAG,PK_CATALOG)
+	   values (#{pkTemplate,jdbcType=VARCHAR}, #{pkOrg,jdbcType=VARCHAR},  #{codeTmp,jdbcType=VARCHAR}, 
+	     #{nameTmp,jdbcType=VARCHAR}, #{pkTemplate,jdbcType=VARCHAR}||#{codeTmp,jdbcType=VARCHAR}||'.xml', #{range,jdbcType=VARCHAR},
+	     #{pkDept,jdbcType=VARCHAR}, #{pkUser,jdbcType=VARCHAR}, #{pkTmpClass,jdbcType=VARCHAR}, 
+	     #{patientType,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{patientType,jdbcType=VARCHAR},
+	     #{creator,jdbcType=VARCHAR}, sysdate, #{modifier,jdbcType=VARCHAR}, 
+	     #{modifyTime,jdbcType=DATE}, #{delFlag,jdbcType=CHAR}, #{pkCatalog,jdbcType=VARCHAR})
+	 </insert>
+
+	<update id="update" parameterType="com.haoze.model.template.temp.entity.TemplateEntity">
+		update EMR_TEMPLATE set CODE_TMP =  #{codeTmp,jdbcType=VARCHAR},NAME_TMP =  #{nameTmp,jdbcType=VARCHAR},RANGE =  #{range,jdbcType=VARCHAR},
+			PK_TMP_CLASS = #{pkTmpClass,jdbcType=VARCHAR}, PATIENT_TYPE = #{patientType,jdbcType=VARCHAR},STOP_FLAG = #{patientType,jdbcType=VARCHAR},
+			MODIFIER =  #{modifier,jdbcType=VARCHAR}, MODIFY_TIME = sysdate, PK_CATALOG = #{pkCatalog,jdbcType=VARCHAR}
+		where PK_TEMPLATE = #{pkTemplate,jdbcType=VARCHAR}
+	</update>
+
+	<update id="startUsing" parameterType="java.util.Map">
+		update EMR_TEMPLATE set STOP_FLAG=0 where PK_TEMPLATE = #{id,jdbcType=VARCHAR}
+	</update>
+
+	<update id="stopUsing" parameterType="java.util.Map">
+		update EMR_TEMPLATE set STOP_FLAG=1 where PK_TEMPLATE = #{id,jdbcType=VARCHAR}
+	</update>
+	<update id="deleteTemplate" parameterType="java.util.Map">
+		update EMR_TEMPLATE set DEL_FLAG=1 where PK_TEMPLATE = #{id,jdbcType=VARCHAR}
+	</update>
+</mapper>

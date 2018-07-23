@@ -1,0 +1,108 @@
+.navbar-form {
+    text-align: center;
+}
+
+.navbar {
+    background: #8ebcc0;
+    height: 50px;
+}
+
+.navbar-header p,
+.navbar-form {
+    color: #FFFFFF;
+    font-size: 24px;
+    line-height: 50px;
+    margin: 0;
+}
+
+.sidebar {
+    margin-bottom: 17px;
+    padding-top: 2px;
+}
+
+.sidebar>.active>a,
+.sidebar>.active>a:hover,
+.sidebar>.active>a:focus {
+    color: #fff;
+    background-color: #8dbcc0;
+}
+
+.sidebar {
+    padding-left: 0;
+}
+
+.btn-group1 {
+    margin-top: 6px;
+    color: #fff;
+}
+
+.btn-default10 {
+    background-color: #7fbfc1;
+    color: #ffffff;
+}
+
+.btn-default4 {
+    color: #FFFFFF;
+    border-color: #7fbfc1;
+    background: #7fbfc1;
+    margin-top: 8px;
+    margin-right: 10px;
+}
+
+.hide {
+    display: none;
+}
+
+.title {
+    height: 40px;
+    width: 240px;
+    background-color: #7fbfc1;
+    color: white;
+    border-bottom: 1px solid #ffffff;
+    line-height: 40px;
+    text-align: center;
+}
+
+.form-group {
+    padding: 10px;
+    height: 50px;
+}
+
+.pager li>a,
+.pager li>span {
+    display: inline-block;
+    padding: 5px 14px;
+    background-color: #fff;
+    border: 1px solid #7fbfc1;
+    border-radius: 15px;
+}
+
+a {
+    color: #7fbfc1;
+    text-decoration: none;
+}
+
+
+.btn-primary {
+    background-color: #7fbfc1;
+    color: #ffffff;
+    border-color: #7fbfc1;
+}
+
+.abc {
+    margin-top: 10px;
+}
+
+.panel-info>.panel-heading {
+    color: #ffffff;
+    background-color: #7fbfc1;
+    border-color: #7fbfc1;
+}
+
+.form-group{
+    margin-bottom: 0;
+}
+
+#disabledInput4{
+    width: 350px;
+}

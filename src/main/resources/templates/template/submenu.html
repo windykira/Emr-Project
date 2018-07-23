@@ -1,0 +1,59 @@
+<div class="sidebar" xmlns:th="http://www.w3.org/1999/xhtml">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">模板管理</h4>
+    </div>
+    <ul class="list-group">
+      <a th:each="menu : ${menus}" class="list-group-item" style="cursor:pointer;" th:url="${menu.menuUrl}" th:text="${menu.menuName}"></a>
+      <!--<li class="list-group-item"><a href="#">菜单管理</a></li>-->
+    </ul>
+  </div>
+</div>
+<div class="main"></div>
+<script>
+
+  $(function() {
+
+    load();
+
+    $(".list-group a").click(function () {
+      $(this).addClass("active").siblings(".active").removeClass("active");
+    });
+  });
+
+  $(".list-group-item").click(function(){
+    $.ajax({
+      type: "GET",
+      url: $(this).attr("url"),
+      async: false,
+      error: function (request) {
+        parent.layer.alert("Connection error");
+      },
+      success: function (data) {
+        $(".main").initPage(data);
+      }
+    });
+  });
+
+  //默认加载病历模板
+  function load(){
+
+    $(".list-group a").each(function(i,e){
+      if($(this).attr("url") == "template/temp/index"){
+        $(this).addClass("active");
+      }
+    });
+
+    $.ajax({
+      type: "GET",
+      url: "/template/temp/index",
+      async: false,
+      error: function (request) {
+        parent.layer.alert("Connection error");
+      },
+      success: function (data) {
+        $(".main").initPage(data);
+      }
+    });
+  }
+</script>

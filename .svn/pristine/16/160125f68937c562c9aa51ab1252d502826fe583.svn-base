@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/plugins/default/default.css" />
+    <link rel="stylesheet" href="/css/mystyle.css" />
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="gray-bg">
+
+<div class="panel-body clearfix">
+    <form class="form-horizontal" id="addDataGroup">
+        <div class="form-group">
+            <label for="inputEmail3" class="col-sm-3 control-label">数据组编码</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="codeDg" name="codeDg"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-3 control-label">数据组名称</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="nameDg" name="nameDg" placeholder="">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-3 control-label">描述</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="describe" name="describe" placeholder="">
+            </div>
+        </div>
+    </form>
+
+    <div class="form-group">
+        <div class="col-sm-8 col-sm-offset-3">
+            <button type="button" class="btn btn-default element-delete">取消</button>
+            <button type="button" class="btn btn-primary element-save">保存</button>
+        </div>
+    </div>
+
+</div>
+
+<div th:include="emrinclude::footer"></div>
+<script type="text/javascript" src="/js/appjs/repository/dictionary/datagroup/add.js"></script>
+</body>
+</html>

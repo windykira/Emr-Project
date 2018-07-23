@@ -1,0 +1,102 @@
+/* This is a compiled file, you should be editing the file in the templates directory */
+.pace.pace-inactive {
+	display: none;
+}
+.pace {
+	-webkit-pointer-events: none;
+	pointer-events: none;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	user-select: none;
+	z-index: 2000;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 140px;
+	width: 140px;
+	margin: auto;
+	padding: 10px;
+	background: rgba(30,30,30,.95);
+    border-radius: 50%;
+}
+.pace .pace-progress {
+	z-index: 2000;
+	position: absolute;
+	height: 120px;
+	width: 120px;
+	-webkit-transform: translate3d(0, 0, 0) !important;
+	-ms-transform: translate3d(0, 0, 0) !important;
+	transform: translate3d(0, 0, 0) !important;
+}
+.pace .pace-progress:before, .pace .pace-progress:after {
+	text-align: center;
+	border-radius: 50%;
+	font-family: "Helvetica Neue", sans-serif;
+	display: block;
+	z-index: 999;
+	position: absolute;
+}
+.pace .pace-progress:before {
+	bottom: 20px;
+	left: 0;
+	width: 100%;
+	height: 60px;
+	background: url(../images/loading-logo.png) center top no-repeat;
+	color: #fff;
+	content: attr(data-progress-text);
+	font-size: 16px;
+	line-height: 5em;
+	font-weight: bold;
+}
+.pace .pace-activity {
+	font-size: 15px;
+	line-height: 1;
+	z-index: 2000;
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: block;
+	-webkit-animation: pace-theme-center-atom-spin 2s linear infinite;
+	-moz-animation: pace-theme-center-atom-spin 2s linear infinite;
+	-o-animation: pace-theme-center-atom-spin 2s linear infinite;
+	animation: pace-theme-center-atom-spin 2s linear infinite;
+	border-radius: 50%;
+	content: ' ';
+	height: 140px;
+	width: 140px;
+	background: url(../images/loading-bg.png) no-repeat center;
+}
+@-webkit-keyframes pace-theme-center-atom-spin {
+ 0% {
+-webkit-transform: rotate(0deg)
+}
+ 100% {
+-webkit-transform: rotate(359deg)
+}
+}
+@-moz-keyframes pace-theme-center-atom-spin {
+ 0% {
+-moz-transform: rotate(0deg)
+}
+ 100% {
+-moz-transform: rotate(359deg)
+}
+}
+@-o-keyframes pace-theme-center-atom-spin {
+ 0% {
+-o-transform: rotate(0deg)
+}
+ 100% {
+-o-transform: rotate(359deg)
+}
+}
+@keyframes pace-theme-center-atom-spin {
+ 0% {
+transform: rotate(0deg)
+}
+ 100% {
+transform: rotate(359deg)
+}
+}

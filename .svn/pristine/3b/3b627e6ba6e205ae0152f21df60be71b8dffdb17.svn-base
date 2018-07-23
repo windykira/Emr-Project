@@ -1,0 +1,10 @@
+body{
+    padding-top:10px;
+}
+
+.control-label{
+    text-align: left;
+}
+.col-sm-3{
+    width: 18%;
+}

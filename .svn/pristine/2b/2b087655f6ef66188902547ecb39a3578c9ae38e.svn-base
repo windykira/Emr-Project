@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>常州市第二人民医院住院电子病历</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<!-- 导航区开始 -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+            <a class="navbar-brand" href="/index"><img src="/img/logo.png" height="30" class="d-inline-block align-top" alt=""> 常州市第二人民医院住院电子病历</a></div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="nav-item"> <a class="nav-link" href="/index">病人列表</a></li>
+                <li class="nav-item"> <a class="nav-link" href="模板管理.html">模板管理</a></li>
+                <li class="nav-item"> <a class="nav-link" href="知识库管理.html">知识库管理</a></li>
+                <li class="nav-item active"> <a class="nav-link" href="/system">系统设置</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa fa-cog" aria-hidden="true"></i> 设置</a></li>
+                <li class="nav-item"> <a class="nav-link" href="#"><i class="fa fa-question-circle" aria-hidden="true"></i> 帮助</a></li>
+                <li class="nav-item"> <a class="nav-link" href="登录.html"><i class="fa fa-sign-out" aria-hidden="true"></i> 退出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- 导航区结束 -->
+
+<!-- 左侧菜单开始 -->
+<div class="sidebar">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">菜单管理</h4>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="#">菜单管理</a></li>
+        </ul>
+        <div id="menuTree"></div>
+    </div>
+</div>
+<!-- 左侧菜单结束-->
+
+<!--主页信息开始-->
+<div class="main">
+
+</div>
+<!--主页信息结束-->
+
+<!-- footer -->
+<footer class="footer">
+    <h5 class="pull-left mr-20"><i class="fa fa-user-md fa-lg text-primary" aria-hidden="true"></i> 郑正   住院医生</h5>
+    <h5 class="pull-left"><i class="fa fa-clock-o fa-lg text-primary" aria-hidden="true"></i> 2018年5月17日  10:30:36</h5>
+    <nav class="pull-right">
+        <ul class="pagination pagination-sm">
+            <li><a href="#">上一页</a></li>
+            <li><a href="#">下一页</a></li>
+        </ul>
+    </nav>
+</footer>
+<!-- /footer -->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/appjs/emrsys/system.js"></script>
+</body>
+</html>

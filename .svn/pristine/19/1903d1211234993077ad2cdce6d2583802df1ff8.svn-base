@@ -1,0 +1,66 @@
+<head th:fragment="header">
+    <!--<meta charset="utf-8">-->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--<title></title>-->
+    <!--<meta name="keywords" content="">-->
+    <!--<meta name="description" content="">-->
+    <!--<link href="/css/bootstrap.min.css"  rel="stylesheet">-->
+    <!--<link href="/css/font-awesome.css"  rel="stylesheet">-->
+    <!--<link href="/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">-->
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>常州市第二人民医院住院电子病历</title>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <!--<link rel="stylesheet" href="/css/pace-theme-loading-bar.css">-->
+
+    <link rel="stylesheet" href="/css/plugins/default/default.css" />
+    <!--&lt;!&ndash;[if lt IE 9]>-->
+    <!--<script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>-->
+    <!--<script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>-->
+    <!--<![endif]&ndash;&gt;-->
+    <!--<meta charset="utf-8">-->
+    <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+    <!--<title></title>-->
+    <!--<meta name="keywords" content="">-->
+    <!--<meta name="description" content="">-->
+    <!--<link href="/css/bootstrap.min.css"  rel="stylesheet">-->
+    <!--<link href="/css/font-awesome.css"  rel="stylesheet">-->
+    <!--<link href="/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">-->
+    <!--<meta charset="utf-8">-->
+    <!--<meta name="keywords" content="">-->
+    <!--<meta name="description" content="">-->
+    <!--<link rel="stylesheet" href="/css/bootstrap.css">-->
+    <!--<link rel="stylesheet" href="/css/font-awesome.css">-->
+    <!--<link rel="stylesheet" href="/css/plugins/bootstrap-table/bootstrap-table.min.css">-->
+    <!--<link rel="stylesheet" href="/css/styles.css">-->
+    <!--<link rel="stylesheet" href="/css/plugins/jsTree/style.min.css">-->
+    <!--<link rel="stylesheet" href="/css/animate.css">-->
+    <link rel="stylesheet" href="/css/plugins/chosen/chosen.css" >
+    <link rel="stylesheet" href="/css/zTreeStyle/zTreeStyle.css">
+</head>
+
+<div th:fragment="footer">
+    <script src="/js/jquery.min.js?v=2.1.4"></script>
+    <script src="/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="/js/plugins/validate/messages_zh.min.js"></script>
+    <script src="/js/plugins/jsTree/jstree.min.js"></script>
+    <script src="/js/plugins/jqTreeGrid/jquery.treegrid.min.js"></script>
+    <script src="/js/plugins/jqTreeGrid/jquery.treegrid.extension.js"></script>
+    <script src="/js/plugins/jqTreeGrid/jquery.treegrid.bootstrap3.js"></script>
+    <script src="/js/plugins/layer/layer.js"></script>
+    <script src="/js/plugins/chosen/chosen.jquery.js"></script>
+    <script src="/js/content.js?v=1.0.0"></script>
+    <script src="/js/core.js"></script>
+    <script src="/js/ckeditor/ckeditor.js"></script>
+    <script src="/js/jquery.ztree.core-3.5.js"></script>
+    <script src="/js/tableclick.js"></script>
+</div>

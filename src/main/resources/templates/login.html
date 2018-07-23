@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--<link rel="stylesheet" href="/css/login.css">-->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>常州市第二人民医院</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/newlogin.css">
+    <script>
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+    </script>
+</head>
+<body>
+<div class="">
+    <span><img src="/img/back.png"></span>
+</div>
+<div class="wrapper">
+    <div class="container">
+        <h1>欢迎登录</h1>
+        <input type="hidden" id="emrLoginPage" value="emrLoginPage">
+        <form class="form" id="signupForm">
+            <input id="departmentId" name="departmentId" type="hidden">
+            <input type="hidden" id="userId" th:value="${userId}">
+            <input type="text" id="inputUser" name="username" value="3796" placeholder="用户名">
+            <input type="password" id="inputPassword" name="password" value="111111" placeholder="密码">
+            <!--<button type="submit" id="login-button">登录</button>-->
+            <input type="button" id="login" value="登录">
+        </form>
+    </div>
+</div>
+
+<!--注脚开始-->
+<div class="footer">
+    <div class="row">
+        <div class="col-sm-12 text-center">
+            <span style="color: #7b7b7b;">©2018 常州市第二人民医院</span>
+            <small>建议使用IE8+浏览器</small>
+        </div>
+    </div>
+</div>
+
+<!--<div class="login">
+    <div class="login-box"><a class="logo" href="/" title="常州市第二人民医院"><img src="/img/logo.png" alt=""/> 常州市第二人民医院</a>
+        <input type="hidden" id="emrLoginPage" value="emrLoginPage"/>
+
+        <div class="login-title">用户登录</div>
+        <form class="clearfix" id="signupForm">
+            <input id="departmentId" name="departmentId" type="hidden">
+            <input type="hidden" id="userId" th:value="${userId}"/>
+
+            <div class="form-group clearfix">
+                <label for="inputUser"> <span class="icon-user"></span> </label>
+                <input class="form-control" type="text" id="inputUser" name="username" value="3796"
+                       placeholder="请输入用户名">
+            </div>
+            <div class="form-group clearfix">
+                <label for="inputPassword"> <span class="icon-key"></span> </label>
+                <input class="form-control" type="password" id="inputPassword" name="password" value="111111"
+                       placeholder="请输入密码">
+            </div>
+            <button type="button" class="login-btn" id="login">登录</button>
+        </form>
+    </div>
+
+    <footer class="footer">©2018 常州市第二人民医院
+        <small>建议使用IE8+浏览器</small>
+    </footer>
+</div>-->
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script th:inline="javascript"> var ctx = [[@{/}]];</script>
+<script src="/js/jquery.min.js" type="text/javascript"></script>
+<script src="/js/plugins/validate/jquery.validate.min.js"></script>
+<script src="/js/plugins/layer/layer.min.js"></script>
+<script src="/js/bootstrap.min.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    var departmentData = "";
+    $(document).ready(function () {
+
+        upgradeIEEdition();
+        $("#login").on('click', function () {
+            login();
+        });
+        validateRule();
+    });
+
+    //IE浏览器版本低于9.0默认升级
+    function upgradeIEEdition() {
+
+        var defaultVersion = 9.0;
+        var ua = navigator.userAgent.toLowerCase();
+        var isIE = ua.indexOf("msie") > -1;
+        var safariVersion;
+        if (isIE) {
+            safariVersion = ua.match(/msie ([\d.]+)/)[1];
+            if (safariVersion < defaultVersion) {
+                var activeXObject = new ActiveXObject("wscript.shell");
+                activeXObject.run("D://dc//EIE11_ZH-CN_WOL_WIN764.EXE");
+            }
+            ;
+        }
+    }
+
+    function login() {
+
+        $.ajax({
+            type: "POST",
+            url: "/emrsys/user/checkForDepartment",
+            data: $('#signupForm').serialize(),
+            success: function (data) {
+                if (data.code == 1) {
+                    if (data.userDepartments > 1) {
+                        departmentData = data.departmentsData;
+                        layer.open({
+                            type: 2,
+                            closeBtn: 0,
+                            title: '选择科室',
+                            maxmin: true,
+                            shadeClose: false, // 点击遮罩关闭层
+                            area: ['800px', '400px'],
+                            content: ['emrsys/dept/choose', 'no']
+                        })
+                    } else {
+                        $("#departmentId").val(data.departmentsData[0].id);
+                        $.ajax({
+                            type: "POST",
+                            url: ctx + "login",
+                            data: $('#signupForm').serialize(),
+                            success: function (r) {
+                                if (r.code == 1) {
+                                    var index = layer.load(1, {
+                                        shade: [0.1, '#fff'] //0.1透明度的白色背景
+                                    });
+                                    parent.location.href = '/index';
+                                } else {
+                                    layer.msg(r.msg);
+                                }
+                            },
+                        })
+                    }
+                } else {
+                    layer.msg(data.msg);
+                }
+            }
+        });
+
+    }
+
+    function validateRule() {
+        var icon = "<i class='fa fa-times-circle'></i> ";
+        $(".clearfix").validate({
+            rules: {
+                username: {
+                    required: true
+                },
+                password: {
+                    required: true
+                }
+            },
+            messages: {
+                username: {
+                    required: icon + "请输入您的用户名",
+                },
+                password: {
+                    required: icon + "请输入您的密码",
+                }
+            }
+        })
+    }
+</script>
+
+</body>
+</html>

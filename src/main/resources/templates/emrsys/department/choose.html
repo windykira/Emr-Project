@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="emrinclude :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <input id="userId" name="userId" type="hidden">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">科室：</label>
+                            <div class="col-sm-6">
+                                <select data-placeholder="--选择科室--" name="sysdept" id="sysdept"
+                                        class="form-control chosen-select" tabindex="2" required>
+                                    <!--<option value="">&#45;&#45;选择科室&#45;&#45;</option>-->
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-6 col-sm-offset-3">
+                                <button type="submit" class="btn btn-primary">确定</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:include="emrinclude::footer"></div>
+<script type="text/javascript" src="/js/appjs/emrsys/department/choose.js">
+</script>
+</body>
+</html>

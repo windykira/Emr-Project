@@ -1,0 +1,10 @@
+$(function() {
+
+    //初始化数据集
+    loadDataDictionary();
+});
+
+function loadDataDictionary(){
+
+
+}

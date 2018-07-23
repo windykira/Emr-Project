@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.haoze.dao.emr.SymptomDao">
+
+    <resultMap id="SympMap" type="com.haoze.model.emr.symp.entity.SympEntity" >
+        <result column="PK_SYMP" property="ID" jdbcType="VARCHAR" />
+        <result column="PK_ORG" property="organizationID" jdbcType="VARCHAR" />
+        <result column="CODE_SYMP" property="sympCode" jdbcType="VARCHAR" />
+        <result column="NAME_SYMP" property="sympName" jdbcType="VARCHAR" />
+        <result column="RANGE" property="range" jdbcType="VARCHAR" />
+		
+        <result column="PY_CODE" property="pyCode" jdbcType="VARCHAR" />
+        <result column="WB_CODE" property="wbCode" jdbcType="VARCHAR" />
+        
+        <result column="DEL_FLAG" property="delFlag" jdbcType="DATE" />
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+        <result column="MODIFY_TIME" property="modifyTime" jdbcType="DATE" />
+    </resultMap>
+	<resultMap id="SimuSympMap" type="com.haoze.model.emr.symp.entity.SimuSympEntity" >
+        <result column="PK_SIMUSYMP" property="ID" jdbcType="VARCHAR" />
+        <result column="PK_ORG" property="organizationID" jdbcType="VARCHAR" />
+        <result column="CODE_SIMUSYMP" property="simuSympCode" jdbcType="VARCHAR" />
+        <result column="NAME_SIMUSYMP" property="simuSympName" jdbcType="VARCHAR" />
+		
+        <result column="PY_CODE" property="pyCode" jdbcType="VARCHAR" />
+        <result column="WB_CODE" property="wbCode" jdbcType="VARCHAR" />
+        
+        <result column="DEL_FLAG" property="delFlag" jdbcType="DATE" />
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+        <result column="MODIFY_TIME" property="modifyTime" jdbcType="DATE" />
+    </resultMap>
+
+
+    
+    <select id="listSymp" resultMap="SympMap">
+        select * from bd_symptom
+    </select>
+    
+    <select id="listSimuSymp" resultMap="SimuSympMap">
+        select * from bd_simu_symptom
+    </select>
+    
+    <select id="getSympTree" resultType="Map">
+    SELECT
+		simu.PK_SIMUSYMP id,
+		simu.NAME_SIMUSYMP name,
+		rela.PK_SYMP pid
+	FROM
+		BD_SIMU_SYMPTOM simu
+	INNER JOIN BD_SYMP_SIMUSYMP rela ON SIMU.PK_SIMUSYMP = RELA.PK_SIMUSYMP
+	UNION ALL
+		SELECT
+			pk_symp id,
+			NAME_SYMP name,
+			'1' pid
+		FROM
+			BD_SYMPTOM
+	UNION ALL
+		SELECT
+			'1' id,
+			'症状' name,
+			'0' pid
+		FROM
+			dual
+    </select>
+    
+    <select id="getSimuInfo" resultType="Map">
+	SELECT
+		simu.NAME_SIMUSYMP name,
+		to_char(wm_concat (symp.name_symp)) symps
+	FROM
+		BD_SIMU_SYMPTOM simu
+	LEFT JOIN BD_SYMP_SIMUSYMP rela ON RELA.PK_SIMUSYMP = SIMU.PK_SIMUSYMP
+	LEFT JOIN BD_SYMPTOM symp ON RELA.PK_SYMP = symp.PK_SYMP
+	
+	GROUP BY
+		simu.NAME_SIMUSYMP
+    </select>
+    
+    <select id="getSympInfo" resultType="Map">
+    select pk_symp id,name_symp name from bd_symptom
+    </select>
+</mapper>

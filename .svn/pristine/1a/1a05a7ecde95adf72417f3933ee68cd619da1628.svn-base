@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.haoze.dao.repository.DataElementDao" >
+
+  <resultMap id="BaseResultMap" type="com.haoze.model.repository.entity.DataElementEntity" >
+    <id column="PK_DATA_ELEMT" property="pkDataElemt" jdbcType="VARCHAR" />
+    <result column="PK_ORG" property="pkOrg" jdbcType="VARCHAR" />
+    <result column="CODE_DE" property="codeDe" jdbcType="VARCHAR" />
+    <result column="NAME_DE" property="nameDe" jdbcType="VARCHAR" />
+    <result column="PY_CODE" property="pyCode" jdbcType="VARCHAR" />
+    <result column="WB_CODE" property="wbCode" jdbcType="VARCHAR" />
+    <result column="DEFINITION" property="definition" jdbcType="VARCHAR" />
+    <result column="DE_VALS_TYPE" property="deValsType" jdbcType="VARCHAR" />
+    <result column="REP_FMT" property="repFmt" jdbcType="VARCHAR" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+    <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="DATE" />
+    <result column="ELEMENT_PD_ID" property="elementPdId" jdbcType="VARCHAR" />
+    <result column="ELEMENT_BD_ID" property="elementBdId" jdbcType="VARCHAR" />
+    <result column="ELEMENT_FD_ID" property="elementFdId" jdbcType="VARCHAR" />
+    <result column="ELEMENT_STD_ID" property="elementStdId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PK_DATA_ELEMT, PK_ORG, CODE_DE, NAME_DE, PY_CODE, WB_CODE, DEFINITION, DE_VALS_TYPE, 
+    REP_FMT, DEL_FLAG, CREATOR, CREATE_TIME, MODIFIER, MODIFY_TIME, ELEMENT_PD_ID, ELEMENT_BD_ID, 
+    ELEMENT_FD_ID, ELEMENT_STD_ID
+  </sql>
+  <select id="get" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from BD_DATA_ELEMENT
+    where PK_DATA_ELEMT = #{pkDataElemt,jdbcType=VARCHAR}
+  </select>
+
+  <select id="getByDataDictionaryId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    bde.*
+    from BD_DATA_ELEMENT bde INNER JOIN SYS_DIR sd on bde.PK_DATA_ELEMT=sd.PK_BD
+    where sd.PK_NODE = #{_parameter}
+  </select>
+
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from BD_DATA_ELEMENT
+    where PK_DATA_ELEMT = #{_parameter}
+  </delete>
+  <insert id="insert" parameterType="com.haoze.model.repository.entity.DataElementEntity" >
+    insert into BD_DATA_ELEMENT (PK_DATA_ELEMT, PK_ORG, CODE_DE, 
+      NAME_DE, PY_CODE, WB_CODE, 
+      DEFINITION, DE_VALS_TYPE, REP_FMT, 
+      DEL_FLAG, CREATOR, CREATE_TIME, 
+      MODIFIER, MODIFY_TIME, ELEMENT_PD_ID, 
+      ELEMENT_BD_ID, ELEMENT_FD_ID, ELEMENT_STD_ID
+      )
+    values (#{pkDataElemt,jdbcType=VARCHAR}, #{pkOrg,jdbcType=VARCHAR}, #{codeDe,jdbcType=VARCHAR}, 
+      #{nameDe,jdbcType=VARCHAR}, #{pyCode,jdbcType=VARCHAR}, #{wbCode,jdbcType=VARCHAR}, 
+      #{definition,jdbcType=VARCHAR}, #{deValsType,jdbcType=VARCHAR}, #{repFmt,jdbcType=VARCHAR}, 
+      #{delFlag,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, 
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=DATE}, #{elementPdId,jdbcType=VARCHAR}, 
+      #{elementBdId,jdbcType=VARCHAR}, #{elementFdId,jdbcType=VARCHAR}, #{elementStdId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.haoze.model.repository.entity.DataElementEntity" >
+    insert into BD_DATA_ELEMENT
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pkDataElemt != null" >
+        PK_DATA_ELEMT,
+      </if>
+      <if test="pkOrg != null" >
+        PK_ORG,
+      </if>
+      <if test="codeDe != null" >
+        CODE_DE,
+      </if>
+      <if test="nameDe != null" >
+        NAME_DE,
+      </if>
+      <if test="pyCode != null" >
+        PY_CODE,
+      </if>
+      <if test="wbCode != null" >
+        WB_CODE,
+      </if>
+      <if test="definition != null" >
+        DEFINITION,
+      </if>
+      <if test="deValsType != null" >
+        DE_VALS_TYPE,
+      </if>
+      <if test="repFmt != null" >
+        REP_FMT,
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG,
+      </if>
+      <if test="creator != null" >
+        CREATOR,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="modifier != null" >
+        MODIFIER,
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME,
+      </if>
+      <if test="elementPdId != null" >
+        ELEMENT_PD_ID,
+      </if>
+      <if test="elementBdId != null" >
+        ELEMENT_BD_ID,
+      </if>
+      <if test="elementFdId != null" >
+        ELEMENT_FD_ID,
+      </if>
+      <if test="elementStdId != null" >
+        ELEMENT_STD_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pkDataElemt != null" >
+        #{pkDataElemt,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrg != null" >
+        #{pkOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="codeDe != null" >
+        #{codeDe,jdbcType=VARCHAR},
+      </if>
+      <if test="nameDe != null" >
+        #{nameDe,jdbcType=VARCHAR},
+      </if>
+      <if test="pyCode != null" >
+        #{pyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wbCode != null" >
+        #{wbCode,jdbcType=VARCHAR},
+      </if>
+      <if test="definition != null" >
+        #{definition,jdbcType=VARCHAR},
+      </if>
+      <if test="deValsType != null" >
+        #{deValsType,jdbcType=VARCHAR},
+      </if>
+      <if test="repFmt != null" >
+        #{repFmt,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=DATE},
+      </if>
+      <if test="elementPdId != null" >
+        #{elementPdId,jdbcType=VARCHAR},
+      </if>
+      <if test="elementBdId != null" >
+        #{elementBdId,jdbcType=VARCHAR},
+      </if>
+      <if test="elementFdId != null" >
+        #{elementFdId,jdbcType=VARCHAR},
+      </if>
+      <if test="elementStdId != null" >
+        #{elementStdId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.haoze.model.repository.entity.DataElementEntity" >
+    update BD_DATA_ELEMENT
+    <set >
+      <if test="pkOrg != null" >
+        PK_ORG = #{pkOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="codeDe != null" >
+        CODE_DE = #{codeDe,jdbcType=VARCHAR},
+      </if>
+      <if test="nameDe != null" >
+        NAME_DE = #{nameDe,jdbcType=VARCHAR},
+      </if>
+      <if test="pyCode != null" >
+        PY_CODE = #{pyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wbCode != null" >
+        WB_CODE = #{wbCode,jdbcType=VARCHAR},
+      </if>
+      <if test="definition != null" >
+        DEFINITION = #{definition,jdbcType=VARCHAR},
+      </if>
+      <if test="deValsType != null" >
+        DE_VALS_TYPE = #{deValsType,jdbcType=VARCHAR},
+      </if>
+      <if test="repFmt != null" >
+        REP_FMT = #{repFmt,jdbcType=VARCHAR},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        CREATOR = #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME = #{createTime,jdbcType=DATE},
+      </if>
+      <if test="modifier != null" >
+        MODIFIER = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME = #{modifyTime,jdbcType=DATE},
+      </if>
+      <if test="elementPdId != null" >
+        ELEMENT_PD_ID = #{elementPdId,jdbcType=VARCHAR},
+      </if>
+      <if test="elementBdId != null" >
+        ELEMENT_BD_ID = #{elementBdId,jdbcType=VARCHAR},
+      </if>
+      <if test="elementFdId != null" >
+        ELEMENT_FD_ID = #{elementFdId,jdbcType=VARCHAR},
+      </if>
+      <if test="elementStdId != null" >
+        ELEMENT_STD_ID = #{elementStdId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where PK_DATA_ELEMT = #{pkDataElemt,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.haoze.model.repository.entity.DataElementEntity" >
+    update BD_DATA_ELEMENT
+    set PK_ORG = #{pkOrg,jdbcType=VARCHAR},
+      CODE_DE = #{codeDe,jdbcType=VARCHAR},
+      NAME_DE = #{nameDe,jdbcType=VARCHAR},
+      PY_CODE = #{pyCode,jdbcType=VARCHAR},
+      WB_CODE = #{wbCode,jdbcType=VARCHAR},
+      DEFINITION = #{definition,jdbcType=VARCHAR},
+      DE_VALS_TYPE = #{deValsType,jdbcType=VARCHAR},
+      REP_FMT = #{repFmt,jdbcType=VARCHAR},
+      DEL_FLAG = #{delFlag,jdbcType=VARCHAR},
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=DATE},
+      MODIFIER = #{modifier,jdbcType=VARCHAR},
+      MODIFY_TIME = #{modifyTime,jdbcType=DATE},
+      ELEMENT_PD_ID = #{elementPdId,jdbcType=VARCHAR},
+      ELEMENT_BD_ID = #{elementBdId,jdbcType=VARCHAR},
+      ELEMENT_FD_ID = #{elementFdId,jdbcType=VARCHAR},
+      ELEMENT_STD_ID = #{elementStdId,jdbcType=VARCHAR}
+    where PK_DATA_ELEMT = #{pkDataElemt,jdbcType=VARCHAR}
+  </update>
+</mapper>

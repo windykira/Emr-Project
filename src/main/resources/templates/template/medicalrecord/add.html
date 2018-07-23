@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/plugins/default/default.css" />
+    <link rel="stylesheet" href="/css/mystyle.css" />
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="gray-bg">
+    <div class="panel-body clearfix">
+        <form class="form-horizontal" id="addCatalog">
+            <div class="form-group">
+                <label for="inputEmail3" class="col-sm-3 control-label">目录代码</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="codeCatalog" name="codeCatalog">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">目录名称</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="nameCatalog" name="nameCatalog" placeholder="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">图标</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="img" name="img" placeholder="">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">上级目录</label>
+                <div class="col-sm-8">
+                    <input type="hidden" id="pkFather" name="pkFather"/>
+                    <input type="text" class="form-control" id="pkFatherName" name="pkFatherName"  onclick="openCatalog()">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">目录类型</label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="typeCatalog" name="typeCatalog">
+                        <option value="0">普通</option>
+                        <option value="1">婴儿</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">医生模式</label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="doctorMode" name="doctorMode">
+                        <option value="0">不可见</option>
+                        <option value="1">可见</option>
+                        <option value="2">可见只读</option>
+                        <option value="3">可见编辑</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">护士模式</label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="nurseMode" name="nurseMode">
+                        <option value="0">不可见</option>
+                        <option value="1">可见</option>
+                        <option value="2">可见只读</option>
+                        <option value="3">可见编辑</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">排序号</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="sortNo" name="sortNo">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">状态</label>
+                <div class="col-sm-8">
+                    <select class="form-control" id="stopFlag" name="stopFlag">
+                        <option value="1">启用</option>
+                        <option value="0">停用</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputPassword3" class="col-sm-3 control-label">备注</label>
+                <div class="col-sm-8">
+                    <textarea class="form-control" id="remark" name="remark" cols="30" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-3">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--<div class="wrapper wrapper-content ">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-content">
+                        <form class="form-horizontal m-t" id="templateForm">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">模板名称：</label>
+                                <div class="col-sm-8">
+                                    <input id="templateName" name="templateName" class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">适用范围：</label>
+                                <div class="col-sm-8">
+                                    <select id="rangeSel" name="rangeSel" class="form-control chosen-select" ></select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">模板类型：</label>
+                                <div class="col-sm-8">
+                                    <select id="typeSel" name="typeSel" class="form-control chosen-select" ></select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="col-sm-2 pull-right">
+                                    <button onclick="cancel()" class="btn btn-white">取消</button>
+                                </div>
+                                <div class="col-sm-2 pull-right">
+                                    <button type="submit" class="btn btn-primary">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>-->
+    <div th:include="emrinclude::footer"></div>
+    <script type="text/javascript" src="/js/appjs/template/medicalrecord/add.js"></script>
+</body>
+</html>

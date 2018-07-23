@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" href="/css/font-awesome.css">
+	<link rel="stylesheet" href="/css/plugins/bootstrap-table/bootstrap-table.min.css">
+	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="/css/plugins/jsTree/style.min.css">
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<input id="parentMenu" name="parentMenu" type="hidden"
+								th:value="${pId}">
+							<div class="form-group">
+								<label class="col-sm-3 control-label">上级菜单：</label>
+								<div class="col-sm-8">
+									<input id="" name="" class="form-control" type="text"
+										th:value="${pName}" readonly>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">菜单类型：</label>
+								<div class="col-sm-8">
+									<label class="radio-inline"> <input type="radio"
+										name="menuType" value="1" /> 目录
+									</label> <label class="radio-inline"> <input type="radio"
+										name="menuType" value="2" /> 菜单
+									</label> <label class="radio-inline"> <input type="radio"
+										name="menuType" value="3" /> 按钮
+									</label>
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">菜单名称：</label>
+								<div class="col-sm-8">
+									<input id="menuName" name="menuName" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">链接地址：</label>
+								<div class="col-sm-8">
+									<input id="menuUrl" name="menuUrl" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">权限标识：</label>
+								<div class="col-sm-8">
+									<input id="menuPermission" name="menuPermission" class="form-control" type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">排序号：</label>
+								<div class="col-sm-8">
+									<input id="order" name="order" class="form-control"
+										type="text">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">图标：</label>
+								<div class="col-sm-6">
+									<input id="menuIcon" name="menuIcon" class="form-control" type="text"
+										placeholder="例如：fa fa-circle-o">
+								</div>
+								<input id="ico-btn" class="btn btn-warning" type="button" value="选择图标">
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="emrinclude::footer"></div>
+	<script src="/js/appjs/emrsys/menu/add.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.haoze.dao.emr.EmrCataLogDao" >
+
+  <resultMap id="BaseResultMap" type="com.haoze.model.emr.emrwriting.entity.EmrCataLogEntity" >
+    <id column="PK_CATALOG" property="ID" jdbcType="VARCHAR" />
+    <result column="PK_ORG" property="pkOrg" jdbcType="VARCHAR" />
+    <result column="CODE_CATALOG" property="codeCatalog" jdbcType="VARCHAR" />
+    <result column="NAME_CATALOG" property="nameCatalog" jdbcType="VARCHAR" />
+    <result column="IMG" property="img" jdbcType="VARCHAR" />
+    <result column="PK_FATHER" property="pkFather" jdbcType="VARCHAR" />
+    <result column="TYPE_CATALOG" property="typeCatalog" jdbcType="VARCHAR" />
+    <result column="PY_CODE" property="pyCode" jdbcType="VARCHAR" />
+    <result column="WB_CODE" property="wbCode" jdbcType="VARCHAR" />
+    <result column="DOCTOR_MODE" property="doctorMode" jdbcType="VARCHAR" />
+    <result column="NURSE_MODE" property="nurseMode" jdbcType="VARCHAR" />
+    <result column="REMARK" property="remark" jdbcType="VARCHAR" />
+    <result column="SORT_NO" property="sortNo" jdbcType="DECIMAL" />
+    <result column="STOP_FLAG" property="stopFlag" jdbcType="VARCHAR" />
+    <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+    <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="DATE" />
+    <result column="DEL_FLAG" property="delFlag" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    PK_CATALOG, PK_ORG, CODE_CATALOG, NAME_CATALOG, IMG, PK_FATHER, TYPE_CATALOG, PY_CODE, 
+    WB_CODE, DOCTOR_MODE, NURSE_MODE, REMARK, SORT_NO, STOP_FLAG, CREATOR, CREATE_TIME, 
+    MODIFIER, MODIFY_TIME, DEL_FLAG
+  </sql>
+
+  <select id="get" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from EMR_CATALOG
+    <where>
+      <if test="_parameter != null and _parameter != ''"> and PK_CATALOG = #{_parameter} </if>
+    </where>
+  </select>
+  
+    <select id="getNameCatalog" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from EMR_CATALOG
+    <where>
+     PK_CATALOG = #{id}
+    </where>
+  </select>
+
+  <select id="count" resultType="int" parameterType="java.util.Map">
+    select count(*) from EMR_CATALOG
+    <where>
+      <if test="codeCatalog != null and codeCatalog != ''"> and CODE_CATALOG = #{codeCatalog} </if>
+      <if test="nameCatalog != null and nameCatalog != ''"> and NAME_CATALOG = #{nameCatalog} </if>
+      <if test="catalogId != null and catalogId != ''"> and PK_CATALOG <![CDATA[ <> ]]> #{catalogId} </if>
+    </where>
+  </select>
+
+  <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+    SELECT
+    <include refid="Base_Column_List"/>
+    FROM EMR_CATALOG
+    <where>
+      <if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
+    </where>
+    ORDER BY SORT_NO ASC
+  </select>
+
+  <delete id="delete" parameterType="java.lang.String" >
+    delete from EMR_CATALOG
+    where PK_CATALOG = #{_parameter}
+  </delete>
+
+  <insert id="insert" parameterType="com.haoze.model.emr.emrwriting.entity.EmrCataLogEntity" >
+    insert into EMR_CATALOG (PK_CATALOG, PK_ORG, CODE_CATALOG, 
+      NAME_CATALOG, IMG, PK_FATHER, 
+      TYPE_CATALOG, PY_CODE, WB_CODE, 
+      DOCTOR_MODE, NURSE_MODE, REMARK, 
+      SORT_NO, STOP_FLAG, CREATOR, 
+      CREATE_TIME, MODIFIER, MODIFY_TIME, 
+      DEL_FLAG)
+    values (#{ID,jdbcType=VARCHAR}, #{pkOrg,jdbcType=VARCHAR}, #{codeCatalog,jdbcType=VARCHAR},
+      #{nameCatalog,jdbcType=VARCHAR}, #{img,jdbcType=VARCHAR}, #{pkFather,jdbcType=VARCHAR}, 
+      #{typeCatalog,jdbcType=VARCHAR}, #{pyCode,jdbcType=VARCHAR}, #{wbCode,jdbcType=VARCHAR}, 
+      #{doctorMode,jdbcType=VARCHAR}, #{nurseMode,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{sortNo,jdbcType=DECIMAL}, #{stopFlag,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=DATE}, #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=DATE}, 
+      #{delFlag,jdbcType=CHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.haoze.model.emr.emrwriting.entity.EmrCataLogEntity" >
+    insert into EMR_CATALOG
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pkCatalog != null" >
+        PK_CATALOG,
+      </if>
+      <if test="pkOrg != null" >
+        PK_ORG,
+      </if>
+      <if test="codeCatalog != null" >
+        CODE_CATALOG,
+      </if>
+      <if test="nameCatalog != null" >
+        NAME_CATALOG,
+      </if>
+      <if test="img != null" >
+        IMG,
+      </if>
+      <if test="pkFather != null" >
+        PK_FATHER,
+      </if>
+      <if test="typeCatalog != null" >
+        TYPE_CATALOG,
+      </if>
+      <if test="pyCode != null" >
+        PY_CODE,
+      </if>
+      <if test="wbCode != null" >
+        WB_CODE,
+      </if>
+      <if test="doctorMode != null" >
+        DOCTOR_MODE,
+      </if>
+      <if test="nurseMode != null" >
+        NURSE_MODE,
+      </if>
+      <if test="remark != null" >
+        REMARK,
+      </if>
+      <if test="sortNo != null" >
+        SORT_NO,
+      </if>
+      <if test="stopFlag != null" >
+        STOP_FLAG,
+      </if>
+      <if test="creator != null" >
+        CREATOR,
+      </if>
+      <if test="createTime != null" >
+        CREATE_TIME,
+      </if>
+      <if test="modifier != null" >
+        MODIFIER,
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME,
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pkCatalog != null" >
+        #{pkCatalog,jdbcType=VARCHAR},
+      </if>
+      <if test="pkOrg != null" >
+        #{pkOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCatalog != null" >
+        #{codeCatalog,jdbcType=VARCHAR},
+      </if>
+      <if test="nameCatalog != null" >
+        #{nameCatalog,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="pkFather != null" >
+        #{pkFather,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCatalog != null" >
+        #{typeCatalog,jdbcType=VARCHAR},
+      </if>
+      <if test="pyCode != null" >
+        #{pyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wbCode != null" >
+        #{wbCode,jdbcType=VARCHAR},
+      </if>
+      <if test="doctorMode != null" >
+        #{doctorMode,jdbcType=VARCHAR},
+      </if>
+      <if test="nurseMode != null" >
+        #{nurseMode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null" >
+        #{sortNo,jdbcType=DECIMAL},
+      </if>
+      <if test="stopFlag != null" >
+        #{stopFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=DATE},
+      </if>
+      <if test="modifier != null" >
+        #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=DATE},
+      </if>
+      <if test="delFlag != null" >
+        #{delFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="update" parameterType="com.haoze.model.emr.emrwriting.entity.EmrCataLogEntity" >
+    update EMR_CATALOG
+    <set >
+      <if test="pkOrg != null" >
+        PK_ORG = #{pkOrg,jdbcType=VARCHAR},
+      </if>
+      <if test="codeCatalog != null" >
+        CODE_CATALOG = #{codeCatalog,jdbcType=VARCHAR},
+      </if>
+      <if test="nameCatalog != null" >
+        NAME_CATALOG = #{nameCatalog,jdbcType=VARCHAR},
+      </if>
+      <if test="img != null" >
+        IMG = #{img,jdbcType=VARCHAR},
+      </if>
+      <if test="pkFather != null" >
+        PK_FATHER = #{pkFather,jdbcType=VARCHAR},
+      </if>
+      <if test="typeCatalog != null" >
+        TYPE_CATALOG = #{typeCatalog,jdbcType=VARCHAR},
+      </if>
+      <if test="pyCode != null" >
+        PY_CODE = #{pyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="wbCode != null" >
+        WB_CODE = #{wbCode,jdbcType=VARCHAR},
+      </if>
+      <if test="doctorMode != null" >
+        DOCTOR_MODE = #{doctorMode,jdbcType=VARCHAR},
+      </if>
+      <if test="nurseMode != null" >
+        NURSE_MODE = #{nurseMode,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sortNo != null" >
+        SORT_NO = #{sortNo,jdbcType=DECIMAL},
+      </if>
+      <if test="stopFlag != null" >
+        STOP_FLAG = #{stopFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="modifier != null" >
+        MODIFIER = #{modifier,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyTime != null" >
+        MODIFY_TIME = #{modifyTime,jdbcType=DATE},
+      </if>
+      <if test="delFlag != null" >
+        DEL_FLAG = #{delFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where PK_CATALOG = #{ID,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.haoze.model.emr.emrwriting.entity.EmrCataLogEntity" >
+    update EMR_CATALOG
+    set PK_ORG = #{pkOrg,jdbcType=VARCHAR},
+      CODE_CATALOG = #{codeCatalog,jdbcType=VARCHAR},
+      NAME_CATALOG = #{nameCatalog,jdbcType=VARCHAR},
+      IMG = #{img,jdbcType=VARCHAR},
+      PK_FATHER = #{pkFather,jdbcType=VARCHAR},
+      TYPE_CATALOG = #{typeCatalog,jdbcType=VARCHAR},
+      PY_CODE = #{pyCode,jdbcType=VARCHAR},
+      WB_CODE = #{wbCode,jdbcType=VARCHAR},
+      DOCTOR_MODE = #{doctorMode,jdbcType=VARCHAR},
+      NURSE_MODE = #{nurseMode,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      SORT_NO = #{sortNo,jdbcType=DECIMAL},
+      STOP_FLAG = #{stopFlag,jdbcType=VARCHAR},
+      CREATOR = #{creator,jdbcType=VARCHAR},
+      CREATE_TIME = #{createTime,jdbcType=DATE},
+      MODIFIER = #{modifier,jdbcType=VARCHAR},
+      MODIFY_TIME = #{modifyTime,jdbcType=DATE},
+      DEL_FLAG = #{delFlag,jdbcType=CHAR}
+    where PK_CATALOG = #{pkCatalog,jdbcType=VARCHAR}
+  </update>
+</mapper>

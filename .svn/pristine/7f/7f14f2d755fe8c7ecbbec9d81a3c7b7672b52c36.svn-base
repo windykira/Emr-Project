@@ -1,0 +1,9 @@
+package com.haoze.dao.repository;
+
+import com.haoze.common.model.BaseDao;
+import com.haoze.model.repository.entity.DataElementValuesEntity;
+
+public interface DataElementValuesDao extends BaseDao<DataElementValuesEntity,String>{
+
+    void deleteByDataElementId(String dataElementId);
+}

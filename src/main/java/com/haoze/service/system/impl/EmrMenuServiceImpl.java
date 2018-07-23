@@ -1,0 +1,199 @@
+package com.haoze.service.system.impl;
+
+import com.haoze.common.model.ResponseResult;
+import com.haoze.common.model.Tree;
+import com.haoze.dao.system.EmrMenuDao;
+import com.haoze.dao.system.EmrRoleMenuDao;
+import com.haoze.model.system.menu.entity.EmrMenuEntity;
+import com.haoze.service.system.EmrMenuService;
+import com.haoze.utils.ShiroUtil;
+import com.haoze.utils.TreeBuildUtil;
+import com.haoze.utils.UUIDUtil;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
+
+/**
+ * 菜单数据服务接口实现类。
+ * @author maxl
+ * @time 2018-05-07。
+ */
+@Service
+public class EmrMenuServiceImpl implements EmrMenuService {
+
+    @Autowired
+    EmrMenuDao emrMenuMapper;
+    @Autowired
+    EmrRoleMenuDao emrRoleMenuMapper;
+
+    @Transactional
+    @Override
+    public ResponseResult save(EmrMenuEntity menu) {
+        try {
+            menu.setID(UUIDUtil.randomString());
+            menu.setMenuOrganization(ShiroUtil.getUser().getUserOrganization());
+            menu.setPyCode("XZCDPYM");
+            menu.setWbCode("XZCDWBM");
+            emrMenuMapper.save(menu);
+            return ResponseResult.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseResult.failure(0, "保存失败");
+        }
+    }
+
+    @Transactional
+    @Override
+    public ResponseResult remove(String menuID) {
+        try {
+            //查询当前菜单子菜单
+            List<EmrMenuEntity> childrenMenus = emrMenuMapper.listChildrenMenus(menuID);
+            if(childrenMenus.size() > 0){
+                return ResponseResult.failure(0,"拥有子菜单，无法删除。");
+            }
+            Map<String,Object> paramMap = new HashedMap();
+            paramMap.put("menuId",menuID);
+            int relationNumbers = emrRoleMenuMapper.count(paramMap);
+            if(relationNumbers > 0){
+                return ResponseResult.failure(0,"请先解除关联的角色。");
+            }
+            emrMenuMapper.remove(menuID);
+            return ResponseResult.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+    }
+
+    @Transactional
+    @Override
+    public ResponseResult update(EmrMenuEntity menu) {
+        try {
+            emrMenuMapper.update(menu);
+            return ResponseResult.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseResult.failure();
+        }
+    }
+
+    @Override
+    public Tree<EmrMenuEntity> getTree() {
+
+        List<Tree<EmrMenuEntity>> trees = new ArrayList();
+        List<EmrMenuEntity> menuEntities = emrMenuMapper.listMenus(new HashMap());
+        for (EmrMenuEntity emrMenuEntity : menuEntities) {
+            Tree<EmrMenuEntity> tree = new Tree();
+            tree.setId(emrMenuEntity.getID());
+            tree.setParentId(emrMenuEntity.getParentMenu());
+            tree.setText(emrMenuEntity.getMenuName());
+            trees.add(tree);
+        }
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        Tree<EmrMenuEntity> t = TreeBuildUtil.build(trees);
+        return t;
+    }
+
+    @Override
+    public Tree<EmrMenuEntity> getTree(String roleId) {
+
+        //查询全部菜单
+        List<EmrMenuEntity> menus = emrMenuMapper.listMenus(new HashMap());
+        //查询角色关联菜单
+        List<String> menuIds = emrRoleMenuMapper.listMenuIdsByRoleId(roleId);
+        List<String> tempArrayList = menuIds;
+        for (EmrMenuEntity menu : menus) {
+            if (tempArrayList.contains(menu.getParentMenu())) {
+                menuIds.remove(menu.getParentMenu());
+            }
+        }
+
+        List<Tree<EmrMenuEntity>> trees = new ArrayList();
+        List<EmrMenuEntity> menuEntities = emrMenuMapper.listMenus(new HashMap());
+        for (EmrMenuEntity menuEntity : menuEntities) {
+            Tree<EmrMenuEntity> tree = new Tree();
+            tree.setId(menuEntity.getID());
+            tree.setParentId(menuEntity.getParentMenu());
+            tree.setText(menuEntity.getMenuName());
+            Map<String, Object> state = new HashMap();
+            String menuId = menuEntity.getID();
+            if (menuIds.contains(menuId)) {
+                state.put("selected", true);
+            } else {
+                state.put("selected", false);
+            }
+            tree.setState(state);
+            trees.add(tree);
+        }
+        // 默认顶级菜单为０，根据数据库实际情况调整
+        Tree<EmrMenuEntity> tree = TreeBuildUtil.build(trees);
+        return tree;
+    }
+
+    @Override
+    public List<Tree<EmrMenuEntity>> listMenuTree(String userID) {
+
+        List<Tree<EmrMenuEntity>> trees = new ArrayList();
+        List<EmrMenuEntity> emrMenuEntities = emrMenuMapper.listMenusByUserID(userID);
+        for (EmrMenuEntity emrMenuEntity : emrMenuEntities) {
+
+            Tree<EmrMenuEntity> tree = new Tree();
+            tree.setId(emrMenuEntity.getID());
+            tree.setParentId(emrMenuEntity.getParentMenu());
+            tree.setText(emrMenuEntity.getMenuName());
+            Map<String, Object> attributes = new HashMap();
+            attributes.put("url", emrMenuEntity.getMenuUrl());
+            attributes.put("icon", emrMenuEntity.getMenuIcon());
+            tree.setAttributes(attributes);
+            trees.add(tree);
+        }
+        // 默认顶级菜单为０
+        List<Tree<EmrMenuEntity>> list = TreeBuildUtil.buildList(trees, "0");
+        return list;
+    }
+
+    @Override
+    public Set<String> listUserPermissions(String userID) {
+
+        List<String> userPermissions = emrMenuMapper.listUserPermissions(userID);
+        Set<String> permissionSet = new HashSet();
+        for (String permission : userPermissions) {
+            if (StringUtils.isNotBlank(permission)) {
+                permissionSet.addAll(Arrays.asList(permission.trim().split(",")));
+            }
+        }
+        return permissionSet;
+    }
+
+
+    @Override
+    public Set<String> listUserRoles(String userID) {
+        List<String> userRoles = emrMenuMapper.listUserRoles(userID);
+        Set<String> rolesSet = new HashSet();
+        for (String roleCode : userRoles) {
+            if (StringUtils.isNotBlank(roleCode)) {
+                rolesSet.add(roleCode);
+            }
+        }
+        return rolesSet;
+    }
+
+    @Override
+    public List<EmrMenuEntity> listMenus(Map<String, Object> params) {
+        return emrMenuMapper.listMenus(params);
+    }
+
+    @Override
+    public EmrMenuEntity get(String menuID) {
+        return emrMenuMapper.get(menuID);
+    }
+    
+    @Override
+    public List<Map> getSubMenuByName(String name) {
+    	return emrMenuMapper.getSubMenuByName(name);
+    }
+}

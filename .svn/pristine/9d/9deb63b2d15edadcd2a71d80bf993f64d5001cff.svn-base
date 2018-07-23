@@ -1,0 +1,196 @@
+<div class="sidebar">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">模板列表</h4>
+    </div>
+    <ul class="list-group">
+      <li class="list-group-item"><a href="#">模版1</a></li>
+    </ul>
+  </div>
+</div>
+<div class="main">
+  <div class="well well-sm text-right">
+    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addTemplate" data-backdrop="static"><span class="glyphicon glyphicon-plus"></span> 新增模板</button>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body clearfix">
+      <form class="form-inline">
+        <div class="form-group form-group-sm">
+          <label for="">适用范围：</label>
+          <select class="form-control">
+            <option value="">全院</option>
+            <option value="">科室</option>
+            <option value="">个人</option>
+          </select>
+        </div>
+        &nbsp;
+        <div class="form-group form-group-sm">
+          <label for="">模板类型：</label>
+          <select class="form-control">
+            <option value="">病案首页</option>
+            <option value="">病程记录</option>
+            <option value="">手术记录</option>
+          </select>
+        </div>
+        &nbsp;
+        <div class="form-group form-group-sm">
+          <label for="">状态：</label>
+          <select class="form-control">
+            <option value="">可用</option>
+            <option value="">不可用</option>
+          </select>
+        </div>
+        &nbsp;
+        <button type="button" class="btn btn-primary btn-sm">查询</button>
+      </form>
+    </div>
+  </div>
+  <table class="table table-bordered table-striped table-hover">
+    <thead>
+      <tr>
+        <th>状态</th>
+        <th>模板类型</th>
+        <th>模板名称</th>
+        <th>创建人</th>
+        <th>创建时间</th>
+        <th>适用范围</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>可用</td>
+        <td>病案首页</td>
+        <td>病案首页</td>
+        <td>管理员</td>
+        <td>2018-05-20 20:25:50</td>
+        <td>自费</td>
+      </tr>
+      <tr>
+        <td>不可用</td>
+        <td>入院记录</td>
+        <td>儿科入院记录</td>
+        <td>管理员</td>
+        <td>2018-05-20 20:25:50</td>
+        <td>自费</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<!-- modal -->
+<div class="modal fade" id="addTemplate" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">新增模板</h4>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label for="inputEmail3" class="col-sm-3 control-label">模板名称：</label>
+            <div class="col-sm-7">
+              <input type="email" class="form-control" id="inputEmail3" placeholder="病案首页模板">
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputPassword3" class="col-sm-3 control-label">适用范围：</label>
+            <div class="col-sm-7">
+              <select type="text" class="form-control">
+                <option value="">全院</option>
+                <option value="">科室</option>
+                <option value="">个人</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="inputPassword3" class="col-sm-3 control-label">模板类型：</label>
+            <div class="col-sm-7">
+              <select type="text" class="form-control">
+                <option value="">病案首页</option>
+                <option value="">病程记录</option>
+                <option value="">手术记录</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button type="button" class="btn btn-primary" onClick="window.open('template-manager-add.html')">确定</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /modal -->

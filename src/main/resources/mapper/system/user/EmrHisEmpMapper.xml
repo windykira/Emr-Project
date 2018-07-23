@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.haoze.dao.system.EmrHisEmpDao" >
+
+  <resultMap id="BaseResultMap" type="com.haoze.model.system.user.entity.EmrHisEmpEntity" >
+    <result column="PK_EMP" property="pkEmp" jdbcType="VARCHAR" />
+    <result column="JOB_NUM" property="jobNum" jdbcType="VARCHAR" />
+
+    <result column="EMP_NO" property="empNo" jdbcType="VARCHAR" />
+    <result column="CZEYJOB_NUM" property="czeyJobNum" jdbcType="VARCHAR" />
+    <result column="JOB" property="job" jdbcType="VARCHAR" />
+
+    <result column="EMP_NAME" property="empName" jdbcType="VARCHAR" />
+    <result column="DEPT_ID" property="deptId" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="ID_CARD" property="idCard" jdbcType="VARCHAR" />
+    <result column="NATIVE_PLACE" property="nativePlace" jdbcType="VARCHAR" />
+    <result column="JOINJOB_DATE" property="joinjobDate" jdbcType="VARCHAR" />
+    <result column="ENT_DATE" property="entDate" jdbcType="VARCHAR" />
+    <result column="ITEM_NAME" property="itemName" jdbcType="VARCHAR" />
+    <result column="MOBILE_PHONE" property="mobilePhone" jdbcType="VARCHAR" />
+    <result column="POLITICAL_STATUS" property="politicalStatus" jdbcType="VARCHAR" />
+    <result column="ACADEMIC_DEGREE" property="academicDegree" jdbcType="VARCHAR" />
+    <result column="SCHOOL" property="school" jdbcType="VARCHAR" />
+    <result column="CREATESTATUS" property="createStatus" jdbcType="VARCHAR" />
+    <result column="PK_ORG" property="pkOrg" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    PK_EMP,JOB_NUM,EMP_NO,CZEYJOB_NUM,JOB,EMP_NAME,DEPT_ID,SEX,ID_CARD,NATIVE_PLACE,JOINJOB_DATE,ENT_DATE,ITEM_NAME,MOBILE_PHONE,POLITICAL_STATUS,ACADEMIC_DEGREE,
+    SCHOOL,CREATESTATUS,PK_ORG
+  </sql>
+
+  <select id="listHisEmp" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from SYS_EMP
+    <where>
+      <if test="sex != null and sex != ''"> and SEX = #{sex} </if>
+      <if test="createStatus != null and createStatus != ''"> and CREATESTATUS = #{createStatus} </if>
+      <if test="empName != null and empName != ''"> and EMP_NAME like concat(concat('%',#{empName}),'%')</if>
+    </where>
+    <choose>
+      <when test="sort != null and sort.trim() != ''">
+        order by ${sort} ${sortOrder}
+      </when>
+    </choose>
+  </select>
+
+  <select id="get" parameterType="String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from SYS_EMP where PK_EMP = #{_parameter}
+  </select>
+
+  <select id="countHisEmp" parameterType="java.util.Map" resultType="int">
+    select count(PK_EMP) from SYS_EMP
+    <where>
+      <if test="createStatus != null and createStatus != ''"> and CREATESTATUS = #{createStatus} </if>
+      <if test="empName != null and empName != ''"> and EMP_NAME like concat(concat('%',#{empName}),'%') </if>
+    </where>
+  </select>
+
+  <insert id="insert" parameterType="com.haoze.model.system.user.entity.EmrHisEmpEntity" >
+    insert into SYS_EMP (PK_EMP, JOB_NUM, EMP_NAME, 
+      DEPT_ID, SEX, ID_CARD,
+      NATIVE_PLACE, JOINJOB_DATE, ENT_DATE, 
+      ITEM_NAME, MOBILE_PHONE, POLITICAL_STATUS, 
+      ACADEMIC_DEGREE, SCHOOL
+      )
+    values (#{pkEmp,jdbcType=VARCHAR}, #{jobNum,jdbcType=VARCHAR}, #{empName,jdbcType=VARCHAR}, 
+      #{deptId1,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, 
+      #{nativePlace,jdbcType=VARCHAR}, #{joinjobDate,jdbcType=VARCHAR}, #{entDate,jdbcType=VARCHAR}, 
+      #{itemName,jdbcType=VARCHAR}, #{mobilePhone,jdbcType=VARCHAR}, #{politicalStatus,jdbcType=VARCHAR}, 
+      #{academicDegree,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <update id="update" parameterType="com.haoze.model.system.user.entity.EmrHisEmpEntity">
+    update SYS_EMP
+    <set>
+      <if test="createStatus != null">CREATESTATUS = #{createStatus}, </if>
+    </set>
+    where PK_EMP = #{pkEmp}
+  </update>
+
+
+  <insert id="insertSelective" parameterType="com.haoze.model.system.user.entity.EmrHisEmpEntity" >
+    insert into SYS_EMP
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pkEmp != null" >
+        PK_EMP,
+      </if>
+      <if test="jobNum != null" >
+        JOB_NUM,
+      </if>
+      <if test="empName != null" >
+        EMP_NAME,
+      </if>
+      <if test="deptId1 != null" >
+        DEPT_ID,
+      </if>
+      <if test="sex != null" >
+        SEX,
+      </if>
+      <if test="idCard != null" >
+        ID_CARD,
+      </if>
+      <if test="nativePlace != null" >
+        NATIVE_PLACE,
+      </if>
+      <if test="joinjobDate != null" >
+        JOINJOB_DATE,
+      </if>
+      <if test="entDate != null" >
+        ENT_DATE,
+      </if>
+      <if test="itemName != null" >
+        ITEM_NAME,
+      </if>
+      <if test="mobilePhone != null" >
+        MOBILE_PHONE,
+      </if>
+      <if test="politicalStatus != null" >
+        POLITICAL_STATUS,
+      </if>
+      <if test="joinpartyDate != null" >
+        JOINPARTY_DATE,
+      </if>
+      <if test="academicDegree != null" >
+        ACADEMIC_DEGREE,
+      </if>
+      <if test="school != null" >
+        SCHOOL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pkEmp != null" >
+        #{pkEmp,jdbcType=VARCHAR},
+      </if>
+      <if test="jobNum != null" >
+        #{jobNum,jdbcType=VARCHAR},
+      </if>
+      <if test="empName != null" >
+        #{empName,jdbcType=VARCHAR},
+      </if>
+      <if test="deptId1 != null" >
+        #{deptId1,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="nativePlace != null" >
+        #{nativePlace,jdbcType=VARCHAR},
+      </if>
+      <if test="joinjobDate != null" >
+        #{joinjobDate,jdbcType=VARCHAR},
+      </if>
+      <if test="entDate != null" >
+        #{entDate,jdbcType=VARCHAR},
+      </if>
+      <if test="itemName != null" >
+        #{itemName,jdbcType=VARCHAR},
+      </if>
+      <if test="mobilePhone != null" >
+        #{mobilePhone,jdbcType=VARCHAR},
+      </if>
+      <if test="politicalStatus != null" >
+        #{politicalStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="joinpartyDate != null" >
+        #{joinpartyDate,jdbcType=VARCHAR},
+      </if>
+      <if test="academicDegree != null" >
+        #{academicDegree,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        #{school,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+</mapper>

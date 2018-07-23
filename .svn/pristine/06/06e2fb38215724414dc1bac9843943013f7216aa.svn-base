@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>数据字典</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/plugins/default/default.css" />
+    <link rel="stylesheet" href="/css/mystyle.css" />
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        input{
+            width: 400px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!--右侧 上方菜单-->
+<div class="container-fluid">
+    <div class="col-sm-12  row">
+        <!-- 数据组信息 面板 -->
+            <div class="panel panel-info">
+                <div class="panel-body">
+                    <div class="form-group pull-right">
+                        <label for="Input">数据组:</label>
+                        <input type="text" class="" id="queryParam" placeholder="模糊匹配（数据组名称、数据组编码、拼音码、五笔码）">
+                        <button type="submit" class="btn btn-warning">查询</button>
+                    </div>
+                    <table class="table table-striped table-bordered text-center data-group">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div th:include="emrinclude::footer"></div>
+<script type="text/javascript" src="/js/appjs/repository/dictionary/datagroup/datagroup.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+	<link rel="stylesheet" href="/css/bootstrap.css">
+	<link rel="stylesheet" href="/css/font-awesome.css">
+	<link rel="stylesheet" href="/css/plugins/bootstrap-table/bootstrap-table.min.css">
+	<link rel="stylesheet" href="/css/styles.css">
+	<link rel="stylesheet" href="/css/plugins/jsTree/style.min.css">
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox float-e-margins">
+					<div class="ibox-content">
+						<form class="form-horizontal m-t" id="signupForm">
+							<input id="ID" name="ID" type="hidden"
+								th:value="${tempClass.ID}"> <input id="menuIDs"
+								name="menuIDs" type="hidden">
+							<input id="stopFl" name="stopFl" class="form-control"
+										type="hidden" th:value="${tempClass.stopFlag}" >
+							<input id="pkCatalog" name="pkCatalog" class="form-control"
+										type="hidden" th:value="${tempClass.pkCatalog}" >
+							<div class="form-group">
+								<label class="col-sm-3 control-label">类型名称：</label>
+								<div class="col-sm-8">
+									<input id="nameClass" name="nameClass" class="form-control"
+										type="text" th:value="${tempClass.nameClass}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">类型编码：</label>
+								<div class="col-sm-8">
+									<input id="codeClass" name="codeClass" class="form-control"
+										type="text" th:value="${tempClass.codeClass}">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">五笔码：</label>
+								<div class="col-sm-8">
+									<input id="wbCode" name="wbCode" class="form-control" type="text" th:value="${tempClass.wbCode}" readonly="readonly">
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">拼音码：</label>
+								<div class="col-sm-8">
+									<input id="pyCode" name="pyCode" class="form-control" type="text" th:value="${tempClass.wbCode}" readonly="readonly">
+								</div>
+							</div>
+							<div class="form-group">
+                			<label for="inputPassword3" class="col-sm-3 control-label">上级目录</label>
+                				<div class="col-sm-8">
+                    		<input type="text" class="form-control" id="pkCatalogName"  onclick="openCatalog()" th:value="${nameCatalog}">
+                				</div>
+            				</div>
+							<div class="form-group">
+								<label class="col-sm-3 control-label">状态：</label>
+								<div class="col-sm-8">
+									
+									<select id="stopFlag" name="stopFlag" class="form-control chosen-select" ></select>
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="submit" class="btn btn-primary">提交</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="emrinclude::footer"></div>
+	<script src="/js/appjs/template/templateclass/edit.js"></script>
+</body>
+
+</html>

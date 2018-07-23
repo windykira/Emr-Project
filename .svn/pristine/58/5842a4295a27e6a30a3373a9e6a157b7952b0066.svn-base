@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.haoze.dao.system.EmrUserDao">
+
+    <resultMap id="BaseResultMap" type="com.haoze.model.system.user.entity.EmrUserEntity" >
+        <result column="PK_USER" property="ID" jdbcType="VARCHAR" />
+        <result column="PK_ORG" property="userOrganization" jdbcType="VARCHAR" />
+        <result column="ACCOUNT" property="account" jdbcType="VARCHAR" />
+        <result column="PWD" property="passWord" jdbcType="VARCHAR" />
+        <result column="CODE_USER" property="userCode" jdbcType="VARCHAR" />
+        <result column="NAME_USER" property="userName" jdbcType="VARCHAR" />
+        <result column="SEX" property="sex" jdbcType="VARCHAR" />
+        <result column="BIRTHDAY" property="birthday" jdbcType="DATE" />
+        <result column="IDNO" property="identityCard" jdbcType="VARCHAR" />
+
+        <result column="WORKPHONE" property="workPhone" jdbcType="VARCHAR" />
+        <result column="MOBILE" property="mobile" jdbcType="VARCHAR" />
+        <result column="POSITION" property="position" jdbcType="VARCHAR" />
+        <result column="TITLE" property="title" jdbcType="VARCHAR" />
+        <result column="JOB_DATE" property="inductionDate" jdbcType="DATE" />
+        <result column="ARREDSS" property="address" jdbcType="VARCHAR" />
+        <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+        <result column="SPEC" property="spec" jdbcType="VARCHAR" />
+        <result column="FLAG_ACTIVE" property="status" jdbcType="VARCHAR" />
+        <result column="LOGO_USER" property="userLogo" jdbcType="VARCHAR" />
+        <result column="DATA_VERSION" property="dataVersion" jdbcType="VARCHAR" />
+
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+        <result column="MODIFY_TIME" property="modifyTime" jdbcType="DATE" />
+        <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        PK_USER,PK_ORG,ACCOUNT,PWD,CODE_USER,NAME_USER,SEX,BIRTHDAY,IDNO,WORKPHONE,MOBILE,POSITION,TITLE,JOB_DATE,ARREDSS,EMAIL,SPEC,FLAG_ACTIVE
+        ,DATA_VERSION,CREATE_TIME,MODIFIER,MODIFY_TIME,DEL_FLAG,LOGO_USER
+    </sql>
+
+    <select id="get" resultMap="BaseResultMap" parameterType="String">
+        SELECT
+          <include refid="Base_Column_List"/>
+        FROM SYS_USER WHERE PK_USER = #{_parameter}
+    </select>
+
+    <select id="listUsers" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM SYS_USER
+        <where>
+            <if test="account != null and account != ''"> and ACCOUNT = #{account} </if>
+            <if test="passWord != null and passWord != ''"> and PWD = #{passWord} </if>
+            <if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
+        </where>
+    </select>
+
+    <select id="countUsers" resultType="int">
+        select count(*) from SYS_USER
+        <where>
+            <if test="ID != null and ID != ''"> and PK_USER = #{ID} </if>
+            <if test="userName != null and userName != ''"> and NAME_USER = #{userName} </if>
+            <if test="delFlag != null and delFlag != ''"> and DEL_FLAG = #{delFlag} </if>
+        </where>
+    </select>
+
+    <update id="update" parameterType="com.haoze.model.system.user.entity.EmrUserEntity">
+        update sys_user
+        <set>
+            <if test="account != null">ACCOUNT = #{account}, </if>
+            <if test="passWord != null">PWD = #{passWord}, </if>
+            <if test="userName != null">NAME_USER = #{userName}, </if>
+            <if test="sex != null">SEX = #{sex}, </if>
+            <if test="birthday != null">BIRTHDAY = #{birthday}, </if>
+            <if test="identityCard != null">IDNO = #{identityCard}, </if>
+            <if test="workPhone != null">WORKPHONE = #{workPhone}, </if>
+            <if test="mobile != null">MOBILE = #{mobile}, </if>
+            <if test="position != null">POSITION = #{position}, </if>
+            <if test="title != null">TITLE = #{title}, </if>
+            <if test="inductionDate != null">JOB_DATE = #{inductionDate}, </if>
+            <if test="address != null">ARREDSS = #{address}, </if>
+            <if test="email != null">EMAIL = #{email}, </if>
+            <if test="spec != null">SPEC = #{spec}, </if>
+            <if test="status != null">FLAG_ACTIVE = #{status}, </if>
+            <if test="userLogo != null">LOGO_USER = #{userLogo}, </if>
+            <if test="dataVersion != null">DATA_VERSION = #{dataVersion}</if>
+
+            <if test="modifier != null">MODIFIER = #{modifier}</if>
+            <if test="modifyTime != null">MODIFY_TIME = #{modifyTime}</if>
+            <if test="delFlag != null">DEL_FLAG = #{delFlag}</if>
+        </set>
+        where PK_USER = #{ID}
+    </update>
+
+    <delete id="remove" parameterType="String">
+        delete from sys_user where PK_USER = #{_parameter}
+    </delete>
+
+    <delete id="batchRemove">
+        delete from sys_user where user_id in
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+
+    <insert id="save" parameterType="com.haoze.model.system.user.entity.EmrUserEntity" useGeneratedKeys="false">
+        insert into SYS_USER (PK_USER,PK_ORG,ACCOUNT,PWD,CODE_USER,NAME_USER,SEX,BIRTHDAY,IDNO,WORKPHONE,MOBILE,POSITION,
+        TITLE,JOB_DATE,ARREDSS,EMAIL,SPEC,FLAG_ACTIVE,DATA_VERSION,CREATE_TIME,MODIFIER,MODIFY_TIME,DEL_FLAG,LOGO_USER)
+        VALUES
+        (#{ID,jdbcType=VARCHAR},#{userOrganization,jdbcType=VARCHAR},#{account,jdbcType=VARCHAR},#{passWord,jdbcType=VARCHAR},#{userCode,jdbcType=VARCHAR},
+        #{userName,jdbcType=VARCHAR},#{sex,jdbcType=VARCHAR},#{birthday,jdbcType=DATE},#{identityCard,jdbcType=VARCHAR},#{workPhone,jdbcType=VARCHAR},#{mobile,jdbcType=VARCHAR},
+        #{position,jdbcType=VARCHAR},#{title,jdbcType=VARCHAR},#{inductionDate,jdbcType=DATE},#{address,jdbcType=VARCHAR},#{email,jdbcType=VARCHAR},
+        #{spec,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{dataVersion,jdbcType=NUMERIC},#{createTime,jdbcType=DATE},#{modifier,jdbcType=VARCHAR},
+        #{modifyTime,jdbcType=DATE},#{delFlag,jdbcType=VARCHAR},#{userLogo,jdbcType=VARCHAR})
+
+    </insert>
+
+    <insert id="batchSave" parameterType="java.util.List" useGeneratedKeys="false">
+        insert into SYS_USER (PK_USER,PK_ORG,ACCOUNT,PWD,CODE_USER,NAME_USER,SEX,BIRTHDAY,IDNO,WORKPHONE,MOBILE,POSITION,
+        TITLE,JOB_DATE,ARREDSS,EMAIL,SPEC,FLAG_ACTIVE,DATA_VERSION,CREATE_TIME,MODIFIER,MODIFY_TIME,DEL_FLAG,LOGO_USER)
+        select Temp.* from
+        (
+        <foreach item="item" index="index" collection="list" separator="union all">
+            select #{item.ID}, #{item.userOrganization}, #{item.account},
+            #{item.passWord}, #{item.userCode}, #{item.userName},#{item.sex}, #{item.birthday}, #{item.identityCard},
+            #{item.workPhone}, #{item.mobile}, #{item.position},#{item.title}, #{item.inductionDate}, #{item.address},
+            #{item.email}, #{item.spec}, #{item.status},#{item.dataVersion}, #{item.createTime}, #{item.modifier},
+            #{item.modifyTime}, #{item.delFlag}, #{item.userLogo}
+            from dual
+        </foreach>
+        ) Temp
+    </insert>
+</mapper>

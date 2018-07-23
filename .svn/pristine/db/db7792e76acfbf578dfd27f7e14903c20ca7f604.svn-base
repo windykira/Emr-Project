@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.haoze.dao.system.EmrMenuDao">
+
+    <resultMap id="BaseResultMap" type="com.haoze.model.system.menu.entity.EmrMenuEntity" >
+
+        <result column="PK_ORG" property="menuOrganization" jdbcType="VARCHAR" />
+        <result column="CODE_MENU" property="menuCode" jdbcType="VARCHAR" />
+        <result column="NAME_MENU" property="menuName" jdbcType="VARCHAR" />
+        <result column="PK_FATHER" property="parentMenu" jdbcType="VARCHAR" />
+        <result column="LEVEL_MENU" property="menuLevel" jdbcType="VARCHAR" />
+        <result column="FLAG_ACTIVE" property="status" jdbcType="VARCHAR" />
+        <result column="PARAMS" property="params" jdbcType="VARCHAR" />
+        <result column="DESCR" property="description" jdbcType="VARCHAR" />
+        <result column="ICO_MENU" property="menuIcon" jdbcType="VARCHAR" />
+        <result column="ORD" property="order" jdbcType="VARCHAR" />
+
+        <result column="MENU_PERMISSION" property="menuPermission" jdbcType="VARCHAR" />
+        <result column="PY_CODE" property="pyCode" jdbcType="VARCHAR" />
+        <result column="WB_CODE" property="wbCode" jdbcType="VARCHAR" />
+        <result column="DATA_VERSION" property="dataVersion" jdbcType="NUMERIC" />
+        <result column="URL_MENU" property="menuUrl" jdbcType="VARCHAR" />
+        <result column="TYPE_MENU" property="menuType" jdbcType="VARCHAR" />
+
+        <result column="PK_MENU" property="ID" jdbcType="VARCHAR" />
+        <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
+        <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+        <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
+        <result column="MODIFY_TIME" property="modifyTime" jdbcType="DATE" />
+        <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        PK_MENU,PK_ORG,CODE_MENU,NAME_MENU,PK_FATHER,LEVEL_MENU,FLAG_ACTIVE,PARAMS,DESCR,ICO_MENU,ORD,MENU_PERMISSION,
+        PY_CODE,WB_CODE,DATA_VERSION,URL_MENU,TYPE_MENU,CREATOR,CREATE_TIME,MODIFIER,MODIFY_TIME,DEL_FLAG
+    </sql>
+
+    <select id="get" resultMap="BaseResultMap" parameterType="String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM SYS_MENU
+        where PK_MENU = #{_parameter}
+    </select>
+
+    <select id="listMenus" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM SYS_MENU
+        <where>
+            <if test="menuId != null and menuId != ''"> and PK_MENU = #{menuId} </if>
+            <if test="parentMenu != null and parentMenu != ''"> and PK_FATHER = #{parentMenu} </if>
+        </where>
+    </select>
+
+    <select id="listChildrenMenus" resultMap="BaseResultMap" parameterType="String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM SYS_MENU
+        <where>
+            <if test="_parameter != null and _parameter != ''"> and PK_FATHER = #{_parameter} </if>
+        </where>
+    </select>
+
+    <select id="count" resultType="int">
+        select count(*) from sys_menu
+        <where>
+            <if test="menuId != null and menuId != ''"> and menu_id = #{menuId} </if>
+            <if test="parentId != null and parentId != ''"> and parent_id = #{parentId} </if>
+            <if test="name != null and name != ''"> and name = #{name} </if>
+            <if test="url != null and url != ''"> and url = #{url} </if>
+            <if test="perms != null and perms != ''"> and perms = #{perms} </if>
+            <if test="type != null and type != ''"> and type = #{type} </if>
+            <if test="icon != null and icon != ''"> and icon = #{icon} </if>
+            <if test="orderNum != null and orderNum != ''"> and order_num = #{orderNum} </if>
+            <if test="gmtCreate != null and gmtCreate != ''"> and gmt_create = #{gmtCreate} </if>
+            <if test="gmtModified != null and gmtModified != ''"> and gmt_modified = #{gmtModified} </if>
+        </where>
+    </select>
+
+    <insert id="save" parameterType="com.haoze.model.system.menu.entity.EmrMenuEntity">
+        insert into SYS_MENU(PK_MENU,PK_ORG,CODE_MENU,NAME_MENU,PK_FATHER,LEVEL_MENU,FLAG_ACTIVE,PARAMS,DESCR,ICO_MENU,ORD,MENU_PERMISSION,
+        PY_CODE,WB_CODE,DATA_VERSION,URL_MENU,TYPE_MENU,CREATOR,CREATE_TIME,MODIFIER,MODIFY_TIME,DEL_FLAG)
+        values
+        (#{ID,jdbcType=VARCHAR},#{menuOrganization,jdbcType=VARCHAR},#{menuCode,jdbcType=VARCHAR},#{menuName,jdbcType=VARCHAR},#{parentMenu,jdbcType=VARCHAR},
+        #{menuLevel,jdbcType=VARCHAR},#{status,jdbcType=VARCHAR},#{params,jdbcType=VARCHAR},#{description,jdbcType=VARCHAR},#{menuIcon,jdbcType=VARCHAR},#{order,jdbcType=VARCHAR},
+        #{menuPermission,jdbcType=VARCHAR},#{pyCode,jdbcType=VARCHAR},#{wbCode,jdbcType=VARCHAR},#{dataVersion,jdbcType=VARCHAR},#{menuUrl,jdbcType=VARCHAR},
+        #{menuType,jdbcType=VARCHAR},#{creator,jdbcType=VARCHAR},#{createTime,jdbcType=DATE},#{modifier,jdbcType=VARCHAR},#{modifyTime,jdbcType=DATE},
+        #{delFlag,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="update" parameterType="com.haoze.model.system.menu.entity.EmrMenuEntity">
+        update SYS_MENU
+        <set>
+            <if test="menuCode != null">CODE_MENU = #{menuCode}, </if>
+            <if test="menuName != null">NAME_MENU = #{menuName}, </if>
+            <if test="parentMenu != null">PK_FATHER = #{parentMenu}, </if>
+            <if test="menuLevel != null">LEVEL_MENU = #{menuLevel}, </if>
+            <if test="status != null">FLAG_ACTIVE = #{status}, </if>
+            <if test="params != null">PARAMS = #{params}, </if>
+            <if test="description != null">DESCR = #{description}, </if>
+            <if test="menuIcon != null">ICO_MENU = #{menuIcon}, </if>
+            <if test="order != null">ORD = #{order},</if>
+
+            <if test="menuPermission != null">MENU_PERMISSION = #{menuPermission},</if>
+            <if test="pyCode != null">PY_CODE = #{pyCode},</if>
+            <if test="wbCode != null">WB_CODE = #{wbCode},</if>
+            <if test="dataVersion != null">DATA_VERSION = #{dataVersion},</if>
+            <if test="menuUrl != null">URL_MENU = #{menuUrl},</if>
+            <if test="menuType != null">TYPE_MENU = #{menuType},</if>
+            <if test="modifier != null">MODIFIER = #{modifier},</if>
+            <if test="modifyTime != null">MODIFY_TIME = #{modifyTime},</if>
+            <if test="delFlag != null">DEL_FLAG = #{delFlag}</if>
+        </set>
+        where PK_MENU = #{ID}
+    </update>
+
+    <delete id="remove" parameterType="String">
+        DELETE FROM SYS_MENU WHERE PK_MENU = #{_parameter}
+    </delete>
+
+    <delete id="batchRemove">
+        delete from sys_menu where menu_id in
+        <foreach item="menuId" collection="array" open="(" separator=","
+                 close=")">
+            #{menuId}
+        </foreach>
+    </delete>
+
+    <select id="listMenusByUserID" resultMap="BaseResultMap">
+        select distinct
+        m.PK_MENU , m.PK_FATHER, m.NAME_MENU, m.URl_MENU,
+        m.MENU_PERMISSION,m.TYPE_MENU,m.ICO_MENU,m.ORD,m.CREATE_TIME, m.MODIFY_TIME
+        from SYS_MENU m
+        left
+        join SYS_ROLE_MENU rm on m.PK_MENU = rm.PK_MENU left join
+        SYS_USER_ROLE ur
+        on rm.PK_ROLE =ur.PK_ROLE where ur.PK_USER = #{userID}
+        and
+        m.TYPE_MENU in(1,2)
+        order by
+        m.ORD
+    </select>
+
+    <!--<select id="listMenusByUserID" resultMap="BaseResultMap">
+        select distinct
+          m.PK_MENU , m.PK_FATHER, m.NAME_MENU, m.URl_MENU,
+          m.MENU_PERMISSION,m.TYPE_MENU,m.ICO_MENU,m.ORD,m.CREATE_TIME, m.MODIFY_TIME
+        from SYS_MENU m
+        left
+        join SYS_ROLE_MENU rm on m.PK_MENU = rm.PK_MENU left join
+          SYS_USER_ROLE ur
+        on rm.PK_ROLE =ur.PK_ROLE where ur.PK_USER = #{userID}
+        and
+          m.TYPE_MENU in(1,2)
+        order by
+          m.ORD
+    </select>-->
+
+    <select id="listUserPermissions" resultType="string">
+        select distinct m.MENU_PERMISSION
+        from SYS_MENU m left join
+          SYS_ROLE_MENU rm on m.PK_MENU = rm.PK_MENU
+        left join SYS_USER_ROLE ur
+        on rm.PK_ROLE = ur.PK_ROLE where ur.PK_USER
+          = #{userID}
+    </select>
+    
+    <select id="getSubMenuByName" resultType="Map" parameterType="String">
+       select * from SYS_MENU where PK_FATHER = (Select PK_MENU from SYS_MENU where NAME_MENU=#{name})
+    </select>
+    
+    
+</mapper>

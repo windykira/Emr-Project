@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="/css/plugins/default/default.css" />
+<!-- 字体下拉菜单 -->
+<body style="margin:0">
+
+		<div id="font_menu" style="width: 150px;position: absolute ;z-index: 811213;" class="ke-menu-default ke-shadow ke-menu" unselectable="on">
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left">	</div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: SimSun;" unselectable="on">宋体</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: NSimSun;" unselectable="on">新宋体</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: FangSong_GB2312;" unselectable="on">仿宋_GB2312</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: KaiTi_GB2312;" unselectable="on">楷体_GB2312</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: SimHei;" unselectable="on">黑体</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: Microsoft YaHei;" unselectable="on">微软雅黑</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: Arial;" unselectable="on">Arial</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: Arial Black;" unselectable="on">Arial Black</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: Times New Roman;" unselectable="on">Times New Roman</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: Courier New;" unselectable="on">Courier New</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: Tahoma;" unselectable="on">Tahoma</span></div></div>
+			<div class="ke-menu-item" unselectable="on">
+			<div class="ke-inline-block ke-menu-item-left"></div>
+			<div class="ke-inline-block ke-menu-item-right">
+				<span style="font-family: Verdana;" unselectable="on">Verdana</span>
+			</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="/js/jquery.min.js" ></script>
+		<script>
+		//绑定下拉菜单点击事件
+		$("#font_menu").delegate('.ke-menu-item','click',function () {//
+			var font_name = $(this).children()[1].children[0].innerHTML;
+			window.parent.myWriter.ExecuteCommand("FontName" , false , font_name);
+			window.parent.document.getElementById("font_menu_frame").style.display='none';
+		})
+		
+		//下拉菜单代理各个选项
+		$("#font_menu").delegate('.ke-menu-item','mouseenter',function () {
+		    $(this).addClass("ke-menu-item-on")   
+		})
+		$("#font_menu").delegate('.ke-menu-item','mouseleave',function () {
+		    $(this).removeClass("ke-menu-item-on")  
+		})
+		
+			
+		</script>
+</body>

@@ -1,0 +1,53 @@
+<link rel="stylesheet" href="/css/plugins/default/default.css" />
+<!-- 字体下拉菜单 -->
+<body style="margin:0">
+<!-- 字号下拉菜单 -->
+<div id="size_menu" style="width: 150px; position: absolute ;z-index: 811213;" class="ke-menu-default ke-shadow ke-menu" unselectable="on">
+	<div class="ke-menu-item" unselectable="on" style="height: 21px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 21px;"><span style="font-size:9px;" unselectable="on">9px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 22px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 22px;"><span style="font-size:10px;" unselectable="on">10px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 24px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 24px;"><span style="font-size:12px;" unselectable="on">12px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 26px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 26px;"><span style="font-size:14px;" unselectable="on">14px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 28px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 28px;"><span style="font-size:16px;" unselectable="on">16px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 30px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 30px;"><span style="font-size:18px;" unselectable="on">18px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 36px;">
+		<div class="ke-inline-block ke-menu-item-left"></div>
+		<div class="ke-inline-block ke-menu-item-right" style="line-height: 36px;"><span style="font-size:24px;" unselectable="on">24px</span></div></div>
+	<div class="ke-menu-item" unselectable="on" style="height: 44px;">
+		<div class="ke-inline-block ke-menu-item-left">
+			<span class="ke-inline-block ke-toolbar-icon ke-toolbar-icon-url ke-icon-checked"></span>
+		</div>
+	<div class="ke-inline-block ke-menu-item-right" style="line-height: 44px;"><span style="font-size:32px;" unselectable="on">32px</span></div></div></div>
+
+		<script type="text/javascript" src="/js/jquery.min.js" ></script>
+		<script>
+		//绑定下拉菜单点击事件
+		$("#size_menu").delegate('.ke-menu-item','click',function () {
+			var font_size = $(this).children()[1].children[0].innerHTML;
+			font_size = font_size.replace("px","");
+			window.parent.myWriter.ExecuteCommand("FontSize" , false , font_size);
+			window.parent.document.getElementById("size_menu_frame").style.display='none';   
+		})
+		
+		//下拉菜单代理各个选项
+		$("#size_menu").delegate('.ke-menu-item','mouseenter',function () {
+	   		$(this).addClass("ke-menu-item-on")   
+		})
+		$("#size_menu").delegate('.ke-menu-item','mouseleave',function () {
+			$(this).removeClass("ke-menu-item-on")  
+		})
+		
+			
+		</script>
+</body>

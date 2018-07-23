@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<meta charset="utf-8">
+<head>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/plugins/jsTree/style.min.css">
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+
+    <div class="row">
+        <div class="col-sm-12">
+
+            <div class="ibox-content">
+                <div id="catalogTree"></div>
+            </div>
+            <!--<div class="form-group">
+                <div class="col-sm-12 col-sm-offset-12">
+                    <button type="submit" class="btn btn-primary">提交</button>
+                </div>
+            </div>-->
+        </div>
+    </div>
+</div>
+<div th:include="emrinclude::footer"></div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        getTreeData()
+    });
+    function getTreeData() {
+
+        $.ajax({
+            type : "GET",
+            url : "/template/tempClass/tree",
+            success : function(tree) {
+                loadTree(tree);
+            }
+        });
+    }
+
+    function loadTree(tree) {
+        $('#catalogTree').jstree({
+            'core' : {
+                'data' : tree
+            },
+            "checkbox" : {
+                "three_state" : true,
+            },
+            "plugins" : [ "search" , "radio" ,"wholerow"]
+        });
+        $('#catalogTree').jstree().open_all();
+    }
+
+    $(".btn-primary").click(function(){
+        var ref = $('#catalogTree').jstree(true); // 获得整个树
+        var catalogId = ref.get_selected();
+        var catalogName = $('#catalogTree').jstree().get_node("#"+catalogId).text;
+
+        parent.callBack(catalogId,catalogName);
+        var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+        parent.layer.close(index);
+    });
+
+    function callBack(){
+
+        var ref = $('#catalogTree').jstree(true);
+        var catalogId = ref.get_selected();
+        var catalogName = $('#catalogTree').jstree().get_node("#"+catalogId).text;
+        var object = {
+            "catalogId":catalogId,
+            "catalogName":catalogName
+        };
+        return object;
+    }
+
+</script>
+</body>
+
+</html>

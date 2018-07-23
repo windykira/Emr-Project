@@ -1,0 +1,58 @@
+<link rel="stylesheet" href="/css/plugins/default/default.css" />
+<body style="margin:0">
+<!-- 文字色下拉菜单 -->
+<div id="color_menu" style="position: absolute; z-index: 811213;" class="ke-menu-default ke-colorpicker-default ke-shadow ke-colorpicker" unselectable="on">
+	<table class="ke-colorpicker-table" cellpadding="0" cellspacing="0" border="0">
+	<tbody>
+		<tr>
+		<td colspan="6" class="ke-colorpicker-cell-top" title="transparent" unselectable="on">无颜色</td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#E53333" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(229, 51, 51);"></div></td>
+		<td class="ke-colorpicker-cell" title="#E56600" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(229, 102, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#FF9900" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(255, 153, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#64451D" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(100, 69, 29);"></div></td>
+		<td class="ke-colorpicker-cell" title="#DFC5A4" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(223, 197, 164);"></div></td>
+		<td class="ke-colorpicker-cell" title="#FFE500" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(255, 229, 0);"></div></td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#009900" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 153, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#006600" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 102, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#99BB00" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(153, 187, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#B8D100" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(184, 209, 0);"></div></td>
+		<td class="ke-colorpicker-cell" title="#60D978" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(96, 217, 120);"></div></td>
+		<td class="ke-colorpicker-cell" title="#00D5FF" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 213, 255);"></div></td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#337FE5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(51, 127, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#003399" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 51, 153);"></div></td>
+		<td class="ke-colorpicker-cell" title="#4C33E5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(76, 51, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#9933E5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(153, 51, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#CC33E5" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(204, 51, 229);"></div></td>
+		<td class="ke-colorpicker-cell" title="#EE33EE" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(238, 51, 238);"></div></td></tr>
+		<tr>
+		<td class="ke-colorpicker-cell" title="#FFFFFF" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(255, 255, 255);"></div></td>
+		<td class="ke-colorpicker-cell" title="#CCCCCC" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(204, 204, 204);"></div></td>
+		<td class="ke-colorpicker-cell" title="#999999" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(153, 153, 153);"></div></td>
+		<td class="ke-colorpicker-cell" title="#666666" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(102, 102, 102);"></div></td>
+		<td class="ke-colorpicker-cell" title="#333333" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(51, 51, 51);"></div></td>
+		<td class="ke-colorpicker-cell ke-colorpicker-cell-selected" title="#000000" unselectable="on"><div class="ke-colorpicker-cell-color" unselectable="on" style="background-color: rgb(0, 0, 0);"></div></td></tr></tbody>
+	</table>
+</div>
+		<script type="text/javascript" src="/js/jquery.min.js" ></script>
+		<script>
+		//绑定下拉菜单点击事件
+		$("#color_menu").delegate('td','click',function () {
+		    var color_code = $(this).attr("title"); 
+		  	window.parent.myWriter.ExecuteCommand("Color" , false , color_code);
+			window.parent.document.getElementById("color_menu_frame").style.display='none';
+		})
+		
+		//下拉菜单代理各个选项
+		$("#color_menu").delegate('td','mouseenter',function () {
+		    $(this).addClass("ke-colorpicker-cell-selected")   
+		})
+		$("#color_menu").delegate('td','mouseleave',function () {
+		    $(this).removeClass("ke-colorpicker-cell-selected")  
+		})
+		
+			
+		</script>
+</body>

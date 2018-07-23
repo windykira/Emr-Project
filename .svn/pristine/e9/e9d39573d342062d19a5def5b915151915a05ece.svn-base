@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=8">-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>常州市第二人民医院住院电子病历</title>
+    <link rel="stylesheet" href="/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/plugins/default/default.css" />
+    <link rel="shortcut icon" href="img/favicon.ico">
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!-- navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header"> <a class="navbar-brand" href="index.html"><img src="/img/logo.png" height="30" class="d-inline-block align-top" alt=""> 常州市第二人民医院住院电子病历</a></div>
+    </div>
+</nav>
+<!-- /navbar -->
+<div class="well well-sm" id="patient">
+    <strong>姓名：</strong><span id="patient_name"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <strong>床号：</strong><span id="patient_bedNo"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <strong>住院号：</strong><span id="patient_patientId"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <strong>性别：</strong><span id="patient_sex"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <strong>年龄：</strong><span id="patient_age"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <strong>费用类别：</strong><span id="patient_chargeType"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <strong>所在病区：</strong><span id="patient_deptAlias"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <strong>入院时间：</strong><span id="patient_indate"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+    <strong>主要诊断：</strong><span id="patient_diagnosis"></span>
+    <strong style="display:none;">主治医师<span id="patient_docname"></span></strong>
+
+</div>
+<!-- sidebar -->
+<div class="sidebar2">
+    <div class="content_wrap">
+        <!--<div id="retract" style="cursor: pointer;">收起</div>-->
+        <div class="zTreeDemoBackground left">
+            <ul id="treeDemo" class="ztree">
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- /sidebar -->
+
+<div class="main2">
+
+    <div class="well well-sm">
+        <a class="navbar-minimalize minimalize-styl-2 btn btn-default "
+           href="#" title="收起左侧菜单" id="retract" value="open"><i class="fa fa-bars"></i> </a>
+        <div class="btn-group">
+            <!--<button type="button" class="btn btn-default" data-toggle="modal" data-target="#addMedical" data-backdrop="static">新增</button>-->
+            <button type="button" class="btn btn-default" data-backdrop="static" onclick="showModal()">新增</button>
+            <button type="button" class="btn btn-default" onclick="saveEmr()">保存</button>
+            <button type="button" class="btn btn-default" onclick="deleteEmr()">删除</button>
+            <button type="button" class="btn btn-default">存为个人模板</button>
+            <button type="button" class="btn btn-default" onclick="preview()">预览</button>
+            <button type="button" class="btn btn-default" onclick="print()">打印</button>
+        </div>
+        <div class="btn-group pull-right" id="pageBtn">
+            <button id="btnPop1" type="button" class="btn btn-default" onclick="openReport('1')">医嘱</button>
+            <button id="btnPop2" type="button" class="btn btn-default" onclick="openReport('2')">检查</button>
+            <button id="btnPop3" type="button" class="btn btn-default" onclick="openReport('3')">检验</button>
+            <button id="btnPop4" type="button" class="btn btn-default" onclick="openReport('4')">处方</button>
+            <button id="btnPop5" type="button" class="btn btn-default" onclick="openReport('5')">手术</button>
+        </div>
+        <div th:include="dc_div" id="dcContainer"></div>
+    </div>
+    <!--<textarea name="editor1">常州市第二人民医院住院病案首页</textarea>-->
+    <!-- 弹出窗1 -->
+    <div id="boxPop1" class="pop-box">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix"><a class="close"><span>&times;</span></a>
+                <h3 class="panel-title">医嘱</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-striped" id="doctorAdvice">
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /弹出窗1 -->
+    <!-- 弹出窗2 -->
+    <div id="boxPop2" class="pop-box">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix"><a class="close"><span>&times;</span></a>
+                <h3 class="panel-title">检查</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-striped" id="checkUp">
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /弹出窗2 -->
+    <!-- 弹出窗3 -->
+    <div id="boxPop3" class="pop-box">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix"><a class="close"><span>&times;</span></a>
+                <h3 class="panel-title">检验</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-striped" id="inspect">
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /弹出窗3 -->
+    <!-- 弹出窗4 -->
+    <div id="boxPop4" class="pop-box">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix"><a class="close"><span>&times;</span></a>
+                <h3 class="panel-title">处方</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-striped" id="prescription">
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /弹出窗4 -->
+    <!-- 弹出窗5 -->
+    <div id="boxPop5" class="pop-box">
+        <div class="panel panel-default">
+            <div class="panel-heading clearfix"><a class="close"><span>&times;</span></a>
+                <h3 class="panel-title">手术</h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered table-striped" id="operation">
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /弹出窗5 -->
+
+    <!--<iframe id="tmpTable" frameborder="1" style="display:none;" src=""></iframe>-->
+</div>
+
+<!-- footer -->
+<footer class="footer">
+    <h5 class="pull-left mr-20" th:text="${footerName}"><i class="fa fa-user-md fa-lg text-primary" aria-hidden="true"></i></h5>
+    <h5 class="pull-left" id="timer"><i class="fa fa-clock-o fa-lg text-primary" aria-hidden="true"></i></h5>
+</footer>
+<!-- /footer -->
+
+<!-- modal -->
+<div class="modal fade" id="addMedical" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                <h4 class="modal-title">新增病历</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-5 col-md-4">
+
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" style="margin-bottom:8px;">
+                            <li value="1" class="active" onclick="reloadTemplateTable(this.value)"><a href="#home" data-toggle="tab">全院</a></li>
+                            <li value="2" onclick="reloadTemplateTable(this.value)"><a href="#profile" data-toggle="tab">科室</a></li>
+                            <li value="3" onclick="reloadTemplateTable(this.value)"><a href="#messages" data-toggle="tab">个人</a></li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="home">
+                                <ul class="list-group">
+                                    <!--<li class="list-group-item active">病案首页</li>
+                                    <li class="list-group-item">入院记录</li>
+                                    <li class="list-group-item">病程记录</li>
+                                    <li class="list-group-item">手术记录</li>
+                                    <li class="list-group-item">会诊记录</li>
+                                    <li class="list-group-item">知情同意书</li>
+                                    <li class="list-group-item">出院记录</li>-->
+                                </ul>
+                            </div>
+                            <div class="tab-pane" id="profile">22.</div>
+                            <div class="tab-pane" id="messages">.33</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-7 col-md-8">
+                        <table id="templateTable" data-mobile-responsive="true">
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <!--<button type="button" class="btn btn-primary" onClick="window.open('template-manager-add.html')">确定</button>-->
+                <button type="button" class="btn btn-primary" onclick="loadDcEditor()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- /modal -->
+<div th:include="emrinclude::footer"></div>
+<script src="/js/jquery.ztree.core-3.5.js"></script>
+<script src="/js/appjs/emr/emrwriting/emrwrite.js"></script>
+<script>
+    var current_index;
+    function openReport(hisCallType){
+
+        $("#dcContainer").hide();
+        var title = "";
+        switch(hisCallType){
+
+            case "1":title="医嘱";break;
+            case "2":title="检查";break;
+            case "3":title="检验";break;
+            case "4":title="处方";break;
+            case "5":title="手术";break;
+            case "8":title="检验";break;
+            case "9":title="检查";break;
+        }
+
+        current_index = layer.open({
+            type: 2,
+            closeBtn:1,
+            title: title,
+            maxmin: false,
+            shadeClose: true, // 点击遮罩关闭层
+            area: ['900px', '580px'],
+            skin: 'layui-layer-molv',
+            offset: 't',
+            content: '/emr/emrwriting/reportimport/' + hisCallType,
+            end:function(){
+                $("#dcContainer").show();
+            }
+        });
+    }
+
+    function closeLayer(){
+        layer.close(current_index);
+    }
+</script>
+<!--<script src="/js/appjs/emr/emrwriting/buttonshow.js"></script>-->
+</body>
+</html>

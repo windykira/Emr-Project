@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="emrinclude :: header"></head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="col-sm-12">
+        <div class="ibox">
+            <div class="ibox-body">
+                <div class="fixed-table-toolbar">
+                    <div class="columns pull-left">
+                        <button type="button" class="btn  btn-primary"
+                                onclick="add()">
+                            <i class="fa fa-plus hidden" aria-hidden="true"></i>添加
+                        </button>
+                        <button shiro:hasPermission="system:sysDept:batchRemove" type="button" class="btn  btn-danger"
+                                onclick="batchRemove()">
+                            <i class="fa fa-trash" aria-hidden="true"></i>删除
+                        </button>
+                    </div>
+                    <div class="columns pull-right">
+                        <button class="btn btn-primary" onclick="reLoad()">查询</button>
+                    </div>
+
+                    <div class="columns pull-right col-md-2 nopadding">
+                        <input id="searchName" type="text" class="form-control"
+                               placeholder="">
+                    </div>
+                </div>
+                <table id="exampleTable" data-mobile-responsive="true">
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="emrinclude :: footer"></div>
+<script type="text/javascript" src="/js/appjs/emrsys/department/department.js"></script>
+</body>
+</html>

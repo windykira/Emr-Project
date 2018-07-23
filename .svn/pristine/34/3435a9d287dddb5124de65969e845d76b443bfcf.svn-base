@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>data dictionary</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<link rel="shortcut icon" href="/img/favicon.ico">-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="/css/plugins/bootstrap-table/bootstrap-table.min.css">-->
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/datadictionary.css">
+    <link rel="stylesheet" href="/css/plugins/default/default.css" />
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="container-fluid">
+    <div class="col-sm-12  row">
+        <!-- 树形图 面板 开始 -->
+        <div class="col-sm-12 row">
+            <div class="col-sm-3 row abc">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">目录</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="content_wrap">
+                            <div class="zTreeDemoBackground left">
+                                <ul id="dataDictionaryTree" class="ztree">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-sm-9 row pull-right">
+                <button  data-toggle="modal" class="btn btn-default4 pull-right add-element">新增数据元</button>
+                <button  data-toggle="modal" class="btn btn-default4 pull-right add-group">新增数据组</button>
+                <!--<button  data-toggle="modal" class="btn btn-default4 pull-right">新增数据集</button>-->
+            </div>
+            <!-- 数据组信息 面板 -->
+            <div class="col-sm-9 row abc pull-right dataGroup">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" style="text-align: center">数据组信息</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <form class="form-horizontal" id="dataGroupForm">
+                                <input type="hidden" id="ID" name="ID"/>
+                                <div class="form-group">
+                                    <label for="inputEmail1" class="col-sm-3 control-label">数据组编码：</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="codeDg" name="codeDg" placeholder="数据组编码">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail2" class="col-sm-3 control-label">数据组名称：</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="nameDg" name="nameDg" placeholder="数据组名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">描述：</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="describe" name="describe" placeholder="描述">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="col-sm-7 row pull-right">
+                                <button type="button" class="btn btn-default group-delete">删除</button>
+                                <button type="button" class="btn btn-primary group-save">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 数据元信息 面板 -->
+            <div class="col-sm-9 row abc pull-right dataElement">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <h3 class="panel-title" style="text-align: center">数据元信息</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-horizontal">
+                            <form class="form-horizontal" id="dataElementForm">
+                                <input type="hidden" id="pkDataElemt" name="pkDataElemt"/>
+                                <div class="form-group">
+                                    <label for="inputEmail1" class="col-sm-3 control-label">数据元编码：</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="codeDe" name="codeDe" placeholder="数据元编码">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail2" class="col-sm-3 control-label">数据元名称：</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="nameDe" name="nameDe" placeholder="数据元名称">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">数据元定义：</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="definition" name="definition" placeholder="数据元定义">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">数据元值的数据类型：</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="deValsType" name="deValsType" placeholder="数据元值的数据类型">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail3" class="col-sm-3 control-label">数据元表示格式：</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="repFmt" name="repFmt" placeholder="数据元表示格式">
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="col-md-8 row pull-right">
+                                <button type="button" class="btn btn-default element-delete">删除</button>
+                                <button type="button" class="btn btn-primary element-save">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="disabledInput">数据元值域码:</label>
+                            <input type="text" class="" id="codeDeForValue" placeholder="" readonly>
+                        </div>
+                        <table id="elementValuesTable" data-mobile-responsive="true">
+                        </table>
+                        <div class="col-sm-7 row pull-right">
+                            <button type="button" class="btn btn-default add-value">新增</button>
+                            <button type="button" class="btn btn-primary value-delete">删除</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--新增数据组模态框 开始-->
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal1">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">新增数据组</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail1" class="col-sm-3 control-label">数据组编码：</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="inputEmail9" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail2" class="col-sm-3 control-label">数据组名称：</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="inputEmail10" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-3 control-label">描述：</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="inputEmail11" placeholder="">
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<!--新增数据元模态框 开始-->
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header text-center">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">新增数据元</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="inputEmail1" class="col-sm-4 control-label">数据元编码：</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="inputEmail12" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail2" class="col-sm-4 control-label">数据元名称：</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="inputEmail13" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail2" class="col-sm-4 control-label">数据元定义：</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="inputEmail14" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail2" class="col-sm-4 control-label">数据元值的数据类型：</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="inputEmail15" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="inputEmail2" class="col-sm-4 control-label">数据元表示格式：</label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="inputEmail16" placeholder="">
+                        </div>
+                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary">保存</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!--&lt;!&ndash; Placed at the end of the document so the pages load faster &ndash;&gt;-->
+<!--<script src="../jquery-3.3.1.min.js"></script>-->
+<div th:include="emrinclude::footer"></div>
+<script type="text/javascript" src="/js/appjs/repository/dictionary/dictionary.js"></script>
+</body>
+</html>

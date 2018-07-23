@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>常州市第二人民医院住院电子病历</title>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/plugins/bootstrap-table/bootstrap-table.min.css">
+    <link rel="stylesheet" href="/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <!--<link rel="stylesheet" href="/css/pace-theme-loading-bar.css">-->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="/css/zTreeStyle/zTreeStyle.css">
+</head>
+<body>
+<!-- navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar"><span class="sr-only">Toggle navigation</span> <span
+                    class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button>
+            <a class="navbar-brand" href="index.html"><img src="/img/logo.png" height="30"
+                                                           class="d-inline-block align-top" alt=""> 常州市第二人民医院住院电子病历</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li th:each="menu : ${menus}" class="nav-item" style="cursor:pointer;">
+                    <a class="nav-link" th:url="${menu.attributes.url}" th:text="${menu.text}"
+                       th:menuId="${menu.id}"></a>
+                </li>
+                <!--<li class="nav-item nav-01 active"><a class="nav-link" href="javascript:;">病人列表</a></li>
+                <li class="nav-item nav-02"><a class="nav-link" href="javascript:;">模板管理</a></li>
+                <li class="nav-item nav-03"><a class="nav-link" href="javascript:;">知识库管理</a></li>
+                <li class="nav-item nav-04"><a class="nav-link" href="javascript:;">系统设置</a></li>-->
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-cog" aria-hidden="true"></i> 设置</a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="#"><i class="fa fa-question-circle"
+                                                                     aria-hidden="true"></i> 帮助</a></li>
+                <li class="nav-item"><a class="nav-link" href="/logout"><i class="fa fa-sign-out"
+                                                                           aria-hidden="true"></i> 退出</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- /navbar -->
+
+<!-- content -->
+<div class="content" id="content"></div>
+<!-- /content -->
+
+<!-- footer -->
+<footer class="footer">
+    <h5 id="doc_name" class="pull-left mr-5" th:text="${footerName}" ></h5>
+    <h5 id="doc_dept" class="pull-left mr-10" th:text="${dept}" ></h5>
+    <h5 id="doc_role" class="pull-left mr-20" th:text="${role}" ></h5>
+    <h5 class="pull-left" id="timer"><i class="fa fa-clock-o fa-lg text-primary" aria-hidden="true"></i></h5>
+    <!--<nav class="pull-right">
+        <ul class="pagination pagination-sm">
+            <li><a href="#">上一页</a></li>
+            <li><a href="#">下一页</a></li>
+        </ul>
+    </nav>-->
+</footer>
+<!-- /footer -->
+<div th:include="emrinclude::footer"></div>
+<script>
+    $(".pace .pace-progress").css({
+        width: "300px"
+    });
+
+    $("#timer").text($.getCurrentTime());
+    setInterval(function(){
+        $("#timer").text($.getCurrentTime());
+    },1000)
+</script>
+<script>
+    $(function () {
+
+        //导航高亮
+        $("#navbar li").click(function () {
+            $(this).addClass("active").siblings(".active").removeClass("active");
+        });
+
+        //默认加载患者列表页面
+        loadPatients();
+
+        $(".nav-link").click(function () {
+
+            $.ajax({
+                 type: "GET",
+                 url: $(this).attr("url")+"/"+$(this).attr("menuId"),
+                 async: false,
+                 error: function (request) {
+                 parent.layer.alert("Connection error");
+                 },
+                 success: function (data) {
+                     /*if($(data).find("#userId").val() == ""){
+                         parent.location.href = "/login";
+                     }else {
+                         $("#content").html(data);
+                     }*/
+                     $("#content").initPage(data);
+                 }
+             });
+        });
+    });
+
+    function loadPatients(){
+
+        var menuId = "";
+        $(".navbar-nav a").each(function(i,e){
+            if($(this).attr("url") == "emr/patient/patients"){
+                $(this).parent().addClass("active");
+                menuId = $(this).attr("menuId");
+            }
+        });
+        if(menuId != ""){
+            $.ajax({
+                type: "GET",
+                url: "emr/patient/patients"+"/"+menuId,
+                async: false,
+                error: function (request) {
+                    parent.layer.alert("Connection error");
+                },
+                success: function (data) {
+                    //debugger;
+                    $("#content").initPage(data);
+                }
+            });
+        }
+    }
+
+    //加载页面
+    //$("#content").load("patients.html");
+    /*$("#navbar .nav-01").click(function(){
+
+     $.ajax({
+     cache: true,
+     type: "GET",
+     url: "/test",
+     async: false,
+     error: function (request) {
+     parent.layer.alert("Connection error");
+     },
+     success: function (data) {
+     $("#content").html(data);
+     }
+     });
+     });*/
+
+    /*$("#navbar .nav-02").click(function(){
+     $.ajax({
+     cache: true,
+     type: "GET",
+     url: "/test1",
+     async: false,
+     error: function (request) {
+     parent.layer.alert("Connection error");
+     },
+     success: function (data) {
+     $("#content").html(data);
+     }
+     });
+     });
+     $("#navbar .nav-03").click(function(){
+     $("#content").load("repository-manager.html");
+     });
+     $("#navbar .nav-04").click(function(){
+     $("#content").load("sys-setup.html");
+     });*/
+</script>
+</body>
+</html>

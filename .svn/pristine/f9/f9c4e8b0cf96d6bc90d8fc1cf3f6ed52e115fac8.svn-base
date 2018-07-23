@@ -1,0 +1,12 @@
+package com.haoze.service.repository;
+
+import com.haoze.common.model.BaseService;
+import com.haoze.model.repository.entity.DataElementValuesEntity;
+
+/**
+ * 数据元值域服务接口。
+ * @author maxl
+ * @time 2018-07-18。
+ */
+public interface DataElementValuesService extends BaseService<DataElementValuesEntity,String>{
+}
