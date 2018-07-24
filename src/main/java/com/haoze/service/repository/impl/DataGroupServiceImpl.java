@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 数据组服务接口实现类。
@@ -83,6 +85,29 @@ public class DataGroupServiceImpl implements DataGroupService {
             //更新节点信息
             DataDictionaryEntity dataDictionaryEntity = dataDictionaryDao.getByDataId(dataGroupEntity.getID());
             dataDictionaryEntity.setNameNode(dataGroupEntity.getNameDg());
+            dataDictionaryEntity.setSortNo(dataGroupEntity.getSortNo());
+            /*//获取同一父节点下的子节点
+            QueryParam queryParam = QueryParam.getDefaultQueryParam();
+            queryParam.put("pkFather", dataDictionaryEntity.getPkFather());
+            int count = dataDictionaryDao.count(queryParam);
+            int sortNo;
+            if (dataGroupEntity.getSortNo() <= 1) {
+                dataDictionaryEntity.setSortNo(1);
+                sortNo = 1;
+                dataDictionaryDao.updateSortNoForEnlarge(queryParam);
+            } else if (dataGroupEntity.getSortNo() > count) {
+                dataDictionaryEntity.setSortNo(count + 1);
+                sortNo = count + 1;
+            } else {
+                dataDictionaryEntity.setSortNo(dataGroupEntity.getSortNo());
+                sortNo = dataGroupEntity.getSortNo();
+                queryParam.put("sortNo",dataGroupEntity.getSortNo());
+                if (dataDictionaryEntity.getSortNo() > dataGroupEntity.getSortNo()) {
+                    dataDictionaryDao.updateSortNoForEnlarge(queryParam);
+                } else {
+                    dataDictionaryDao.updateSortNoForReduce(queryParam);
+                }
+            }*/
             dataDictionaryDao.update(dataDictionaryEntity);
             return ResponseResult.success();
         } catch (Exception e) {
@@ -147,7 +172,10 @@ public class DataGroupServiceImpl implements DataGroupService {
     public ResponseResult deleteByDataDictionaryId(String dataDictionaryId) {
 
         try {
+            ResponseResult responseResult = ResponseResult.success();
             DataDictionaryEntity dataDictionaryEntity = dataDictionaryDao.get(dataDictionaryId);
+            responseResult.put("sortNo",dataDictionaryEntity.getSortNo());
+            responseResult.put("pkFather",dataDictionaryEntity.getPkFather());
             if (dataDictionaryEntity == null) {
                 return ResponseResult.failure(0, "不存在的数据集。");
             }
@@ -161,11 +189,73 @@ public class DataGroupServiceImpl implements DataGroupService {
             dataGroupDao.delete(dataDictionaryEntity.getPkBd());
             //删除节点关系
             dataDictionaryDao.delete(dataDictionaryId);
-            return ResponseResult.success();
+            return responseResult;
         } catch (Exception e) {
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResponseResult.failure(0, "删除失败");
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult updateSort(DataGroupEntity dataGroupEntity) {
+
+        try {
+            DataDictionaryEntity dataDictionaryEntity = dataDictionaryDao.getByDataId(dataGroupEntity.getID());
+            //获取同一父节点下的子节点
+            QueryParam queryParam = QueryParam.getDefaultQueryParam();
+            queryParam.put("pkFather", dataDictionaryEntity.getPkFather());
+            int count = dataDictionaryDao.count(queryParam);
+
+            if (dataGroupEntity.getSortNo() < 1) {
+                dataGroupEntity.setSortNo(1);
+            }
+            if (dataGroupEntity.getSortNo() > count) {
+                dataGroupEntity.setSortNo(count);
+            }
+            queryParam.put("currentSortNo", dataDictionaryEntity.getSortNo());
+            queryParam.put("targetSortNo", dataGroupEntity.getSortNo());
+            if(dataGroupEntity.getSortNo() > dataDictionaryEntity.getSortNo()){
+                dataDictionaryDao.updateSortNoForReduce(queryParam);
+            }else if(dataGroupEntity.getSortNo() < dataDictionaryEntity.getSortNo()){
+                dataDictionaryDao.updateSortNoForEnlarge(queryParam);
+            }
+            ResponseResult responseResult = ResponseResult.success();
+            responseResult.put("sortNo", dataGroupEntity.getSortNo());
+            return responseResult;
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "更新排序号失败。");
+        }
+    }
+
+    @Transactional
+    public ResponseResult updateSortNoForEnlarge(QueryParam queryParam) {
+
+        try {
+            dataDictionaryDao.updateSortNoForEnlarge(queryParam);
+            return ResponseResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "减小排序号失败。");
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult updateSortNoForReduce(QueryParam queryParam) {
+
+        try {
+            queryParam.put("currentSortNo",queryParam.get("sortNo"));
+            dataDictionaryDao.updateSortNoForReduce(queryParam);
+            return ResponseResult.success();
+        } catch (Exception e) {
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "减小排序号失败。");
         }
     }
 }

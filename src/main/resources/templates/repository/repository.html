@@ -14,7 +14,7 @@
 <script>
 
   $(function() {
-    //默认加载用户管理页面
+    //默认加载数据字典页面
     loadRepository();
 
     $(".list-group a").click(function () {
@@ -38,19 +38,18 @@
 
   function loadRepository(){
     $(".list-group a").each(function(i,e){
-      if($(this).attr("url") == "emrsys/kb/"){
+      if($(this).attr("url") == "repository/dictionary"){
         $(this).addClass("active");
       }
     });
     $.ajax({
       type: "GET",
-      url: "/emrsys/kb",
+      url: "/repository/dictionary",
       async: false,
       error: function (request) {
         parent.layer.alert("Connection error");
       },
       success: function (data) {
-        //debugger;
         $(".main").initPage(data);
       }
     });

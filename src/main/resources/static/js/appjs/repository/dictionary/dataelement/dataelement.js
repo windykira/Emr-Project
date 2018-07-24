@@ -4,6 +4,7 @@ $(function () {
 
 function loadDataElement() {
 
+    $(".data-element").bootstrapTable('destroy');
     $('.data-element')
         .bootstrapTable(
             {

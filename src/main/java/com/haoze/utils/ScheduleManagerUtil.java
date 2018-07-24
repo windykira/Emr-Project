@@ -14,7 +14,6 @@ public class ScheduleManagerUtil {
     private static String JOB_GROUP_NAME = "DEFAULT_JOBGROUP_NAME";//默认任务名
     private static String TRIGGER_GROUP_NAME = "DEFAULT_TRIGGERGROUP_NAME";//默认触发器名
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     public static void addJob(String triggerName, String triggerGroupName, Class jobClass, String cronTime) {
         try {
             Scheduler scheduler = schedulerFactory.getScheduler();

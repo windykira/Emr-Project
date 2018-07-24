@@ -20,4 +20,16 @@ public interface DataDictionaryDao extends BaseDao<DataDictionaryEntity,String>{
      */
     DataDictionaryEntity getByDataId(String dataId);
 
+    /**
+     * 增大排序号
+     * @param queryParam
+     */
+    void updateSortNoForEnlarge(QueryParam queryParam);
+
+    /**
+     * 减小排序号
+     * @param queryParam
+     */
+    void updateSortNoForReduce(QueryParam queryParam);
+
 }

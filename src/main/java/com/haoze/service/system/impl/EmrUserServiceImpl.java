@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -98,6 +99,9 @@ public class EmrUserServiceImpl implements EmrUserService {
             //新增用户信息
             EmrUserEntity emrUser = emrUserVO.getEmrUser();
             FixedFieldInitializedUtil.initialize(emrUser);
+            if(StringUtils.isEmpty(emrUser.getPassWord())){
+                emrUser.setPassWord("111111");
+            }
             emrUser.setUserCode(emrUser.getAccount());
             emrUserMapper.save(emrUser);
             //删除用户科室关联关系数据

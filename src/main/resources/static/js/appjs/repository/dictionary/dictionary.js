@@ -35,14 +35,17 @@ $(function () {
         deleteElementValue();
     });
 
+    $("#searchName").keyup(function () {
+        selectNode($("#searchName").val());
+    });
+
 });
 
-function selectNode(searchName){
-    if (searchName != '') {
-        var nodes = zTree.getNodesByParamFuzzy("name", searchName, null);
-        if (nodes.length > 0) {
-            zTree.selectNode(nodes[0]);
-        }
+function selectNode(id) {
+    if (id != '') {
+        //var nodes = zTree.getNodesByParamFuzzy("name", searchName, null);
+        var node = zTree.getNodeByParam("id",id);
+        zTree.selectNode(node);
     }
 }
 
@@ -141,6 +144,7 @@ function updateDataGroup() {
         data: $('#dataGroupForm').serialize(),
         success: function (r) {
             if (r.code == 1) {
+                loadDataDictionary();
                 layer.msg("更新成功");
             } else {
                 layer.msg(r.msg);
@@ -157,8 +161,8 @@ function updateDataElement() {
         data: $('#dataElementForm').serialize(),
         success: function (r) {
             if (r.code == 1) {
-                layer.msg("更新成功");
                 loadDataDictionary();
+                layer.msg("更新成功");
             } else {
                 layer.msg(r.msg);
             }
@@ -173,7 +177,7 @@ function deleteDataGroup() {
         alert("请选择要删除的数据组。");
         return;
     }
-
+    var parentId = selectedNodes[0].pId;
     layer.confirm('确定要删除选中的数据组？', {
         btn: ['确定', '取消']
     }, function () {
@@ -186,6 +190,7 @@ function deleteDataGroup() {
             success: function (r) {
                 if (r.code == 1) {
                     layer.msg("删除成功");
+                    currentSelectedNode = zTree.getNodeByParam("id",parentId);
                     loadDataDictionary();
                     $(".dataGroup").hide();
                 } else {
@@ -203,7 +208,7 @@ function deleteDataElement() {
         alert("请选择要删除的数据元。");
         return;
     }
-
+    var parentId = selectedNodes[0].pId;
     layer.confirm('确定要删除选中的数据元？', {
         btn: ['确定', '取消']
     }, function () {
@@ -216,6 +221,7 @@ function deleteDataElement() {
             success: function (r) {
                 if (r.code == 1) {
                     layer.msg("删除成功");
+                    currentSelectedNode = zTree.getNodeByParam("id",parentId);
                     loadDataDictionary();
                     $(".dataElement").hide();
                 } else {
@@ -273,11 +279,15 @@ function loadDataDictionary() {
         url: "/repository/dictionary/tree",
         success: function (tree) {
             zTree = $.fn.zTree.init($("#dataDictionaryTree"), setting, tree);
-            if(currentSelectedNode == ""){
+            /*if (currentSelectedNode == "") {
                 zTree.expandAll(false);
-            }else{
-                selectNode(currentSelectedNode.name);
-            }
+            } else {
+                zTree.expandNode(zTree.getNodeByParam("id",currentSelectedNode.id,null));
+            }*/
+            zTree.setting.view.expandSpeed = "";
+             zTree.expandAll(false);
+             zTree.setting.view.expandSpeed = "fast";
+             selectNode(currentSelectedNode.id)
         }
     });
 };

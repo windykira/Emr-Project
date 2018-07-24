@@ -1,6 +1,7 @@
 package com.haoze.service.repository;
 
 import com.haoze.common.model.BaseService;
+import com.haoze.common.model.QueryParam;
 import com.haoze.common.model.ResponseResult;
 import com.haoze.model.repository.entity.DataGroupEntity;
 import com.haoze.model.repository.vo.DataDictionaryVO;
@@ -32,4 +33,16 @@ public interface DataGroupService extends BaseService<DataGroupEntity,String>{
      * @return
      */
     ResponseResult deleteByDataDictionaryId(String dataDictionaryId);
+
+    /**
+     * 更新排序号
+     * @param dataGroupEntity
+     */
+    ResponseResult updateSort(DataGroupEntity dataGroupEntity);
+
+    /**
+     * 减小排序号
+     * @param queryParam
+     */
+    ResponseResult updateSortNoForReduce(QueryParam queryParam);
 }

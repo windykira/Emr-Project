@@ -25,6 +25,16 @@ public class DataElementEntity extends BaseEntity{
     private String elementFdId;//数据元对应标识数据ID(FD)
     private String elementStdId;//数据元对应国家或行业标准标识码
 
+    private int sortNo;//排序
+
+    public int getSortNo() {
+        return sortNo;
+    }
+
+    public void setSortNo(int sortNo) {
+        this.sortNo = sortNo;
+    }
+
     public String getPkDataElemt() {
         return pkDataElemt;
     }

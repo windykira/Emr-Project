@@ -2,6 +2,7 @@ package com.haoze.model.repository.entity;
 
 import com.haoze.common.model.BaseEntity;
 
+import java.beans.Transient;
 import java.util.Date;
 
 /**
@@ -18,6 +19,16 @@ public class DataGroupEntity extends BaseEntity{
     private String wbCode;//五笔码
     private String describe;//数据组属性描述
     private String dgStdId;//数据组对应国家或行业标准标识码
+
+    private int sortNo;//排序
+
+    public int getSortNo() {
+        return sortNo;
+    }
+
+    public void setSortNo(int sortNo) {
+        this.sortNo = sortNo;
+    }
 
     public String getPkOrg() {
         return pkOrg;

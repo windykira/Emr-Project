@@ -36,7 +36,9 @@ public class ResponseResult extends HashMap<String, Object> {
         ResponseResult result = new ResponseResult();
         result.put("msg", msg);
         return result;
-    }public static ResponseResult successid(int code, String msg) {
+    }
+
+    public static ResponseResult successid(int code, String msg) {
         ResponseResult result = new ResponseResult();
         result.put("code", code);
         result.put("msg", msg);

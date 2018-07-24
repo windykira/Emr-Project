@@ -85,8 +85,8 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
     }
 
     @Override
-    public DataDictionaryEntity get(String s) {
-        return null;
+    public DataDictionaryEntity get(String dataDictionaryId) {
+        return dataDictionaryDao.get(dataDictionaryId);
     }
 
     @Override

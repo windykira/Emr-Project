@@ -70,6 +70,54 @@ public class DataElementServiceImpl implements DataElementService {
     }
 
     @Override
+    @Transactional
+    public ResponseResult updateSort(DataElementEntity dataElementEntity) {
+
+        try {
+            DataDictionaryEntity dataDictionaryEntity = dataDictionaryDao.getByDataId(dataElementEntity.getPkDataElemt());
+            //获取同一父节点下的子节点
+            QueryParam queryParam = QueryParam.getDefaultQueryParam();
+            queryParam.put("pkFather", dataDictionaryEntity.getPkFather());
+            int count = dataDictionaryDao.count(queryParam);
+
+            if (dataElementEntity.getSortNo() < 1) {
+                dataElementEntity.setSortNo(1);
+            }
+            if (dataElementEntity.getSortNo() > count) {
+                dataElementEntity.setSortNo(count);
+            }
+            queryParam.put("currentSortNo", dataDictionaryEntity.getSortNo());
+            queryParam.put("targetSortNo", dataElementEntity.getSortNo());
+            if(dataElementEntity.getSortNo() > dataDictionaryEntity.getSortNo()){
+                dataDictionaryDao.updateSortNoForReduce(queryParam);
+            }else if(dataElementEntity.getSortNo() < dataDictionaryEntity.getSortNo()){
+                dataDictionaryDao.updateSortNoForEnlarge(queryParam);
+            }
+            ResponseResult responseResult = ResponseResult.success();
+            responseResult.put("sortNo", dataElementEntity.getSortNo());
+            return responseResult;
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "更新排序号失败。");
+        }
+    }
+
+    @Override
+    @Transactional
+    public ResponseResult updateSortNoForReduce(QueryParam queryParam) {
+        try {
+            queryParam.put("currentSortNo",queryParam.get("sortNo"));
+            dataDictionaryDao.updateSortNoForReduce(queryParam);
+            return ResponseResult.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResponseResult.failure(0, "更新排序号失败。");
+        }
+    }
+
+    @Override
     public ResponseResult insert(DataElementEntity dataElementEntity) {
         return null;
     }
@@ -78,6 +126,10 @@ public class DataElementServiceImpl implements DataElementService {
     @Transactional
     public ResponseResult delete(String dataElementId) {
         try {
+            ResponseResult responseResult = ResponseResult.success();
+            DataDictionaryEntity dataDictionaryEntity = dataDictionaryDao.getByDataId(dataElementId);
+            responseResult.put("sortNo",dataDictionaryEntity.getSortNo());
+            responseResult.put("pkFather",dataDictionaryEntity.getPkFather());
             //判断是否有子节点
             QueryParam queryParam = QueryParam.getDefaultQueryParam();
             queryParam.put("pkFather",dataElementId);
@@ -91,7 +143,7 @@ public class DataElementServiceImpl implements DataElementService {
             dataElementValuesDao.deleteByDataElementId(dataElementId);
             //删除数据元
             dataElementDao.delete(dataElementId);
-            return ResponseResult.success();
+            return responseResult;
         }catch (Exception e){
             e.printStackTrace();
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
@@ -110,6 +162,7 @@ public class DataElementServiceImpl implements DataElementService {
             //更新节点信息
             DataDictionaryEntity dataDictionaryEntity = dataDictionaryDao.getByDataId(dataElementEntity.getPkDataElemt());
             dataDictionaryEntity.setNameNode(dataElementEntity.getNameDe());
+            dataDictionaryEntity.setSortNo(dataElementEntity.getSortNo());
             dataDictionaryDao.update(dataDictionaryEntity);
             return ResponseResult.success();
         }catch (Exception e){

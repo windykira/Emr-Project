@@ -3,6 +3,7 @@ package com.haoze.utils;
 import com.haoze.common.enumeration.common.DelFlagEnum;
 import com.haoze.common.model.BaseEntity;
 
+import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -12,7 +13,7 @@ import java.util.Date;
  */
 public class FixedFieldInitializedUtil {
 
-    public static void initialize(BaseEntity baseEntity){
+    public static void initialize(BaseEntity baseEntity) throws ParseException {
 
         baseEntity.setID(UUIDUtil.randomString());
         baseEntity.setDelFlag(DelFlagEnum.Not_Deleted.getEnumValue());

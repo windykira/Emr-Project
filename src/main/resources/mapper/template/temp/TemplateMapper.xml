@@ -16,9 +16,9 @@
 	  <result column="REMARK" jdbcType="VARCHAR" property="remark" />
 	  <result column="STOP_FLAG" jdbcType="VARCHAR" property="stopFlag" />
 	  <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
-	  <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+	  <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
 	  <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
-	  <result column="MODIFY_TIME" jdbcType="DATE" property="modifyTime" />
+	  <result column="MODIFY_TIME" jdbcType="TIMESTAMP" property="modifyTime" />
 	  <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />
 	  <result column="CREATOR_NAME" jdbcType="CHAR" property="creatorName" />
 	  <result column="TMP_CLASS_NAME" jdbcType="CHAR" property="tmpClassName" />
@@ -113,7 +113,7 @@
 	     #{pkDept,jdbcType=VARCHAR}, #{pkUser,jdbcType=VARCHAR}, #{pkTmpClass,jdbcType=VARCHAR}, 
 	     #{patientType,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{patientType,jdbcType=VARCHAR},
 	     #{creator,jdbcType=VARCHAR}, sysdate, #{modifier,jdbcType=VARCHAR}, 
-	     #{modifyTime,jdbcType=DATE}, #{delFlag,jdbcType=CHAR}, #{pkCatalog,jdbcType=VARCHAR})
+	     #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR}, #{pkCatalog,jdbcType=VARCHAR})
 	 </insert>
 
 	<update id="update" parameterType="com.haoze.model.template.temp.entity.TemplateEntity">

@@ -8,9 +8,9 @@
     <result column="PK_ROLE" jdbcType="VARCHAR" property="pkRole" />
     <result column="PK_MENU" jdbcType="VARCHAR" property="pkMenu" />
     <result column="CREATOR" jdbcType="VARCHAR" property="creator" />
-    <result column="CREATE_TIME" jdbcType="DATE" property="createTime" />
+    <result column="CREATE_TIME" jdbcType="TIMESTAMP" property="createTime" />
     <result column="MODIFIER" jdbcType="VARCHAR" property="modifier" />
-    <result column="MODIFY_TIME" jdbcType="DATE" property="modifyTime" />
+    <result column="MODIFY_TIME" jdbcType="TIMESTAMP" property="modifyTime" />
     <result column="DEL_FLAG" jdbcType="CHAR" property="delFlag" />
   </resultMap>
 
@@ -20,8 +20,8 @@
       MODIFIER, MODIFY_TIME, DEL_FLAG
       )
     values (#{pkRoleMenu,jdbcType=VARCHAR}, #{pkOrg,jdbcType=VARCHAR}, #{pkRole,jdbcType=VARCHAR}, 
-      #{pkMenu,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, 
-      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=DATE}, #{delFlag,jdbcType=CHAR}
+      #{pkMenu,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{delFlag,jdbcType=CHAR}
       )
   </insert>
 

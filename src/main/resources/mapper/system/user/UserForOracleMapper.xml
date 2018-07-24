@@ -14,8 +14,8 @@
         <result column="STATUS" property="status" jdbcType="VARCHAR" />
         <result column="CREATEUSER" property="createUser" jdbcType="VARCHAR" />
 
-        <result column="CREATEDATE" property="createDate" jdbcType="DATE" />
-        <result column="MODIFYDATE" property="modifyDate" jdbcType="DATE" />
+        <result column="CREATEDATE" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="MODIFYDATE" property="modifyDate" jdbcType="TIMESTAMP" />
         <result column="SEX" property="sex" jdbcType="VARCHAR" />
         <result column="BIRTH" property="birth" jdbcType="VARCHAR" />
         <result column="PICID" property="picID" jdbcType="VARCHAR" />

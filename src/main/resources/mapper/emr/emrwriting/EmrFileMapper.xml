@@ -11,15 +11,15 @@
     <result column="PATIENT_ID" property="patientId" jdbcType="VARCHAR" />
     <result column="FILE_LOC" property="fileLoc" jdbcType="VARCHAR" />
     <result column="CREATOR" property="creator" jdbcType="VARCHAR" />
-    <result column="CREATE_TIME" property="createTime" jdbcType="DATE" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="TIMESTAMP" />
     <result column="MODIFIER" property="modifier" jdbcType="VARCHAR" />
-    <result column="MODIFY_TIME" property="modifyTime" jdbcType="DATE" />
+    <result column="MODIFY_TIME" property="modifyTime" jdbcType="TIMESTAMP" />
     <result column="OP_NUM" property="opNum" jdbcType="VARCHAR" />
     <result column="EMR_FILE_NAME" property="emrFileName" jdbcType="VARCHAR" />
     <result column="DEL_FLAG" property="delFlag" jdbcType="VARCHAR" />
     <result column="LOCK_FLAG" property="lockFlag" jdbcType="VARCHAR" />
     <result column="LOCKER" property="locker" jdbcType="VARCHAR" />
-    <result column="LOCK_TIME" property="lockTime" jdbcType="DATE" />
+    <result column="LOCK_TIME" property="lockTime" jdbcType="TIMESTAMP" />
     <result column="PK_TEMPLATE" property="pkTemplate" jdbcType="VARCHAR" />
 
     <result column="PK_CATALOG" property="catalogId" jdbcType="VARCHAR" />
@@ -78,10 +78,10 @@
       )
     values (#{ID,jdbcType=VARCHAR}, #{pkOrg,jdbcType=VARCHAR}, #{pkDept,jdbcType=VARCHAR},
       #{codeDept,jdbcType=VARCHAR}, #{pkTmpClass,jdbcType=VARCHAR}, #{patientId,jdbcType=VARCHAR}, 
-      #{fileLoc,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=DATE}, 
-      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=DATE}, #{opNum,jdbcType=VARCHAR}, 
+      #{fileLoc,jdbcType=VARCHAR}, #{creator,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{modifier,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{opNum,jdbcType=VARCHAR},
       #{emrFileName,jdbcType=VARCHAR}, #{delFlag,jdbcType=VARCHAR}, #{lockFlag,jdbcType=VARCHAR}, 
-      #{locker,jdbcType=VARCHAR}, #{lockTime,jdbcType=DATE}, #{pkTemplate,jdbcType=VARCHAR},
+      #{locker,jdbcType=VARCHAR}, #{lockTime,jdbcType=TIMESTAMP}, #{pkTemplate,jdbcType=VARCHAR},
       #{catalogId,jdbcType=VARCHAR},#{parentCatalogId,jdbcType=VARCHAR}
       )
   </insert>
@@ -226,13 +226,13 @@
         CREATOR = #{creator,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null" >
-        CREATE_TIME = #{createTime,jdbcType=DATE},
+        CREATE_TIME = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="modifier != null" >
         MODIFIER = #{modifier,jdbcType=VARCHAR},
       </if>
       <if test="modifyTime != null" >
-        MODIFY_TIME = #{modifyTime,jdbcType=DATE},
+        MODIFY_TIME = #{modifyTime,jdbcType=TIMESTAMP},
       </if>
       <if test="opNum != null" >
         OP_NUM = #{opNum,jdbcType=VARCHAR},
@@ -250,7 +250,7 @@
         LOCKER = #{locker,jdbcType=VARCHAR},
       </if>
       <if test="lockTime != null" >
-        LOCK_TIME = #{lockTime,jdbcType=DATE},
+        LOCK_TIME = #{lockTime,jdbcType=TIMESTAMP},
       </if>
       <if test="pkTemplate != null" >
         PK_TEMPLATE = #{pkTemplate,jdbcType=VARCHAR},

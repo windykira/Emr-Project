@@ -5,6 +5,7 @@ import com.haoze.common.annotation.Note;
 import com.haoze.common.model.PaginationResult;
 import com.haoze.common.model.QueryParam;
 import com.haoze.common.model.ResponseResult;
+import com.haoze.model.repository.entity.DataDictionaryEntity;
 import com.haoze.model.repository.entity.DataGroupEntity;
 import com.haoze.model.repository.vo.DataDictionaryVO;
 import com.haoze.service.repository.DataDictionaryService;
@@ -19,6 +20,7 @@ import java.util.Map;
 
 /**
  * 数据组控制器信息。
+ *
  * @author maxl
  * @time 2018-07-18。
  */
@@ -40,7 +42,7 @@ public class DataGroupController {
         return prefix + "/datagroup";
     }
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @ResponseBody
     PaginationResult list(@RequestParam Map<String, Object> params) {
 
@@ -69,19 +71,39 @@ public class DataGroupController {
     @PostMapping("/delete")
     @ResponseBody
     ResponseResult delete(String dataDictionaryId) {
-        return dataGroupService.deleteByDataDictionaryId(dataDictionaryId);
+
+        ResponseResult responseResult = dataGroupService.deleteByDataDictionaryId(dataDictionaryId);
+        if (Integer.valueOf(responseResult.get("code").toString()) == 1) {
+            QueryParam queryParam = QueryParam.getDefaultQueryParam();
+            queryParam.put("pkFather",responseResult.get("pkFather"));
+            queryParam.put("sortNo",responseResult.get("sortNo"));
+            //更新排序号
+            dataGroupService.updateSortNoForReduce(queryParam);
+            return ResponseResult.success();
+        }else {
+            return ResponseResult.failure();
+        }
     }
 
     @PostMapping("/update")
     @ResponseBody
     ResponseResult update(DataGroupEntity dataGroup) {
+        ResponseResult responseResult = dataGroupService.updateSort(dataGroup);
+        if (Integer.valueOf(responseResult.get("code").toString()) == 1) {
+            dataGroup.setSortNo(Integer.valueOf(responseResult.get("sortNo").toString()));
+        } else {
+            return ResponseResult.failure();
+        }
         return dataGroupService.update(dataGroup);
     }
 
     @GetMapping("/get/{dataDictionaryId}")
     @ResponseBody
-    DataGroupEntity get(@PathVariable("dataDictionaryId") String dataDictionaryId) {
-        return dataGroupService.getByDataDictionaryId(dataDictionaryId);
+    DataGroupEntity get(Model model, @PathVariable("dataDictionaryId") String dataDictionaryId) {
+        DataDictionaryEntity dataDictionaryEntity = dataDictionaryService.get(dataDictionaryId);
+        DataGroupEntity dataGroupEntity = dataGroupService.getByDataDictionaryId(dataDictionaryId);
+        dataGroupEntity.setSortNo(dataDictionaryEntity.getSortNo());
+        return dataGroupEntity;
     }
 
     @PostMapping("/exist")

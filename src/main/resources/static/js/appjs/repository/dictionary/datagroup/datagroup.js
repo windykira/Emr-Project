@@ -4,10 +4,11 @@ $(function(){
 
 function loadDataGroup(){
 
+    $(".data-group").bootstrapTable('destroy');
     $('.data-group')
         .bootstrapTable(
             {
-                method: 'post', // 服务器数据的请求方式 get or post
+                method: 'get', // 服务器数据的请求方式 get or post
                 url: "/repository/datagroup/list/", // 服务器数据的加载地址
                 striped: true, // 设置为true会有隔行变色效果
                 dataType: "json", // 服务器返回的数据类型

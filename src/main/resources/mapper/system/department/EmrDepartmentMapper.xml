@@ -11,7 +11,7 @@
         <result column="PK_FATHER" property="parentDepartmentID" jdbcType="VARCHAR" />
         <result column="LVL_DEPT" property="departmentLevel" jdbcType="VARCHAR" />
         <result column="DEPT_TYPE" property="departmentType" jdbcType="VARCHAR" />
-        <result column="SHORTNAME" property="abbreviationName" jdbcType="DATE" />
+        <result column="SHORTNAME" property="abbreviationName" jdbcType="TIMESTAMP" />
         <result column="PY_CODE" property="pyCode" jdbcType="VARCHAR" />
 
     </resultMap>

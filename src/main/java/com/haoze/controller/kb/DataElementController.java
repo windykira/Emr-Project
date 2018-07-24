@@ -5,9 +5,11 @@ import com.haoze.common.annotation.Note;
 import com.haoze.common.model.PaginationResult;
 import com.haoze.common.model.QueryParam;
 import com.haoze.common.model.ResponseResult;
+import com.haoze.model.repository.entity.DataDictionaryEntity;
 import com.haoze.model.repository.entity.DataElementEntity;
 import com.haoze.model.repository.entity.DataGroupEntity;
 import com.haoze.model.repository.vo.DataDictionaryVO;
+import com.haoze.service.repository.DataDictionaryService;
 import com.haoze.service.repository.DataElementService;
 import com.haoze.service.repository.DataGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,8 @@ public class DataElementController {
 
     @Autowired
     DataElementService dataElementService;
+    @Autowired
+    DataDictionaryService dataDictionaryService;
 
     private String prefix = "repository/dictionary/dataelement";
 
@@ -67,18 +71,38 @@ public class DataElementController {
     @PostMapping("/delete")
     @ResponseBody
     ResponseResult delete(String dataElementId) {
-        return dataElementService.delete(dataElementId);
+
+        ResponseResult responseResult = dataElementService.delete(dataElementId);
+        if (Integer.valueOf(responseResult.get("code").toString()) == 1) {
+            QueryParam queryParam = QueryParam.getDefaultQueryParam();
+            queryParam.put("pkFather",responseResult.get("pkFather"));
+            queryParam.put("sortNo",responseResult.get("sortNo"));
+            //更新排序号
+            dataElementService.updateSortNoForReduce(queryParam);
+            return ResponseResult.success();
+        }else {
+            return ResponseResult.failure();
+        }
     }
 
     @PostMapping("/update")
     @ResponseBody
     ResponseResult update(DataElementEntity dataElementEntity) {
+        ResponseResult responseResult = dataElementService.updateSort(dataElementEntity);
+        if (Integer.valueOf(responseResult.get("code").toString()) == 1) {
+            dataElementEntity.setSortNo(Integer.valueOf(responseResult.get("sortNo").toString()));
+        } else {
+            return ResponseResult.failure();
+        }
         return dataElementService.update(dataElementEntity);
     }
 
     @GetMapping("/get/{dataDictionaryId}")
     @ResponseBody
     DataElementEntity get(@PathVariable("dataDictionaryId") String dataDictionaryId) {
-        return dataElementService.getByDataDictionaryId(dataDictionaryId);
+        DataDictionaryEntity dataDictionaryEntity = dataDictionaryService.get(dataDictionaryId);
+        DataElementEntity dataElementEntity = dataElementService.getByDataDictionaryId(dataDictionaryId);
+        dataElementEntity.setSortNo(dataDictionaryEntity.getSortNo());
+        return dataElementEntity;
     }
 }

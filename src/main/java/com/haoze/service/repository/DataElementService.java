@@ -1,6 +1,7 @@
 package com.haoze.service.repository;
 
 import com.haoze.common.model.BaseService;
+import com.haoze.common.model.QueryParam;
 import com.haoze.common.model.ResponseResult;
 import com.haoze.model.repository.entity.DataElementEntity;
 import com.haoze.model.repository.entity.DataGroupEntity;
@@ -26,4 +27,16 @@ public interface DataElementService extends BaseService<DataElementEntity,String
      * @return
      */
     DataElementEntity getByDataDictionaryId(String dataDictionaryId);
+
+    /**
+     * 更新排序号
+     * @param dataElementEntity
+     */
+    ResponseResult updateSort(DataElementEntity dataElementEntity);
+
+    /**
+     * 减小排序号
+     * @param queryParam
+     */
+    ResponseResult updateSortNoForReduce(QueryParam queryParam);
 }
